@@ -1,0 +1,1 @@
+export { default as RewardImage } from './Group 4reward.png'

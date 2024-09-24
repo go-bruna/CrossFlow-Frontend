@@ -1,0 +1,10 @@
+:is(p, h6) > a {
+  /* text-decoration: underline; */
+  border-bottom: 1px solid black;
+  transition-property: opacity;
+  transition-duration: 400ms;
+}
+:is(p, h6) > a:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}

@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Crossflow-Bold';
+  src: url('../assets/fonts/ClashGrotesk-Bold.ttf');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crossflow-Semibold';
+  src: url('../assets/fonts/ClashGrotesk-Semibold.ttf');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crossflow-Medium';
+  src: url('../assets/fonts/ClashGrotesk-Medium.ttf');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crossflow-Regular';
+  src: url('../assets/fonts/ClashGrotesk-Regular.ttf');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crossflow-Light';
+  src: url('../assets/fonts/ClashGrotesk-Light.ttf');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Crossflow-Extralight';
+  src: url('../assets/fonts/ClashGrotesk-Extralight.ttf');
+  font-display: swap;
+}
+
+
+* {
+  font-family: 'Crossflow-Medium';
+}
+.crossflow-bold {
+  font-family: 'Crossflow-Bold';
+}
+.crossflow-semibold {
+  font-family: 'Crossflow-Semibold';
+}
+.crossflow-medium {
+  font-family: 'Crossflow-Medium';
+}
+.crossflow-regular {
+  font-family: 'Crossflow-Regular';
+}
+.crossflow-light {
+  font-family: 'Crossflow-Light';
+}
+.crossflow-extralight {
+  font-family: 'Crossflow-Extralight';
+}
+
+/* Scrollbar */
+html {
+  scroll-behavior: smooth;
+}
+
+.main-bg {
+  background-image: url("../assets/img/bg-img.png");
+  background-size: cover;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #38bdf820;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #222;
+}
+
+.rc-slider-handle {
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  background-color: #854B03;
+  background: linear-gradient(#FF8C00, #854B03);
+  border: none;
+  opacity: 1;
+}
+
+.rc-slider-handle:focus-visible {
+  border: none;
+  box-shadow: none;
+}
+
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  border: none;
+  box-shadow: none;
+}
+
+.custom-shadow {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
