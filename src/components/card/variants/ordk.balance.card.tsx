@@ -9,7 +9,7 @@ import { useWeb3Context } from "@/contexts/web3/useWeb3";
 import { useOrdiPrices } from "@/hooks/queries/useOrbkPrice";
 import { useToast } from "@/hooks/useToast";
 import { INPUT_AMOUNT, WARNING_MESSAGE } from "@/constants/message";
-import { IDuration } from "@/types/interfaces";
+import { IDuration, ITag } from "@/types/interfaces";
 import { DURATIONS_TIME } from "@/constants";
 import { TailSpin } from "react-loader-spinner";
 import { BankerPowerIcon } from "@/assets/icons/banker-power";
@@ -17,10 +17,16 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import Card from "..";
 import { twMerge } from "tailwind-merge";
 
+const tabs = [
+	{title: "3M"},
+	{title: "6M"},
+	{title: "12M"},
+	{title: "24M"},
+]
 export const ORBKBalanceCard = () => {
 	const { isMobile, windowSize } = useWindowSize();
 	const { messageApi } = useToast();
-	const [selected, setSelected] = useState<string>("3M");
+	const [selected, setSelected] = useState<ITag>(tabs[0]);
 	const [staking, setStaking] = useState<boolean>(false);
 	const [apr, setAPR] = useState<number>(0);
 	const [rewards, setRewards] = useState<number>(0);
@@ -49,8 +55,8 @@ export const ORBKBalanceCard = () => {
 			: parseFloat((amount * (price ?? 0)).toFixed(1));
 
 	// Select the period of staking
-	const onSelectPeriod = async (m: string) => {
-		var month = m.replace(/\D/g, "");
+	const onSelectPeriod = async (m: ITag) => {
+		var month = m.title.replace(/\D/g, "");
 		const selectedIndex = DURATIONS_TIME.filter(
 			(e) => e.period === Number(month),
 		)[0];
@@ -155,7 +161,7 @@ export const ORBKBalanceCard = () => {
 							Duration
 						</Typography>
 						<Tab
-							tabs={["3M", "6M", "12M", "24M"]}
+							tabs={tabs}
 							selected={selected}
 							onSelect={onSelectPeriod}
 						/>

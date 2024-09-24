@@ -9,13 +9,19 @@ import { BorrowContainer } from '../base/pool/borrow.base'
 import { WithdrawContainer } from '../base/pool/withdraw.base'
 import { RepayContainer } from '../base/pool/repay.base'
 import { handleAnimation } from '@/utils'
+import { ITag } from '@/types/interfaces'
 
-const tabs = ['Supply', 'Borrow', 'Withdraw', 'Repay']
+const tabs = [
+  { title: 'Supply' },
+  { title: 'Borrow' },
+  { title: 'Withdraw' },
+  { title: 'Repay' },
+]
 export interface Props extends BaseProps {}
 
 export const PoolDrawer = (props: Props) => {
   const { isDesktop } = useWindowSize()
-  const [ current, setCurrent ] = useState<string>(tabs[0])
+  const [ current, setCurrent ] = useState<ITag>(tabs[0])
   const [ opacityAnimation, setOpacityAnimation ] = useState<boolean>(false)
 
   const displayContainer = {
@@ -23,9 +29,9 @@ export const PoolDrawer = (props: Props) => {
     'Borrow': <BorrowContainer />,
     'Withdraw': <WithdrawContainer />,
     'Repay': <RepayContainer />
-  }[current] as JSX.Element
+  }[current.title] as JSX.Element
 
-  const handleContainer = async(tag: string) => {
+  const handleContainer = async(tag: ITag) => {
     await handleAnimation(() => setOpacityAnimation(true))
     setOpacityAnimation(false)
     setCurrent(tag)
