@@ -19,7 +19,7 @@ export const GovernanceStatsbar = (props: Props) => {
           classOverride={{
             container: 'flex-col items-start pr-6 gap-5',
             label: 'text-base crossflow-light',
-            value: 'text-[19px] crossflow-semibold text-[#28b2fa]',
+            value: 'text-[19px] crossflow-semibold',
           }}
         />
         <Paragraph.List 

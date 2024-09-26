@@ -79,9 +79,11 @@ export const Input = (props: Props) => {
             </div>
           )}
         </div>
-        <Typography variant="label-medium" className="text-zinc-100">
-          {props?.suffixLabel}
-        </Typography>
+        {props?.suffixLabel && (
+          <Typography variant="label-medium" className="text-zinc-100">
+            {props.suffixLabel}
+          </Typography>
+        )}
       </div>
     </div>
   )

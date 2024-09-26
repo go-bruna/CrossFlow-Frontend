@@ -105,6 +105,7 @@ export const Header = ({
 											</button> */}
 											<Button.Basic
 												label={'Connected'}
+												isBadge={true}
 												icon={<WalletIcon />}
 												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
 												textStyle="text-white text-sm"

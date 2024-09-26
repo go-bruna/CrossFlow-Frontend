@@ -7,11 +7,13 @@ import { Input } from "@/components/input";
 import { SearchIcon } from "@/assets/icons/common";
 import Table from "@/components/table";
 import { ITag } from "@/types/interfaces";
+import { EthereumIcon } from "@/assets/icons/coins";
 
 const tabs = [{
   title: 'All',
 }, {
-  title: 'Ethereum'
+  title: 'Ethereum',
+  icon: <EthereumIcon />
 }]
 
 export const MainPoolPage = () => {

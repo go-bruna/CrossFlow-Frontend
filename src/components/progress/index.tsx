@@ -57,7 +57,7 @@ export const CustomProgress = (props: Props) => {
 
     return (
       <div className='flex items-center'>
-        <Avatar icon={<ShieldIcon />}/>
+        <Avatar icon={<ShieldIcon stroke="#36f5cf"/>}/>
         <Typography variant="label-medium" className="ml-1.5">{`${props.footerLabel}: ${props?.footerValue}`}</Typography>
         <Avatar icon={<InforCircleIcon />}/>
       </div>

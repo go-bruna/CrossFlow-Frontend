@@ -16,7 +16,7 @@ export const ItemsTab = (props: Props) => {
   return (
     <div
       className={twMerge(
-        'flex justify-center items-center gap-1 place-self-start',
+        'flex justify-center items-center gap-[10px] place-self-start',
         props?.classOverride?.container
       )}
     >

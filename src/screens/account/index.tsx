@@ -9,14 +9,14 @@ import Tab from "@/components/tab"
 import { ACCOUNT_ITEM_DATA } from "@/constants"
 import { ChangeEvent, useState } from "react"
 import { BaseItem } from "@/components/card/base/item.base"
-import { BankerPowerIcon } from "@/assets/icons/banker-power"
 import Table from "@/components/table"
 import { ITag } from "@/types/interfaces"
+import { BorrowedAssetIcon, SuppliedAssetIcon } from "@/assets/icons/supplies"
 
 const tabs = [
   { title: 'All' },
-  { title: 'Supplied assets' },
-  { title: 'Borrowed assets' }
+  { title: 'Supplied assets', icon: <SuppliedAssetIcon /> },
+  { title: 'Borrowed assets', icon: <BorrowedAssetIcon /> }
 ]
 
 export const AccountPage = () => {
@@ -32,7 +32,7 @@ export const AccountPage = () => {
         <Card.AccountStatsBar 
           labels={ACCOUNT_ITEM_DATA}
           labelIcons={[<InforCircleIcon />]}
-          valueColor="text-[#28b2fa]"
+          valueColor="text-[#36f5cf]"
           values={['4.23%', '<$24.12', '$2.12K', '$2.12K', '$0']}
         />
 
@@ -77,7 +77,6 @@ export const AccountPage = () => {
 
         {/* Supplied Assets Table */}
         <BaseItem
-          icon={<BankerPowerIcon />}
           title="Supplied assets"
           classOverride={{
             container: "gap-[6px]",
@@ -89,7 +88,6 @@ export const AccountPage = () => {
 
         {/* Borrowed Assets Table */}
         <BaseItem
-          icon={<BankerPowerIcon />}
           title="Borrowed assets"
           classOverride={{
             container: "gap-[6px]",
