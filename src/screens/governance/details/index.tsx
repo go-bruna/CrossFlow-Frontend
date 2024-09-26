@@ -22,7 +22,7 @@ export const GovernanceDetailPage = () => {
     <div className="w-full">
       <Header.Desktop title={'Proposals'} />
 
-      {/* Container */}
+      {/* Container  */}
       <div className="mt-[30px]">
         <Button.Basic 
           label="Back"
