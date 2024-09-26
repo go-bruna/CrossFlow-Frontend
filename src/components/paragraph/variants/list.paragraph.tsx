@@ -19,7 +19,7 @@ export const ParagraphList = ({ label, value, classOverride}: Props) => {
       ) : (
         (label)
       )}
-      {typeof label === 'string' || typeof label === 'number' ? (
+      {typeof value === 'string' || typeof value === 'number' ? (
         <Typography variant="label-small" className={twMerge("text-[13px]", classOverride?.value)}>{value}</Typography>
       ) : (
         (value)

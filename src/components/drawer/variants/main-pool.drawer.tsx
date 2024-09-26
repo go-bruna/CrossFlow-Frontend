@@ -2,7 +2,7 @@ import Drawer from 'react-modern-drawer'
 import { BaseProps } from '@/types/context/drawer'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { twMerge } from 'tailwind-merge'
-import { Tab } from '@/components/tab'
+import Tab from '@/components/tab'
 import { useState } from 'react'
 import { SupplyContainer } from '../base/pool/supply.base'
 import { BorrowContainer } from '../base/pool/borrow.base'
@@ -52,7 +52,7 @@ export const PoolDrawer = (props: Props) => {
           )}
         >
           {/* tabs */}
-          <Tab 
+          <Tab.List
             tabs={tabs}
             selected={current}
             onSelect={handleContainer}

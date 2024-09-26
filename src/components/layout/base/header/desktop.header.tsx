@@ -1,5 +1,4 @@
 // import { Navbar } from "../../../nav";
-import { Avatar } from "@/components/avatar";
 import { LogoIcon } from "@/assets/icons/logo";
 import { Typography } from "@/components/typography";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -10,7 +9,9 @@ export interface Props {
 	title: string
 }
 
-export const Header = (props: Props) => {
+export const Header = ({
+	title,
+}: Props) => {
 	const gotoMain = () => {
 		window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank");
 	};
@@ -22,9 +23,8 @@ export const Header = (props: Props) => {
 					className="flex items-center gap-2 cursor-pointer"
 					onClick={gotoMain}
 				>
-					<Avatar icon={<LogoIcon />} />
 					<Typography variant="h4" className="font-bold">
-						{props.title}
+						{title}
 					</Typography>
 				</div>
 				{/* <Navbar /> */}

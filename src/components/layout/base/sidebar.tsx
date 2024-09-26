@@ -8,10 +8,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 const SIDEBAR_DATA = [{
-  title: 'Main Pools',
+  title: 'Account',
   // icon: <SidebarMainPoolsIcon />
 }, {
-  title: 'Account',
+  title: 'Main Pools',
   // icon: <SidebarAccountIcon />
 }, {
   title: 'Staking',

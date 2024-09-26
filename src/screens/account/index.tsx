@@ -5,7 +5,7 @@ import Header from "@/components/layout/base/header"
 import { Divider } from "@/components/divider"
 import { Input } from "@/components/input"
 import { CustomProgress } from "@/components/progress"
-import { Tab } from "@/components/tab"
+import Tab from "@/components/tab"
 import { ACCOUNT_ITEM_DATA } from "@/constants"
 import { ChangeEvent, useState } from "react"
 import { BaseItem } from "@/components/card/base/item.base"
@@ -29,7 +29,7 @@ export const AccountPage = () => {
 
       {/* Container */}
       <div className="mt-[30px]">
-        <Card.MainStatsBar 
+        <Card.AccountStatsBar 
           labels={ACCOUNT_ITEM_DATA}
           labelIcons={[<InforCircleIcon />]}
           valueColor="text-[#28b2fa]"
@@ -52,7 +52,7 @@ export const AccountPage = () => {
         {/* Category and Search */}
         <div className="flex justify-between items-center mt-5">
           {/* Categories */}
-          <Tab
+          <Tab.List
             tabs={tabs}
             selected={currentTag}
             onSelect={(_current: ITag) => setCurrentTag(_current)}

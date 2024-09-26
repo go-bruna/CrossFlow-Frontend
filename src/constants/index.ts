@@ -111,3 +111,13 @@ export const GOVERNANCE_ITEM_DATA =[
 	'Total Proposals',
 	'Voting Power'
 ]
+
+export const GOVERNANCE_DETAIL_ITEM_DATA =[
+	'Yes',
+	'No',
+	'Abstain',
+	'End voting period',
+	'Voting Power',
+]
+
+export const PROPOSAL_NAV = ['Description', 'Comments']

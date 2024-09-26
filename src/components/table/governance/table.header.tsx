@@ -38,7 +38,7 @@ export const GovernanceTableHeader = () => {
             <Avatar icon={<SortIcon />} />
           </div>
         </th>
-        <th className="w-[14%]">
+        <th className="w-[14%] rounded-tr-[10px]">
           <div className="flex items-center ">
           Total Deposit
             <Avatar icon={<SortIcon />} />

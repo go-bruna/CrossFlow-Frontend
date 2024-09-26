@@ -8,7 +8,7 @@ import Button from "@/components/button"
 import { twMerge } from "tailwind-merge"
 import { Avatar } from "@/components/avatar"
 import { ArrowRightIcon } from "@/assets/icons/arrow"
-import { Tab } from "@/components/tab"
+import Tab from "@/components/tab"
 import { ITag } from "@/types/interfaces"
 
 const tabs = [
@@ -47,7 +47,7 @@ export const RepayContainer = () => {
       />
 
       {/* tabs */}
-      <Tab 
+      <Tab.List 
         tabs={tabs}
         selected={current}
         onSelect={setCurrent}

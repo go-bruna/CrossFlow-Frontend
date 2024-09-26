@@ -1,0 +1,74 @@
+import { InforCircleIcon } from "@/assets/icons/infor"
+import { LogoIcon } from "@/assets/icons/logo"
+import { Avatar } from "@/components/avatar"
+import Paragraph from "@/components/paragraph"
+import { Typography } from "@/components/typography"
+
+type Props = {
+  labels: string[]
+  values: string[] | number[]
+}
+
+export const GovernanceDetailStatsbar = (props: Props) => {
+
+  return (
+    <div className="flex justify-between items-center lg:gap-[30px] bg-[#101010] p-5 mt-10 rounded-[10px]">
+      <div className="flex justify-between gap-[30px]">
+        <Paragraph.List 
+          label={(
+            <div className="flex items-center">
+              <Typography variant="label-medium" className="text-base crossflow-light">{props.labels[0]}</Typography>
+              <Avatar icon={<InforCircleIcon />}/>
+            </div>
+          )}
+          value={props.values[0]}
+          classOverride={{
+            container: 'flex-col items-start pr-6 gap-5',
+            label: 'text-base crossflow-light',
+            value: 'text-[19px] crossflow-semibold text-[#36f5cf]',
+          }}
+        />
+        <Paragraph.List 
+          label={props.labels[1]}
+          value={props.values[1]}
+          classOverride={{
+            container: 'flex-col items-start px-6 border-l border-[#5e7e8e]/20 gap-5 min-w-[140px]',
+            label: 'text-base crossflow-light',
+            value: 'text-[19px] crossflow-semibold text-[#f13d20]',
+          }}
+        />
+        <Paragraph.List 
+          label={props.labels[2]}
+          value={props.values[2]}
+          classOverride={{
+            container: 'flex-col items-start px-6 border-l border-[#5e7e8e]/20 gap-5 min-w-[140px]',
+            label: 'text-base crossflow-light',
+            value: 'text-[19px] crossflow-semibold text-[#f6851b]',
+          }}
+        />
+        <Paragraph.List 
+          label={props.labels[3]}
+          value={props.values[3]}
+          classOverride={{
+            container: 'flex-col items-start px-6 border-l border-[#5e7e8e]/20 gap-5  min-w-[180px]',
+            label: 'text-base crossflow-light',
+            value: 'text-[19px] crossflow-semibold',
+          }}
+        />
+        <Paragraph.List 
+          label={props.labels[4]}
+          value={(
+            <div className="flex items-center gap-1">
+              <Avatar icon={<LogoIcon fill="#f6851b"/>}/>
+              <Typography variant="label-medium" className="text-[19px] crossflow-semibold">{props.values[4]}</Typography>
+            </div>
+          )}
+          classOverride={{
+            container: 'flex-col items-start px-6 border-l border-[#5e7e8e]/20 gap-5 min-w-[220px]',
+            label: 'text-base crossflow-light',
+          }}
+        />
+      </div>
+    </div>
+  )
+}

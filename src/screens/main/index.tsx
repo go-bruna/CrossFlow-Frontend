@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import Header from "@/components/layout/base/header/index"
 import Card from "@/components/card"
 import { MAIN_POOLS_ITEM_DATA } from "@/constants"
-import { Tab } from "@/components/tab";
+import Tab from "@/components/tab";
 import { Input } from "@/components/input";
 import { SearchIcon } from "@/assets/icons/common";
 import Table from "@/components/table";
@@ -31,7 +31,7 @@ export const MainPoolPage = () => {
         {/* Category and Search */}
         <div className="flex justify-between items-center mt-5">
           {/* Categories */}
-          <Tab
+          <Tab.List
             tabs={tabs}
             selected={currentTag}
             onSelect={(_current: ITag) => setCurrentTag(_current)}

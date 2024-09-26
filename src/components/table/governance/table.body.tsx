@@ -1,13 +1,15 @@
 import { Typography } from "@/components/typography";
-import { GOVERNANCE_TABLE_DATA } from "@/constants/table";
 import { StatusProps } from "@/types/interfaces";
 import { Tag } from "@/components/tag";
 import { twMerge } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 
+type Props = {
+  data: any
+}
 
-export const GovernanceTableBody = () => {
+export const GovernanceTableBody = (props: Props) => {
   const navigate = useNavigate()
 
   const Row = ({ data }: any) => {
@@ -69,7 +71,7 @@ export const GovernanceTableBody = () => {
 
   return (
     <tbody className="overflow-y-auto">
-    {GOVERNANCE_TABLE_DATA.map((item, index) => (
+    {props.data.map((item: any, index: number) => (
       <Row 
         data={item}
         key={index} 

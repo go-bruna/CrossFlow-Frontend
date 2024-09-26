@@ -74,6 +74,24 @@ export const DrawerContent = (props: Props) => {
           onClose={onClose}
         />
       )
+    
+    case 'STAKE':
+      return (
+        <Drawer.Stake
+          {..._selectedDrawer}
+          visible={_visible}
+          onClose={onClose}
+        />
+      )
+
+    case 'WITHDRAW':
+      return (
+        <Drawer.Withdraw
+          {..._selectedDrawer}
+          visible={_visible}
+          onClose={onClose}
+        />
+      )
     default:
       return <></>
   }

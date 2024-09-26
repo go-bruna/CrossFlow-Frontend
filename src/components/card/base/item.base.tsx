@@ -12,7 +12,7 @@ type ClassOverride = {
 }
 type Props = {
   icon?: JSX.Element
-  suffixIcon?: JSX.Element
+  suffixIcon?: JSX.Element | undefined
   title?: string
   description?: string | number
   descriptionElement?: JSX.Element
