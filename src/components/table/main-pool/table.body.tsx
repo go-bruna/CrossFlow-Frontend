@@ -37,7 +37,7 @@ export const MainPoolsTableBody = () => {
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
             <Typography variant="label-medium" className="text-[13px]">124.44K MERN</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">$982.15K</Typography>
+            <Typography variant="label-medium" className="text-[13px]">$982.15K</Typography>
           </div>
         </td>
         <td>
@@ -48,7 +48,7 @@ export const MainPoolsTableBody = () => {
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
             <Typography variant="label-medium" className="text-[13px]">224.12K MERM</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">$322.12K</Typography>
+            <Typography variant="label-medium" className="text-[13px]">$322.12K</Typography>
           </div>
         </td>
         <td>
