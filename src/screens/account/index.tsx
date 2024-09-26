@@ -32,7 +32,6 @@ export const AccountPage = () => {
         <Card.AccountStatsBar 
           labels={ACCOUNT_ITEM_DATA}
           labelIcons={[<InforCircleIcon />]}
-          valueColor="text-[#36f5cf]"
           values={['4.23%', '<$24.12', '$2.12K', '$2.12K', '$0']}
         />
 
