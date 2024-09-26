@@ -10,7 +10,6 @@ import 'rc-slider/assets/index.css'
 import './style/index.css'
 
 Modal.setAppElement('#root')
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Providers>
     <ReactQueryDevtools initialIsOpen={false} />
