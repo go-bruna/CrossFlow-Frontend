@@ -39,6 +39,7 @@ export const WithdrawDrawer = (props: Props) => {
 
           <div className={'w-full'}>
             <Input 
+              label='Amount'
               type="number"
               value={amount ?? ''}
               placeholder="0.00"
@@ -49,8 +50,7 @@ export const WithdrawDrawer = (props: Props) => {
                 setAmount(Number(parseInt(e.target.value)))
               }
               classOverride={{
-                container: 'mt-[14px]',
-                inputContainer: 'bg-black',
+                inputContainer: 'bg-black mt-[15px]',
                 input: 'bg-black ml-1',
                 value: 'text-base text-white',
                 icon: 'w-8'
@@ -59,7 +59,7 @@ export const WithdrawDrawer = (props: Props) => {
 
             <Paragraph.List 
               label={(
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   <Avatar icon={<LogoIcon />} className="w-[16px] justify-start"/>
                   <Typography variant="label-medium" className="text-[13px] mt-0.5">Available CFN</Typography>
                 </div>
@@ -81,7 +81,7 @@ export const WithdrawDrawer = (props: Props) => {
                 />
               ) : (
                 <Button.Basic 
-                  label="Enter valid amount"
+                  label="Enter a valid amount"
                   className="w-full bg-[#36f5cf]/10"
                   onClick={() => {}}
                 />

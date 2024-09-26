@@ -58,8 +58,7 @@ export const PoolDrawer = (props: Props) => {
             onSelect={handleContainer}
             classOverride={{
               container: 'lg:gap-2',
-              tabContainer: 'w-auto rounded-full',
-              tabButton: 'px-5 text-[13px]'
+              tabButton: 'w-auto rounded-full px-5 text-[13px]'
             }}
           />
 

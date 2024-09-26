@@ -53,8 +53,7 @@ export const RepayContainer = () => {
         onSelect={setCurrent}
         classOverride={{
           container: 'lg:gap-2 justify-start my-4',
-          tabContainer: 'w-auto rounded-full',
-          tabButton: 'px-6 text-[13px]'
+          tabButton: 'w-auto rounded-full px-6 text-[13px]'
         }}
       />
 

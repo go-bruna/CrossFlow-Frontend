@@ -45,7 +45,7 @@ export const GovernancePage = () => {
             selected={currentTag}
             onSelect={(_current: ITag) => setCurrentTag(_current)}
             classOverride={{
-              tabContainer: 'w-auto rounded-full',
+              container: 'w-auto rounded-full',
               tabButton: 'text-sm px-[22px]'
             }}
           />

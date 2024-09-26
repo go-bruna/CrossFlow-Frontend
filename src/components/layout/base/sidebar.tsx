@@ -80,7 +80,8 @@ export const Sidebar = () => {
           {item.icon}
           <Typography 
             variant="label-small" 
-            className="crossflow-semibold text-white"
+            // className="text-white text-sm crossflow-semibold"
+            className="text-white text-sm"
           >
             {item.title}
           </Typography>

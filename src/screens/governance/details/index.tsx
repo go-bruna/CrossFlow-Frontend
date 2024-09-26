@@ -13,9 +13,11 @@ import { Divider } from "@/components/divider"
 import { useState } from "react"
 import { CommentContainer } from "../base/comments"
 import { DescriptionContainer } from "../base/description"
+import { useDrawer } from "@/contexts/interface"
 
 export const GovernanceDetailPage = () => {
   const navigate = useNavigate()
+  const { setDrawer } = useDrawer()
   const [ currentTab, setCurrentTab ] = useState<string>(PROPOSAL_NAV[0])
   
   return (
@@ -45,7 +47,7 @@ export const GovernanceDetailPage = () => {
               label="Vote"
               icon={<VoteIcon />}
               className="bg-gradient-to-b from-[#263b43] to-[#198975] rounded-full border-none w-[112px] h-[42px]"
-              onClick={() => {}}
+              onClick={() => setDrawer({ id : 'VOTING' })}
             />
             <Avatar 
               icon={<ThreeDotIcon />}

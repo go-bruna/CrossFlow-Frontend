@@ -35,7 +35,8 @@ export const Header = ({
 				<Button.Basic 
 					label={'Claim CFN'}
 					icon={<LogoIcon />}
-					className="gap-1 py-2 rounded-full"
+					className="gap-1 w-[130px] h-[36px] p-0 rounded-full"
+					textStyle="text-sm"
 				/>
 				<ConnectButton.Custom>
 					{({
@@ -58,7 +59,7 @@ export const Header = ({
 
 						return (
 							<div
-								className="h-full"
+								className=""
 								{...(!ready && {
 									"aria-hidden": true,
 									style: {
@@ -73,8 +74,8 @@ export const Header = ({
 										return (
 											<Button.Basic
 												label={"Connect Wallet"}
-												className="gap-2 h-[44.2px] border border-[#36f5cf]/10 rounded-full"
-												textStyle="text-white"
+												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												textStyle="text-white text-sm"
 												onClick={openConnectModal}
 											/>
 										);
@@ -84,8 +85,8 @@ export const Header = ({
 										return (
 											<Button.Basic
 												label={"Wrong network"}
-												className="gap-2 h-[44.2px] border border-[#36f5cf]/10 rounded-full"
-												textStyle="text-white"
+												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												textStyle="text-white text-sm"
 												onClick={openChainModal}
 											/>
 										);
@@ -105,8 +106,8 @@ export const Header = ({
 											<Button.Basic
 												label={'Connected'}
 												icon={<WalletIcon />}
-												className="gap-2 h-[44.2px] border border-[#36f5cf]/10 rounded-full"
-												textStyle="text-white"
+												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												textStyle="text-white text-sm"
 												onClick={openAccountModal}
 											/>
 										</div>

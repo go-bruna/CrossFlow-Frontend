@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge'
 
 type ClassOverrideProps = {
   container?: string
-  tabContainer?: string
   tabButton?: string
 }
 interface Props {
@@ -17,7 +16,7 @@ export const ItemsTab = (props: Props) => {
   return (
     <div
       className={twMerge(
-        'flex justify-center items-center gap-1 lg:gap-4 place-self-start',
+        'flex justify-center items-center gap-1 place-self-start',
         props?.classOverride?.container
       )}
     >

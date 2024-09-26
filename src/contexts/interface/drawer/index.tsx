@@ -92,6 +92,16 @@ export const DrawerContent = (props: Props) => {
           onClose={onClose}
         />
       )
+
+    case 'VOTING':
+      return (
+        <Drawer.Voting
+          {..._selectedDrawer}
+          visible={_visible}
+          onClose={onClose}
+        />
+      )
+
     default:
       return <></>
   }

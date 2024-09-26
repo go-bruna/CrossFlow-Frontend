@@ -17,7 +17,7 @@ export const GovernanceStatsbar = (props: Props) => {
           label={props.labels[0]}
           value={props.values[0]}
           classOverride={{
-            container: 'flex-col items-start pr-6 border-l border-[#5e7e8e]/20 gap-5',
+            container: 'flex-col items-start pr-6 gap-5',
             label: 'text-base crossflow-light',
             value: 'text-[19px] crossflow-semibold text-[#28b2fa]',
           }}
