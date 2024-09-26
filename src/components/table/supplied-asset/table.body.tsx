@@ -25,7 +25,7 @@ export const SuppliedAssetsTableBody = () => {
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
             <Typography variant="label-medium" className="text-[13px]">{data.balance}</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{data.balance_price}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{data.balance_price}</Typography>
           </div>
         </td>
         <td />
