@@ -15,7 +15,7 @@ export const CommentContainer = () => {
           classOverride={{
             container: 'justify-start gap-2',
             label: 'crossflow-regular',
-            value: 'text-[11px] crossflow-light',
+            value: 'text-[11px] crossflow-light mt-1',
           }}
         />
       </div>

@@ -75,26 +75,54 @@ export const AccountPage = () => {
         <Divider className="bg-[#5e7e8e]/20 my-5"/>
 
         {/* Supplied Assets Table */}
-        <BaseItem
-          title="Supplied assets"
-          classOverride={{
-            container: "gap-[6px]",
-            title: "text-base font-medium",
-            textGap: "flex-row items-center",
-          }}
-        />
-        <Table.SuppliedAssets />
-
-        {/* Borrowed Assets Table */}
-        <BaseItem
-          title="Borrowed assets"
-          classOverride={{
-            container: "gap-[6px]",
-            title: "text-base font-medium",
-            textGap: "flex-row items-center",
-          }}
-        />
-        <Table.BorrowedAssets />
+        {currentTag.title === tabs[1].title ? (
+          <>
+            <BaseItem
+              title="Supplied assets"
+              classOverride={{
+                container: "gap-[6px]",
+                title: "text-base font-medium",
+                textGap: "flex-row items-center",
+              }}
+            />
+            <Table.SuppliedAssets />
+          </>
+        ) : currentTag.title === tabs[2].title ? (
+          <>
+            {/* Borrowed Assets Table */}
+            <BaseItem
+              title="Borrowed assets"
+              classOverride={{
+                container: "gap-[6px]",
+                title: "text-base font-medium",
+                textGap: "flex-row items-center",
+              }}
+            />
+            <Table.BorrowedAssets />
+          </>
+        ) : (
+          <>
+            <BaseItem
+              title="Supplied assets"
+              classOverride={{
+                container: "gap-[6px]",
+                title: "text-base font-medium",
+                textGap: "flex-row items-center",
+              }}
+            />
+            <Table.SuppliedAssets />
+            {/* Borrowed Assets Table */}
+            <BaseItem
+              title="Borrowed assets"
+              classOverride={{
+                container: "gap-[6px]",
+                title: "text-base font-medium",
+                textGap: "flex-row items-center",
+              }}
+            />
+            <Table.BorrowedAssets />
+          </>
+        ) }
 
       </div>
     </div>
