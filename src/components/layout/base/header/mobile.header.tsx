@@ -17,7 +17,7 @@ export const Header = () => {
   // }
 
   const gotoMain = () => {
-    window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank")
+    // window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank")
   }
   
   return (
