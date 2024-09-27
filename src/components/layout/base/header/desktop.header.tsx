@@ -13,7 +13,7 @@ export const Header = ({
 	title,
 }: Props) => {
 	const gotoMain = () => {
-		window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank");
+		// window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank");
 	};
 
 	return (
@@ -59,7 +59,7 @@ export const Header = ({
 
 						return (
 							<div
-								className=""
+								className="w-[150px]"
 								{...(!ready && {
 									"aria-hidden": true,
 									style: {
@@ -74,7 +74,7 @@ export const Header = ({
 										return (
 											<Button.Basic
 												label={"Connect Wallet"}
-												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												className="gap-2 w-full h-[36px] border border-[#36f5cf]/10 rounded-full"
 												textStyle="text-white text-sm"
 												onClick={openConnectModal}
 											/>
@@ -85,7 +85,7 @@ export const Header = ({
 										return (
 											<Button.Basic
 												label={"Wrong network"}
-												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												className="gap-2 w-full h-[36px] border border-[#36f5cf]/10 rounded-full"
 												textStyle="text-white text-sm"
 												onClick={openChainModal}
 											/>
@@ -107,7 +107,7 @@ export const Header = ({
 												label={'Connected'}
 												isBadge={true}
 												icon={<WalletIcon />}
-												className="gap-2 h-[36px] border border-[#36f5cf]/10 rounded-full"
+												className="gap-2 w-full h-[36px] border border-[#36f5cf]/10 rounded-full"
 												textStyle="text-white text-sm"
 												onClick={openAccountModal}
 											/>
