@@ -23,7 +23,7 @@ export const ItemsTab = (props: Props) => {
       {props.tabs.map((tag: ITag, index: number) => (
         <button 
           className={twMerge(
-            'flex justify-center items-center gap-1 bg-[#101010] border border-[#36f5cf]/10 text-white py-[3px] rounded-full',
+            'flex justify-center items-center gap-1 bg-[#101010] border border-[#36f5cf]/10 text-white py-[3px] rounded-full hover:bg-[#5e7e8e]/10',
             props?.classOverride?.tabButton,
             tag.title === props.selected.title && 'bg-[#203933]'
           )}

@@ -1,4 +1,7 @@
+import { ClipboardIcon } from "@/assets/icons/clipboard";
+import { DocumentIcon } from "@/assets/icons/document";
 import { MainLogoIcon } from "@/assets/icons/logo";
+import { GitHubIcon, TelegramIcon, TwitterIcon } from "@/assets/icons/social-icons";
 import { Avatar } from "@/components/avatar";
 import { Typography } from "@/components/typography";
 import { ROUTES } from "@/constants/routes";
@@ -27,7 +30,7 @@ export const Sidebar = () => {
   const [ selectedItem, setSelectedItem ] = useState<ISidebar>(SIDEBAR_DATA[0])
 
   const gotoMain = () => {
-		window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank");
+		
 	};
 
   const navigatePage = {
@@ -50,43 +53,59 @@ export const Sidebar = () => {
   }, [])
   
   return (
-    <div className="h-full min-w-[246px] bg-[#101010]">
-      {/* logo */}
-      <div
-        className="flex items-center gap-2 cursor-pointer px-5 pt-5 pb-7 w-full"
-        onClick={gotoMain}
-      >
-        <Avatar 
-          icon={<MainLogoIcon />}
-          className="w-auto" 
-        />
-        {/* <Typography variant="h5" className="font-bold text-white">
-          OrdiBank
-        </Typography> */}
+    <div className="h-full flex flex-col justify-between min-w-[246px] bg-[#101010]">
+      <div>
+        {/* logo */}
+        <div
+          className="flex items-center gap-2 cursor-pointer px-5 pt-5 pb-7 w-full"
+          onClick={gotoMain}
+        >
+          <Avatar 
+            icon={<MainLogoIcon />}
+            className="w-auto" 
+          />
+          {/* <Typography variant="h5" className="font-bold text-white">
+            OrdiBank
+          </Typography> */}
+        </div>
+
+        {/* Sidebar options */}
+        {SIDEBAR_DATA.map((item: ISidebar, index: number) => (
+          <div 
+            className={twMerge(
+              "flex flex-1 items-center gap-2 hover:bg-[#5e7e8e]/10 p-5 cursor-pointer border-l border-l-8 border-transparent",
+              item.title === selectedItem.title && 'border-l border-l-8 border-[#36f5cf] bg-[#5e7e8e]/10'
+            )}
+            key={index}
+            onClick={() => {
+              setSelectedItem(item)
+            }}
+          >
+            {item.icon}
+            <Typography 
+              variant="label-small" 
+              // className="text-white text-sm crossflow-semibold"
+              className="text-white text-sm"
+            >
+              {item.title}
+            </Typography>
+          </div> 
+        ))}
       </div>
 
-      {/* Sidebar options */}
-      {SIDEBAR_DATA.map((item: ISidebar, index: number) => (
-        <div 
-          className={twMerge(
-            "flex flex-1 items-center gap-2 hover:bg-[#5e7e8e]/10 p-5 cursor-pointer border-l border-l-8 border-transparent",
-            item.title === selectedItem.title && 'border-l border-l-8 border-[#36f5cf] bg-[#5e7e8e]/10'
-          )}
-          key={index}
-          onClick={() => {
-            setSelectedItem(item)
-          }}
-        >
-          {item.icon}
-          <Typography 
-            variant="label-small" 
-            // className="text-white text-sm crossflow-semibold"
-            className="text-white text-sm"
-          >
-            {item.title}
-          </Typography>
-        </div> 
-      ))}
+      {/* Documents and Socials */}
+      <div className="flex flex-col gap-5 mt-auto px-[14px] mb-5">
+        <div className="flex items-center py-[18px] border-b border-[#36f5cf]/10 cursor-pointer">
+          <Avatar icon={<DocumentIcon />}/>
+          <Typography variant="label-small" className="text-sm">Documentation</Typography>
+          <Avatar icon={<ClipboardIcon />} className="ml-auto"/>
+        </div>
+        <div className="flex items-center items-center gap-[14px]">
+          <Avatar icon={<TwitterIcon />} className="w-[42px] h-[42px]"/>
+          <Avatar icon={<TelegramIcon />} className="w-[42px] h-[42px]" />
+          <Avatar icon={<GitHubIcon />} className="w-[42px] h-[42px]" />
+        </div>
+      </div>
     </div>
   )
 }

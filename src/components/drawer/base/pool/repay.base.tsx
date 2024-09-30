@@ -133,7 +133,8 @@ export const RepayContainer = () => {
           label="Repay"
           className={twMerge(
             "w-full bg-[#36f5cf]/10",
-            !amount || amount <= 0 ? 'bg-[#36f5cf]/10' : 'bg-[#0aab8b]' 
+            !amount || amount <= 0 ? 'bg-[#36f5cf]/10' : 'bg-[#0aab8b]',
+            // 'hover:bg-[#0aab8b]'
           )}
           onClick={() => {}}
         />

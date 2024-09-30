@@ -26,7 +26,7 @@ export const ButtonBasic = (props: IButtonBasicProps) => {
   return (
     <button
       className={twMerge(
-        `relative flex w-full justify-center items-center bg-[#101010] rounded-[5px] px-5 py-[14px] border border-[#36f5cf]/10`,
+        `relative flex w-full justify-center items-center bg-[#101010] rounded-[5px] px-5 py-[14px] border border-[#36f5cf]/10 hover:bg-[#5e7e8e]/10`,
         props.className
       )}
       onClick={onButtonClick}

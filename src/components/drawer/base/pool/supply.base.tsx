@@ -114,7 +114,10 @@ export const SupplyContainer = () => {
           <div className="flex flex-col gap-2.5 mt-8 ">
             <Button.Basic 
               label="Enter valid amount"
-              className="w-full bg-[#36f5cf]/10"
+              className={twMerge(
+                "w-full bg-[#36f5cf]/10",
+                // 'hover:bg-[#0aab8b]'
+              )}
               onClick={() => {}}
             />
           </div>
@@ -132,7 +135,8 @@ export const SupplyContainer = () => {
               label="Inscribe Tokens"
               className={twMerge(
                 "w-full bg-[#0aab8b]",
-                inscribed && 'bg-[#36f5cf]/10'
+                inscribed && 'bg-[#36f5cf]/10',
+                // 'hover:bg-[#0aab8b]'
               )}
               onClick={() => setInscribed(true)}
             />
@@ -149,7 +153,8 @@ export const SupplyContainer = () => {
               label="Supply"
               className={twMerge(
                 "w-full bg-[#36f5cf]/10",
-                inscribed && 'bg-[#0aab8b]'
+                inscribed && 'bg-[#0aab8b]',
+                // 'hover:bg-[#0aab8b]'
               )}
               onClick={() => setInscribed(false)}
             />

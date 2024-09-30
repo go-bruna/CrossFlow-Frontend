@@ -12,7 +12,7 @@ export const ButtonTab = (props: Props) => {
 
   return (
     <button 
-      className={twMerge('text-white', textStyle)}
+      className={twMerge('text-white hover:bg-[#5e7e8e]/10', textStyle)}
       onClick={() => props.onSelect(props.id)}
     >
       {props.label}
