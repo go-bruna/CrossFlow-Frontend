@@ -101,9 +101,9 @@ export const Sidebar = () => {
           <Avatar icon={<ClipboardIcon />} className="ml-auto"/>
         </div>
         <div className="flex items-center items-center gap-[14px]">
-          <Avatar icon={<TwitterIcon />} className="w-[42px] h-[42px]"/>
-          <Avatar icon={<TelegramIcon />} className="w-[42px] h-[42px]" />
-          <Avatar icon={<GitHubIcon />} className="w-[42px] h-[42px]" />
+          <Avatar icon={<TwitterIcon />} className="w-[42px] h-[42px] border border-[#36f5cf]/10 rounded-[10px] hover:bg-[#5e7e8e]/10"/>
+          <Avatar icon={<TelegramIcon />} className="w-[42px] h-[42px] border border-[#36f5cf]/10 rounded-[10px] hover:bg-[#5e7e8e]/10" />
+          <Avatar icon={<GitHubIcon />} className="w-[42px] h-[42px] border border-[#36f5cf]/10 rounded-[10px] hover:bg-[#5e7e8e]/10" />
         </div>
       </div>
     </div>
