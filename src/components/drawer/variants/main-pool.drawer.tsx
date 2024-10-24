@@ -10,6 +10,7 @@ import { WithdrawContainer } from '../base/pool/withdraw.base'
 import { RepayContainer } from '../base/pool/repay.base'
 import { handleAnimation } from '@/utils'
 import { ITag } from '@/types/interfaces'
+import { IPool } from '@/types/api/pool'
 
 const tabs = [
   { title: 'Supply' },
@@ -17,15 +18,17 @@ const tabs = [
   { title: 'Withdraw' },
   { title: 'Repay' },
 ]
-export interface Props extends BaseProps {}
+export interface Props extends BaseProps {
+  data: IPool
+}
 
 export const PoolDrawer = (props: Props) => {
   const { isDesktop } = useWindowSize()
   const [ current, setCurrent ] = useState<ITag>(tabs[0])
   const [ opacityAnimation, setOpacityAnimation ] = useState<boolean>(false)
-
+  
   const displayContainer = {
-    'Supply': <SupplyContainer />,
+    'Supply': <SupplyContainer data={props.data}/>,
     'Borrow': <BorrowContainer />,
     'Withdraw': <WithdrawContainer />,
     'Repay': <RepayContainer />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigation } from 'react-router-dom'
+import { matchPath, Outlet, useNavigation } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
-import { TailSpin } from 'react-loader-spinner'
+import useDebounce from '@/hooks/useDebounce'
+import { ROUTES } from '@/constants/routes'
 
 let timeout: NodeJS.Timeout
 const Screen: React.FC = (): JSX.Element => {
@@ -9,10 +10,14 @@ const Screen: React.FC = (): JSX.Element => {
 
   const [loading, setLoading] = useState(true)
   const [opacityAnim, setOpacityAnim] = useState([true, false])
+  const debouncedLocation = useDebounce({
+    value: location?.pathname ?? '',
+    delay: 500,
+    enabled: true,
+  })
 
   const handleStateChange = async () => {
     clearTimeout(timeout)
-
     if (state === 'loading') {
       setOpacityAnim([true, false])
       await new Promise((resolve) => {
@@ -28,6 +33,19 @@ const Screen: React.FC = (): JSX.Element => {
     }
   }
 
+  const getSkeleton = () => {
+    if (matchPath({ path: ROUTES.ACCOUNT }, debouncedLocation)) {
+      return <h1 className='text-white'>Account</h1>
+    } else if (matchPath({ path: ROUTES.MAIN}, debouncedLocation)) {
+      return <h1 className='text-white'>MAIN</h1>
+    } else if (matchPath({ path: ROUTES.STAKE }, debouncedLocation)) {
+      return <h1 className='text-white'>STAKE</h1>
+    } else if (matchPath({ path: ROUTES.GOVERNANCE }, debouncedLocation)) {
+      return <h1 className='text-white'>GOVERNANCE</h1>
+    }
+    return <h1 className='text-white'>Account</h1>
+  }
+
   useEffect(() => {
     handleStateChange()
   }, [state])
@@ -40,15 +58,7 @@ const Screen: React.FC = (): JSX.Element => {
           opacityAnim[0] ? 'opacity-100' : 'opacity-0'
         )}
       >
-        <TailSpin
-          visible={true}
-          height="30"
-          width="30"
-          color="#4fa94d"
-          ariaLabel="tail-spin-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
+        {getSkeleton()}
       </div>
     )
   }

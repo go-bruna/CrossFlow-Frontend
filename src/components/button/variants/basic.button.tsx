@@ -7,7 +7,7 @@ import { Badge } from '@/components/badge'
 export interface IButtonBasicProps {
   label: string
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void
-  icon?: JSX.Element
+  icon?: JSX.Element | undefined
   className?: string
   textStyle?: string
   variant?: Variant

@@ -8,8 +8,22 @@ import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
 import { Avatar } from "@/components/avatar"
 import { ArrowRightIcon } from "@/assets/icons/arrow"
+import { useAccount, useBalance } from 'graz'
+import { cosmoshub } from '@/config/graz'
+import { IPool } from "@/types/api/pool"
+import { numberFormat } from "@/utils"
 
-export const SupplyContainer = () => {
+export interface ISupplyContainer {
+  data: IPool
+}
+export const SupplyContainer = (props: ISupplyContainer) => {
+  const { data: account } = useAccount()
+
+  const { data: balance } = useBalance({
+    chainId: cosmoshub.chainId,
+    denom: cosmoshub.stakeCurrency.coinMinimalDenom,
+    bech32Address: account?.bech32Address,
+  });
   const [ amount, setAmount ] = useState<number | undefined>(undefined)
   const [ inscribed, setInscribed ] = useState<boolean>(false)
   
@@ -24,7 +38,7 @@ export const SupplyContainer = () => {
         placeholder="0.00"
         icon={<AmountIcon />}
         innerButtonLabel="Max"
-        onMax={() => {}}
+        onMax={() => setAmount(Number(balance?.amount) ?? 0)}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setAmount(Number(parseInt(e.target.value)))
         }
@@ -39,14 +53,14 @@ export const SupplyContainer = () => {
 
       <Paragraph.List
         label="Suppliable amount" 
-        value={'14.15 POLY'}
+        value={`${numberFormat(balance?.amount ?? 0)} ${props.data.asset_symbol}`}
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}
       />
       <Paragraph.List
         label="Total APY" 
-        value={'4.21%'}
+        value={`${numberFormat(props.data.apy)} %`}
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}
@@ -82,7 +96,7 @@ export const SupplyContainer = () => {
       />
       <Paragraph.List
         label="Borrow limit" 
-        value={'$0'}
+        value={numberFormat(Number(props.data.total_supply) * 0.8)}
         classOverride={{
           container: 'flex-1 py-[10px]',
         }}
@@ -109,7 +123,7 @@ export const SupplyContainer = () => {
 
       {/* Button group */}
       <div className="flex flex-col gap-6">
-      {!amount || amount <= 0 ? (
+      {!amount || amount <= 0 || amount > Number(balance?.amount ?? 0) ? (
         <>
           <div className="flex flex-col gap-2.5 mt-8 ">
             <Button.Basic 

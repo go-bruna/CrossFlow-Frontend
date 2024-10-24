@@ -1,17 +1,22 @@
 import { createContext } from 'react'
-import { IAuthContext } from '@/types/context/auth'
 import { WALLET_TYPE_UNISAT } from '@/constants/wallets'
+import type { IAuthContext } from '@/types/context/auth'
 
 const initialState = {
+  wallet: null,
+  walletType: WALLET_TYPE_UNISAT,
+
   connected_wallet: null,
-  address: '',
+
+  unisatWallet: null,
+  okxWallet: null,
+  xverseWallet: null,
+  bitgetWallet: null,
+
   paymentAccount: undefined,
   ordinalsAccount: undefined,
-  btcBalance: 0,
-  walletType: WALLET_TYPE_UNISAT,
-  unisatWallet: undefined,
-  phantomWallet: undefined,
-  okxWallet: undefined,
+
+  sendBitcoinToHTLC: () => ({}) as any,
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -20,12 +25,17 @@ export const AuthContext = createContext<IAuthContext>({
     tokenBalances: [],
     poolBalanceList: [],
   },
+
   unisatInstalled: false,
-  phantomInstalled: false,
+  okxInstalled: false,
+  xverseInstalled: false,
+  bitgetInstalled: false,
+
   connectUnisatWallet: () => {},
-  connectPhantomWallet: () => {},
   connectOkxWallet: () => {},
   connectXVerseWallet: () => {},
+  connectBitgetWallet: () => {},
+
   disconnectWallet: () => {},
 } as IAuthContext)
 

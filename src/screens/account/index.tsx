@@ -7,11 +7,18 @@ import { Input } from "@/components/input"
 import { CustomProgress } from "@/components/progress"
 import Tab from "@/components/tab"
 import { ACCOUNT_ITEM_DATA } from "@/constants"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { BaseItem } from "@/components/card/base/item.base"
 import Table from "@/components/table"
 import { ITag } from "@/types/interfaces"
 import { BorrowedAssetIcon, SuppliedAssetIcon } from "@/assets/icons/supplies"
+import { queryClient } from "@/wagmi"
+import { GET_ACCOUNT_BORROWED, GET_ACCOUNT_SUMMARY, GET_ACCOUNT_SUPPLIES } from "@/constants/query"
+import { useAccountSummary } from "@/hooks/queries/useAccountSummary"
+import { useAccountSupplies } from "@/hooks/queries/useAccountSupplies"
+import { useAccountBorrowed } from "@/hooks/queries/useAccountBorrowed"
+import { useAccount } from "graz"
+import AccountSkeleton from "./skeleton"
 
 const tabs = [
   { title: 'All' },
@@ -20,11 +27,47 @@ const tabs = [
 ]
 
 export const AccountPage = () => {
+  const { data: account, isConnected } = useAccount()
   const [currentTag, setCurrentTag] = useState<ITag>(tabs[0]);
   const [ search, setSearch] = useState<string | undefined>(undefined)
+  
+  const { data: accountSummary, isLoading: loadingSummary } = useAccountSummary(account?.bech32Address)  
+  const { data: accountAssetSupplies, isLoading: loadingSupplies } = useAccountSupplies(account?.bech32Address)
+  const { data: accountassetBorrowed, isLoading: loadingBorrowed } = useAccountBorrowed(account?.bech32Address)
+
+  const invalidateQuery = async () => {
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [GET_ACCOUNT_SUMMARY] }),
+      queryClient.invalidateQueries({ queryKey: [GET_ACCOUNT_SUPPLIES] }),
+      queryClient.invalidateQueries({
+        queryKey: [GET_ACCOUNT_BORROWED],
+      }),
+    ])
+  }
+
+  const _summary = useMemo(() => {
+    return !accountSummary
+      ? ['0%', '$0', '$0', '$0', '$0']
+      : [
+        Number(accountSummary.net_apy).toLocaleString() + '%',
+        '$' + Number(accountSummary.daily_earnings).toLocaleString(),
+        '$' + Number(accountSummary.total_supply).toLocaleString(),
+        '$' + Number(accountSummary.total_borrow).toLocaleString(),
+        '$' + Number(accountSummary.total_staked).toLocaleString(),
+      ]
+  }, [accountSummary])
+
+  useEffect(() => {
+    console.log("==load page===")
+    invalidateQuery()
+  }, [isConnected])
+
+  if (loadingSummary || loadingSupplies || loadingBorrowed) {
+    return <AccountSkeleton />
+  }
 
   return (
-    <div className="w-full">
+    <div className="w-full animate-fade-in-up">
       <Header.Desktop title={'Account'} />
 
       {/* Container */}
@@ -32,17 +75,20 @@ export const AccountPage = () => {
         <Card.AccountStatsBar 
           labels={ACCOUNT_ITEM_DATA}
           labelIcons={[<InforCircleIcon />]}
-          values={['4.23%', '<$24.12', '$2.12K', '$2.12K', '$0']}
+          values={_summary}
         />
 
         {/* Borrow limit by progress */}
         <CustomProgress 
           headerLabels={['Borrow limit used:', 'Limit:']}
-          headerValues={['80%', '$11.23']}
-          current="80"
+          headerValues={[
+            `${Number(Number(accountSummary?.borrow_limit_used ?? 0).toFixed(2))}%`,
+            '$11.23'
+          ]}
+          current={Number(accountSummary?.borrow_limit_used ?? 0).toString()}
           limit="80"
           footerLabel="Your safe limit"
-          footerValue="$8.85"
+          footerValue={`$${Number(accountSummary?.borrow_limit_used ?? 0).toLocaleString()}`}
           classOverride={{
             container: 'w-[420px] mt-7 mb-3'
           }}
@@ -85,9 +131,9 @@ export const AccountPage = () => {
                 textGap: "flex-row items-center",
               }}
             />
-            <Table.SuppliedAssets />
+            {accountAssetSupplies && <Table.SuppliedAssets data={accountAssetSupplies}/>}
           </>
-        ) : currentTag.title === tabs[2].title ? (
+        ) : currentTag.title === tabs[2].title  ? (
           <>
             {/* Borrowed Assets Table */}
             <BaseItem
@@ -98,7 +144,7 @@ export const AccountPage = () => {
                 textGap: "flex-row items-center",
               }}
             />
-            <Table.BorrowedAssets />
+            {accountassetBorrowed && <Table.BorrowedAssets data={accountassetBorrowed}/>}
           </>
         ) : (
           <>
@@ -110,7 +156,7 @@ export const AccountPage = () => {
                 textGap: "flex-row items-center",
               }}
             />
-            <Table.SuppliedAssets />
+            {accountAssetSupplies && <Table.SuppliedAssets data={accountAssetSupplies}/>}
             {/* Borrowed Assets Table */}
             <BaseItem
               title="Borrowed assets"
@@ -120,7 +166,7 @@ export const AccountPage = () => {
                 textGap: "flex-row items-center",
               }}
             />
-            <Table.BorrowedAssets />
+            {accountassetBorrowed && <Table.BorrowedAssets data={accountassetBorrowed}/>}
           </>
         ) }
 

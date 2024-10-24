@@ -1,3 +1,4 @@
+import { IPool } from "@/types/api/pool"
 import { MainPoolsTableBody } from "./table.body"
 import { MainPoolsTableHeader } from "./table.header"
 import { useWindowSize } from "@/hooks/useWindowSize"
@@ -6,7 +7,11 @@ import { useWindowSize } from "@/hooks/useWindowSize"
 // import { StakeIcon } from "@/assets/icons/stake"
 // const orderArr = ['Ascending', 'Decending']
 
-export const MainPoolsTable = () => {
+export const MainPoolsTable = ({
+  data
+}: {
+  data: IPool[]
+}) => {
   const { windowSize } = useWindowSize()
 
   return (
@@ -23,7 +28,7 @@ export const MainPoolsTable = () => {
           <div className="pb-3 overflow-auto max-h-[770px]">
             <table className="w-full">
               <MainPoolsTableHeader />
-              <MainPoolsTableBody />
+              <MainPoolsTableBody data={data}/>
             </table>
             {/* {filteredStakeArr.length < 1 && (
               <Card.Wrapper

@@ -3,10 +3,11 @@ import { GovernanceTableBody } from "./table.body"
 import { GovernanceTableHeader } from "./table.header"
 import { useWindowSize } from "@/hooks/useWindowSize"
 import { useMemo } from "react"
-import { GOVERNANCE_TABLE_DATA } from "@/constants/table"
 import { Avatar } from "@/components/avatar"
 import { InforCircleIcon } from "@/assets/icons/infor"
 import { Typography } from "@/components/typography"
+import { useGovernanceProposals } from "@/hooks/queries/useGovernanceProposals"
+import { refineStatus } from "@/helper/status"
 // import Card from "@/components/card"
 // import { Avatar } from "@/components/avatar"
 // import { StakeIcon } from "@/assets/icons/stake"
@@ -23,18 +24,25 @@ export const GovernanceTable = ({
 }: Props) => {
 
   const { windowSize } = useWindowSize()
+  const { data: proposals, isLoading: loadingProposals } = useGovernanceProposals()
 
   const filteredTblData = useMemo(() => {
-    let _filter_data = filter.title.toLowerCase() === 'all' 
-      ? GOVERNANCE_TABLE_DATA
-      : GOVERNANCE_TABLE_DATA.filter(t => t.status.toLowerCase() === filter.title.toLowerCase())
+    if (!proposals)
+      return []
+    const _filter_data = filter.title.toLowerCase() === 'all' 
+      ? proposals
+      : proposals.filter(t => refineStatus(t.status) === filter.title.toLowerCase())
 
     if (!search) return _filter_data
     return _filter_data.filter(
       t => t.title.toLowerCase().includes(search?.toLowerCase())
     )
 
-  }, [search, filter])
+  }, [search, filter, proposals])
+
+  if (loadingProposals) {
+    return <></>
+  }
 
   return (
     <div className="flex flex-col gap-4 my-10 mb-[70px] lg:mt-[45px] w-full">

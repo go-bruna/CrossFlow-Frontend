@@ -11,10 +11,10 @@ export const ModalStyle = {
     padding: '0px',
     borderRadius: '20px',
     border: 'none',
-    background: '#03030300',
+    background: '#101010',
   },
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(30, 30, 30, 0.7)',
   },
 }
 
@@ -31,9 +31,9 @@ export const MobileModalStyle = {
     padding: '0px',
     borderRadius: '20px',
     border: 'none',
-    background: '#03030300',
+    background: '#101010',
   },
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(30, 30, 30, 0.7)',
   },
 }

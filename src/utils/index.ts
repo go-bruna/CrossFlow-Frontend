@@ -1,4 +1,5 @@
 import { WalletType } from "@/types/interfaces"
+import dayjs from "dayjs"
 import { BigNumberish, ethers } from "ethers"
 import Cookies from 'js-cookie'
 
@@ -20,7 +21,7 @@ export const clearCookie = (key: string) => {
   Cookies.remove(key)
 }
 
-export const setCookie = (key: string, value: WalletType | null) => {
+export const setCookie = (key: string, value: string | null) => {
   Cookies.set(key, value as any, { expires: 1 })
 }
 
@@ -56,4 +57,43 @@ export const handleAnimation = async (setOpacityAnimation: Function) => {
   await new Promise((resolve) => {
     timeout = setTimeout(resolve, 200)
   })
+}
+
+export const pureNumberFormat = (param: string | number, decimal=2) => {
+  if (typeof param === 'number') {
+    return Number(param.toFixed(decimal)).toLocaleString()
+  } else {
+    return (Number(Number(param).toFixed(decimal)).toLocaleString())  
+  }
+}
+
+export const numberFormat = (param?: string | number, decimal=2) => {
+  if (!param)
+    return 0
+  let _number = typeof param === 'string' ? Number(param) : param
+
+  const lookup = [
+    { value: 1, symbol: "" },
+    { value: 1e3, symbol: "k" },
+    { value: 1e6, symbol: "M" },
+    { value: 1e9, symbol: "G" },
+    { value: 1e12, symbol: "T" },
+    { value: 1e15, symbol: "P" },
+    { value: 1e18, symbol: "E" }
+  ];
+  const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/;
+  const item = lookup.findLast((item: any) => _number >= item.value);
+  
+  return item ? (_number / item.value).toFixed(decimal).replace(regexp, "").concat(item.symbol) : "0";
+}
+
+export const dayDiff = (startTimeString?: string, endTimeString?: string) => {
+  if (!startTimeString && !endTimeString)
+    return 'NaN'
+  const _date = dayjs()
+  const _s_time = dayjs(endTimeString ?? startTimeString).valueOf()
+  const diff = _date.diff(_s_time, 'day')
+  if (diff === 0)
+    return 'Today'
+  return `${diff} Day(s)`
 }

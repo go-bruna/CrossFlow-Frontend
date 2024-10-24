@@ -29,9 +29,9 @@ export enum STAGE_TYPE {
 
 export enum WalletType {
   UNISAT = 'unisat',
-  PHANTOM = 'phantom',
   OKX = 'okx',
   XVERSE = 'xverse',
+  BITGET = 'bitget',
 }
 
 // Interfaces

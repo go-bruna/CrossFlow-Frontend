@@ -1,12 +1,13 @@
+import { IAccountAssetsSupplies } from "@/types/api/account"
 import { SuppliedAssetsTableBody } from "./table.body"
 import { SuppliedAssetsTableHeader } from "./table.header"
 import { useWindowSize } from "@/hooks/useWindowSize"
-// import Card from "@/components/card"
-// import { Avatar } from "@/components/avatar"
-// import { StakeIcon } from "@/assets/icons/stake"
-// const orderArr = ['Ascending', 'Decending']
 
-export const SuppliedAssetsTable = () => {
+export const SuppliedAssetsTable = ({
+  data
+}: {
+  data: IAccountAssetsSupplies[]
+}) => {
   const { windowSize } = useWindowSize()
 
   return (
@@ -23,7 +24,7 @@ export const SuppliedAssetsTable = () => {
           <div className="pb-3 overflow-auto max-h-[770px]">
             <table className="w-full">
               <SuppliedAssetsTableHeader />
-              <SuppliedAssetsTableBody />
+              <SuppliedAssetsTableBody data={data}/>
             </table>
             {/* {filteredStakeArr.length < 1 && (
               <Card.Wrapper

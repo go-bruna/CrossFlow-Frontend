@@ -2,8 +2,18 @@ import { LogoIcon } from "@/assets/icons/logo"
 import { Avatar } from "@/components/avatar"
 import Paragraph from "@/components/paragraph"
 import { Typography } from "@/components/typography"
+import { refineStatus, statusClassOverride } from "@/helper/status"
+import { useGovernanceProposalDetail } from "@/hooks/queries/useGovernanceProposalDetail"
+import { pureNumberFormat } from "@/utils"
+import dayjs from "dayjs"
+import { useSearchParams } from "react-router-dom"
+import { twMerge } from "tailwind-merge"
 
 export const DescriptionContainer = () => {
+  const [searchParams] = useSearchParams()
+  const proposal_id = searchParams.get('proposal_id') || undefined
+  const { data: proposalDetail } = useGovernanceProposalDetail(proposal_id)
+  
   return (
     <div className="flex flex-col gap-6 px-2.5 py-4 bg-[#101010] rounded-[10px]">
       {/* description content */}
@@ -30,11 +40,15 @@ export const DescriptionContainer = () => {
       <div className="flex flex-col gap-5">
         <Paragraph.List 
           label={'Proposal Status :'}
-          value={'Ongoing'}
+          value={refineStatus(proposalDetail?.status)}
           classOverride={{
-            container: 'justify-start gap-12',
+            container: 'justify-start gap-12 capitalize',
             label: 'w-[114px] crossflow-regular',
-            value: 'text-[#f6851b] crossflow-regular'
+            value: twMerge(
+              'text-[#f6851b] crossflow-regular',
+              statusClassOverride(refineStatus(proposalDetail?.status)),
+              'bg-transparent'
+            )
           }}
         />
         <Paragraph.List 
@@ -42,7 +56,9 @@ export const DescriptionContainer = () => {
           value={(
             <div className="flex items-center">
               <Avatar icon={<LogoIcon />} className="justify-start"/>
-              <Typography variant="label-medium" className="text-[13px] crossflow-regular">22 CFN</Typography>
+              <Typography variant="label-medium" className="text-[13px] crossflow-regular">
+                {`${pureNumberFormat(proposalDetail?.total_deposit?.reduce((res, curr) => res + Number(curr.amount), 0) ?? 0)} CFN`}
+              </Typography>
             </div>
           )}
           classOverride={{
@@ -53,7 +69,10 @@ export const DescriptionContainer = () => {
         />
         <Paragraph.List 
           label={'Submit Time :'}
-          value={'9 Dec 2019, 9:52:09pm UTC'}
+          value={proposalDetail?.submit_time 
+            ? dayjs(proposalDetail.submit_time).format("DD MMM YYYY, h:mm:ss A, [UTC]") 
+            : 'NaN'
+          }
           classOverride={{
             container: 'justify-start gap-12',
             label: 'w-[114px] crossflow-regular',
@@ -62,7 +81,10 @@ export const DescriptionContainer = () => {
         />
         <Paragraph.List 
           label={'Deposit End Time :'}
-          value={'9 Dec 2019, 9:52:09pm UTC'}
+          value={proposalDetail?.deposit_end_time 
+            ? dayjs(proposalDetail.deposit_end_time).format("DD MMM YYYY, h:mm:ss A, [UTC]") 
+            : 'NaN'
+          }
           classOverride={{
             container: 'justify-start gap-12',
             label: 'w-[114px] crossflow-regular',
@@ -71,7 +93,10 @@ export const DescriptionContainer = () => {
         />
         <Paragraph.List 
           label={'Voting Start Time :'}
-          value={'9 Dec 2019, 9:52:09pm UTC'}
+          value={proposalDetail?.voting_start_time 
+            ? dayjs(proposalDetail.voting_start_time).format("DD MMM YYYY, h:mm:ss A, [UTC]") 
+            : 'NaN'
+          }
           classOverride={{
             container: 'justify-start gap-12',
             label: 'w-[114px] crossflow-regular',
@@ -80,7 +105,10 @@ export const DescriptionContainer = () => {
         />
         <Paragraph.List 
           label={'Voting End Time :'}
-          value={'9 Dec 2019, 9:52:09pm UTC'}
+          value={proposalDetail?.voting_end_time 
+            ? dayjs(proposalDetail.voting_end_time).format("DD MMM YYYY, h:mm:ss A, [UTC]") 
+            : 'NaN'
+          }
           classOverride={{
             container: 'justify-start gap-12',
             label: 'w-[114px] crossflow-regular',

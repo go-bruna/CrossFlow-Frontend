@@ -1,12 +1,17 @@
 import { Icon } from "@/components/icon";
 import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
-import { BORROWED_ASSETS_TABLE_DATA } from "@/constants/table";
 import { CustomProgress } from "@/components/progress";
+import { IAccountAssetsBorrowed } from "@/types/api/account";
+import { numberFormat } from "@/utils";
 
-export const BorrowedAssetsTableBody = () => {
+export const BorrowedAssetsTableBody = ({
+  data
+}: {
+  data: IAccountAssetsBorrowed[]
+}) => {
 
-  const Row = ({ data }: any) => {
+  const Row = ({ row }: { row: IAccountAssetsBorrowed }) => {
     return (
       <tr 
         className="h-[68px] text-[13px] hover:bg-[#90d5c8]/10"
@@ -14,26 +19,26 @@ export const BorrowedAssetsTableBody = () => {
         <td>
           <div className="flex items-center gap-2 pl-5">
             <Icon src={EthereumIMG} />
-            <Typography variant="label-medium" className="text-[13px]">{data.ticker}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{row.asset_symbol}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">{data.apy_ltv}</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{data.apy_ltv_percent}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.apy)}</Typography>
+            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{`${numberFormat(row.loan_rate)}%`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">{data.balance}</Typography>
-            <Typography variant="label-medium" className="text-[13px]">{data.balance_price}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
           </div>
         </td>
         <td>
           <div className="flex items-center gap-1 justify-end">
-            <Typography variant="label-medium" className="text-[13px]">{data.limit_percent}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(Number(row.health) * 100)}%`}</Typography>
             <CustomProgress 
-              current="80"
+              current={(Number(row.health) * 100).toString()}
               classOverride={{
                 progressBar: 'w-[60px]'
               }}
@@ -49,9 +54,9 @@ export const BorrowedAssetsTableBody = () => {
 
   return (
     <tbody className="text-gray-900 overflow-y-auto">
-    {BORROWED_ASSETS_TABLE_DATA.map((item, index) => (
+    {data.map((item: IAccountAssetsBorrowed, index: number) => (
       <Row 
-        data={item}
+        row={item}
         key={index} 
       />
     ))}

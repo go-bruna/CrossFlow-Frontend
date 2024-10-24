@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Header from "@/components/layout/base/header/index"
 import Card from "@/components/card"
 import { MAIN_POOLS_ITEM_DATA } from "@/constants"
@@ -8,6 +8,12 @@ import { SearchIcon } from "@/assets/icons/common";
 import Table from "@/components/table";
 import { ITag } from "@/types/interfaces";
 import { EthereumIcon } from "@/assets/icons/coins";
+import { usePoolSummary } from "@/hooks/queries/usePoolSummary";
+import { GET_POOL_LIST, GET_POOL_SUMMARY } from "@/constants/query";
+import { queryClient } from "@/wagmi";
+import { numberFormat } from "@/utils";
+import { usePoolList } from "@/hooks/queries/usePoolList";
+import { IPool } from "@/types/api/pool";
 
 const tabs = [{
   title: 'All',
@@ -17,17 +23,53 @@ const tabs = [{
 }]
 
 export const MainPoolPage = () => {
+  const { data: poolSummary } = usePoolSummary()
+  const { data: poolList } = usePoolList()
   const [currentTag, setCurrentTag] = useState<ITag>(tabs[0]);
   const [ search, setSearch] = useState<string | undefined>(undefined)
+
+  const invalidateQuery = async () => {
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [GET_POOL_SUMMARY] }),
+      queryClient.invalidateQueries({ queryKey: [GET_POOL_LIST] }),
+      // queryClient.invalidateQueries({
+      //   queryKey: [GET_ACCOUNT_BORROWED],
+      // }),
+    ])
+  }
+  
+  const _summary = useMemo(() => {
+    return !poolSummary
+      ? ['0%', '$0', '$0', '$0', '$0']
+      : [
+        '$' + numberFormat(poolSummary.total_borrow),
+        '$' + numberFormat(poolSummary.total_borrow),
+        '$' + numberFormat(poolSummary.available_liquidity),
+        '$' + numberFormat(poolSummary.daily_cfn_rewards),
+        '$' + numberFormat(poolSummary.assets),
+      ]
+  }, [poolSummary])
+
+  const filterPools = useMemo(() => {
+    if (!poolList) return undefined
+    if (currentTag.title === 'All') return poolList
+    return poolList
+      .filter((pool: IPool) => pool.chain_symbol.toLowerCase() === currentTag.title.toLowerCase())
+  }, [poolList, currentTag])
+
+  useEffect(() => {
+    invalidateQuery()
+  }, [])
+
   return (
-    <div className="w-full">
+    <div className="w-full animate-fade-in-up">
       <Header.Desktop title={'Main Pools'} />
       
       {/* container */}
       <div className="mt-[30px]">
         <Card.MainStatsBar 
           labels={MAIN_POOLS_ITEM_DATA}
-          values={['$2.12M', '$2.12M', '$3.12M', '12.312M', '8']}
+          values={_summary}
         />
 
         {/* Category and Search */}
@@ -56,7 +98,7 @@ export const MainPoolPage = () => {
         </div>
 
         {/* Table */}
-        <Table.MainPools />
+        { filterPools && <Table.MainPools data={filterPools}/> }
       </div>
     </div>
   )

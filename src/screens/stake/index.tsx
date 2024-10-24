@@ -6,15 +6,42 @@ import { LogoIcon } from "@/assets/icons/logo";
 import { Typography } from "@/components/typography";
 import Button from "@/components/button";
 import { useDrawer } from "@/contexts/interface";
+import { useStakeSummary } from "@/hooks/queries/useStakeSummary";
+import { useEffect } from "react";
+import { queryClient } from "@/wagmi";
+import { GET_STAKE_SUMMARY } from "@/constants/query";
+import { numberFormat } from "@/utils";
+import { useAccount } from "graz";
+import StakingSkeleton from "./skeleton";
 
 // const arr1 = [1,2,3,4]
 // const arr2 = [1,2,3,4,5,6,7,8]
 
 export const StakePage = () => {
 	const { setDrawer } = useDrawer()
+	const { data: account } = useAccount()
+	const { data: stakeSummary, isLoading } = useStakeSummary(account?.bech32Address)
+	
+	// invalidate queries
+	const invalidateQuery = async () => {
+		Promise.all([
+			queryClient.invalidateQueries({ queryKey: [GET_STAKE_SUMMARY] }),
+			// queryClient.invalidateQueries({
+			//   queryKey: [GET_ACCOUNT_BORROWED],
+			// }),
+		])
+	}
 
+	useEffect(() => {
+		invalidateQuery()
+	}, [])
+
+	if (isLoading) {
+		return <StakingSkeleton />
+	}
+	
 	return (
-		<div className="w-full">
+		<div className="w-full animate-fade-in-up">
 			{/* Header */}
 			<Header.Desktop title={'Stake'} />
 			
@@ -25,7 +52,9 @@ export const StakePage = () => {
           value={(
             <div className="flex items-center gap-1">
               <Avatar icon={<LogoIcon />} className="justify-start"/>
-              <Typography variant="label-medium" className="text-[19px] crossflow-semibold">21 CFN</Typography>
+              <Typography variant="label-medium" className="text-[19px] crossflow-semibold">
+								{numberFormat(stakeSummary?.user_staked ?? 0)}
+							</Typography>
             </div>
           )}
           classOverride={{
@@ -35,10 +64,10 @@ export const StakePage = () => {
         />
 
 				{/* stats */}
-				<div className="flex justify-between items-center gap-5 mt-[25px]">
+				<div className="flex items-center gap-8 mt-[25px]">
 					<Paragraph.List 
 						label="CFN Stake APR"
-						value={`$2.12M`}
+						value={numberFormat(stakeSummary?.cfn_stake_apr ?? 0)}
 						classOverride={{
 							container: 'flex-col justify-start items-start gap-4 max-w-[120px] ',
 							label: 'text-base crossflow-light',
@@ -50,7 +79,9 @@ export const StakePage = () => {
 						value={(
 							<div className="flex items-center">
 								<Avatar icon={<LogoIcon />} className="justify-start"/>
-								<Typography variant="label-medium" className="text-[19px] crossflow-semibold">{`3.12K`}</Typography>
+								<Typography variant="label-medium" className="text-[19px] crossflow-semibold">
+									{numberFormat(stakeSummary?.daily_emission ?? 0)}
+								</Typography>
 							</div>
 						)}
 						classOverride={{
@@ -63,7 +94,9 @@ export const StakePage = () => {
 						value={(
 							<div className="flex items-center">
 								<Avatar icon={<LogoIcon />} className="justify-start"/>
-								<Typography variant="label-medium" className="text-[19px] crossflow-semibold">{`$2.12M`}</Typography>
+								<Typography variant="label-medium" className="text-[19px] crossflow-semibold">
+									{numberFormat(stakeSummary?.total_staked ?? 0)}
+								</Typography>
 							</div>
 						)}
 						classOverride={{

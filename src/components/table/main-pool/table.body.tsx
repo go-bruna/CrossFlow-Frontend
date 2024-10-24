@@ -1,59 +1,68 @@
 import { Icon } from "@/components/icon";
 import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
-import { MAIN_POOLS_TABLE_DATA } from "@/constants/table";
 import { useDrawer } from "@/contexts/interface";
+import { IPool } from "@/types/api/pool";
+import { numberFormat } from "@/utils";
 
-
-export const MainPoolsTableBody = () => {
+export const MainPoolsTableBody = ({
+  data
+}: { 
+  data: IPool[]
+}) => {
   const { setDrawer } = useDrawer()
 
-  const Row = ({ data }: any) => {
+  const Row = ({ 
+    row_data 
+  }: {
+    row_data: IPool
+  }) => {
     return (
       <tr 
         className="h-[70px] text-[13px] hover:bg-[#90d5c8]/10"
         onClick={() => setDrawer({
-          id: 'POOL'
+          id: 'POOL',
+          data: row_data
         })}
       >
         <td>
           <div className="flex items-center gap-2 pl-5">
             <Icon src={EthereumIMG} />
-            <Typography variant="label-medium" className="text-[13px]">{data.ticker}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{row_data.asset_symbol}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">398.44K MERN</Typography>
-            <Typography variant="label-medium" className="text-[13px]">$142.122</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(row_data.total_supply)} ${row_data.asset_symbol}`}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`$${numberFormat(row_data.total_supply_in_dollar)}`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">10.4%</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">78%</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(row_data.apy)}%`}</Typography>
+            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{`${numberFormat(row_data.apy2)}%`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">124.44K MERN</Typography>
-            <Typography variant="label-medium" className="text-[13px]">$982.15K</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(row_data.total_borrow)} ${row_data.asset_symbol}`}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`$${numberFormat(row_data.total_borrow_in_dollar)}`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">10.4%</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(row_data.borrow_apy)}%`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">224.12K MERM</Typography>
-            <Typography variant="label-medium" className="text-[13px]">$322.12K</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`${numberFormat(row_data.liquidity)} ${row_data.asset_symbol}`}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`$${numberFormat(row_data.liquidity_in_dollar)}`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end pr-7">
-            <Typography variant="label-medium" className="text-[13px]">$0.999122</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{`$${numberFormat(row_data.price)}`}</Typography>
           </div>
         </td>
       </tr>
@@ -62,9 +71,9 @@ export const MainPoolsTableBody = () => {
 
   return (
     <tbody className="overflow-y-auto">
-    {MAIN_POOLS_TABLE_DATA.map((item, index) => (
+    {data.map((item, index) => (
       <Row 
-        data={item}
+        row_data={item}
         key={index} 
       />
     ))}

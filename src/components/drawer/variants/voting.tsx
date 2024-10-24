@@ -6,24 +6,46 @@ import Paragraph from '@/components/paragraph'
 import { BaseProps } from '@/types/context/drawer'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { twMerge } from 'tailwind-merge'
-import { ChangeEvent, useState } from 'react'
+import { 
+  ChangeEvent,
+  useEffect, 
+  useState 
+} from 'react'
 import { Input } from '@/components/input'
 import { LogoIcon } from '@/assets/icons/logo'
 import { Avatar } from '@/components/avatar'
 import { Typography } from '@/components/typography'
 import { ITag } from '@/types/interfaces'
+import { queryClient } from '@/wagmi'
+import { GET_GOVERNANCE_VOTES } from '@/constants/query'
+// import { useGovernanceVotes } from '@/hooks/queries/useGovernanceVotes'
 
 const tabs = [
   { title: 'Yes' },
   { title: 'No' },
   { title: 'Abstain' },
 ]
-export interface Props extends BaseProps {}
+export interface Props extends BaseProps {
+  proposal_id?: string
+}
 
 export const VotingDrawer = (props: Props) => {
   const { isDesktop } = useWindowSize()
   const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
   const [ amount, setAmount ] = useState<number | undefined>(undefined)
+  // const { data: votes } = useGovernanceVotes(props.proposal_id)
+  
+  // invalidate queries
+  const invalidateQuery = async () => {
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_VOTES] }),
+    ])
+  }
+
+  useEffect(() => {
+    invalidateQuery()
+  }, [])
+
 
   return (
     <Drawer

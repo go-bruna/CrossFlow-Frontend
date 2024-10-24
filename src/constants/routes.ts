@@ -4,5 +4,5 @@ export const ROUTES = {
   ACCOUNT: '/account',
   STAKE: '/staking',
   GOVERNANCE: '/governance',
-  GOVERNANCE_DETAIL: '/governance/:id',
+  GOVERNANCE_DETAIL: '/governance/detail',
 }

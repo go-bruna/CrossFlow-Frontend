@@ -4,11 +4,17 @@ import Header from "@/components/layout/base/header"
 import { Input } from "@/components/input"
 import Tab from "@/components/tab"
 import { GOVERNANCE_ITEM_DATA } from "@/constants"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { ITag } from "@/types/interfaces"
 import Table from "@/components/table"
+import { useGovernanceSummary } from "@/hooks/queries/useGovernanceSummary"
+import { queryClient } from "@/wagmi"
+import { GET_GOVERNANCE_PROPOSALS, GET_GOVERNANCE_SUMMARY } from "@/constants/query"
+import { numberFormat } from "@/utils"
+import GovernanceSkeleton from "./skeleton"
 
-const tabs = [{
+
+const GOVERNANCE_STATUS_TABS = [{
   title: 'All',
  }, {
   title: 'Ongoing',
@@ -23,25 +29,45 @@ const tabs = [{
 ]
 
 export const GovernancePage = () => {
-  const [currentTag, setCurrentTag] = useState<ITag>(tabs[0]);
+  const { data: governamceSummary, isLoading: loadingSummary } = useGovernanceSummary() 
+  const [currentTag, setCurrentTag] = useState<ITag>(GOVERNANCE_STATUS_TABS[0]);
   const [ search, setSearch] = useState<string | undefined>(undefined)
 
+  // invalidate queries
+  const invalidateQuery = async () => {
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_SUMMARY] }),
+      queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_PROPOSALS] }),
+    ])
+  }
+
+  useEffect(() => {
+    invalidateQuery()
+  }, [])
+  
+  if (loadingSummary) {
+    return <GovernanceSkeleton />
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full animate-fade-in-up">
       <Header.Desktop title={'Governance'} />
 
       {/* Container */}
       <div className="mt-[30px]">
         <Card.GovernanceStatsBar 
           labels={GOVERNANCE_ITEM_DATA}
-          values={['23', '$12.311K']}
+          values={[
+            numberFormat(governamceSummary?.total_proposals), 
+            `$${numberFormat(governamceSummary?.total_staked)}`
+          ]}
         />
 
         {/* Category and Search */}
         <div className="flex justify-between items-center mt-5">
           {/* Categories */}
           <Tab.List
-            tabs={tabs}
+            tabs={GOVERNANCE_STATUS_TABS}
             selected={currentTag}
             onSelect={(_current: ITag) => setCurrentTag(_current)}
             classOverride={{

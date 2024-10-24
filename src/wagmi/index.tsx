@@ -9,6 +9,8 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type State, WagmiProvider } from "wagmi";
 import { chains, storage, transports } from "@/config/wagmi";
+import { cosmoshub } from "@/config/graz";
+import { GrazProvider, WalletType } from "graz";
 
 if (!import.meta.env.VITE_WALLETCONNECT_PROJECT_ID)
 	throw new Error(
@@ -47,7 +49,17 @@ export function CustomWagmiProvider({
 	return (
 		<WagmiProvider config={config} initialState={initialState}>
 			<QueryClientProvider client={queryClient}>
-				<RainbowKitProvider>{children}</RainbowKitProvider>
+				<RainbowKitProvider>
+					<GrazProvider 
+						grazOptions={{
+							chains: [cosmoshub],
+							defaultWallet: WalletType.KEPLR,
+							autoReconnect: true,
+						}}
+					>
+						{children}
+					</GrazProvider>
+				</RainbowKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>
 	);

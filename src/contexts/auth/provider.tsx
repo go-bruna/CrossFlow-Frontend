@@ -1,278 +1,194 @@
-import * as satsConnect from "sats-connect";
-import { TEST_MODE } from "@/constants";
-import { IAccount, WalletType } from "@/types/interfaces";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { WalletType } from "@/types/interfaces";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./context";
-import { getAddressInfo } from "bitcoin-address-validation";
-import { AccountSchema } from "@/schemas/wallet";
+
 import { IContextChildrenProps } from "@/types/context";
-import { useToast } from "@/hooks/useToast";
-import { clearCookie, getCookie, setCookie } from "@/utils";
-import { FAILED_WALLET_CONNECTION, WALLET_INSTALL } from "@/constants/message";
+
 import {
+	WALLET_TYPE_BITGET,
 	WALLET_TYPE_OKX,
+	// WALLET_TYPE_OKX,
 	WALLET_TYPE_UNISAT,
 	WALLET_TYPE_XVERSE,
 } from "@/constants/wallets";
 import { queryClient } from "@/wagmi";
+import { 
+	DirectSecp256k1HdWallet, 
+	OfflineDirectSigner 
+} from "@cosmjs/proto-signing";
+import { Client } from '@ts-client/index'
+import { cosmoshub } from "@/config/graz";
+
+// hooks
+import {
+  useUnisatWallet,
+  Wallet as IUnisatWallet,
+} from './hooks/useUnisatWallet.hook'
+import { useOkxWallet, Wallet as IOkxWallet } from './hooks/useOkxWallet.hook'
+import {
+  useXverseWallet,
+  Wallet as IXverseWallet,
+} from './hooks/useXverseWallet.hook'
+import {
+  useBitgetWallet,
+  Wallet as IBitgetWallet,
+} from './hooks/useBitgetWallet.hook'
+import { getCookie } from "@/utils";
+
+// functions
+import { SendBitcoinToHTLC } from './functions/send-btc-to-htlc'
 
 declare global {
 	interface Window {
 		unisat?: any;
 		phantom?: any;
-		okxwallet?: any;
+		// okxwallet?: any
+    bitkeep?: any;
+		// okxwallet?: any;
 	}
+}
+
+const mnemonic =
+  'betray theory cargo way left cricket doll room donkey wire reunion fall left surprise hamster corn village happy bulb token artist twelve whisper expire'
+
+const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
+  return DirectSecp256k1HdWallet.fromMnemonic(mnemonic.toString(), {
+    prefix: 'ordi',
+  })
+}
+
+export const offlineSigner = await getSignerFromMnemonic()
+export const ordibankClient = new Client(
+  {
+    rpcURL: cosmoshub.rpc,
+    apiURL: cosmoshub.rest,
+    prefix: 'cfn',
+  },
+  offlineSigner,
+)
+
+export const invalidateWalletQueries = (walletAddress: string) => {
+  queryClient.invalidateQueries({
+    predicate: (query) => {
+      return query.queryKey.includes(walletAddress)
+    },
+  })
+}
+
+export type TWallet = (
+  | IUnisatWallet
+  | IOkxWallet
+  | IXverseWallet
+  | IBitgetWallet
+) & {
+  disconnect: Function
 }
 
 export const AuthStateProvider: React.FC<IContextChildrenProps> = ({
 	children,
 }): JSX.Element => {
-	const { messageApi } = useToast();
-	const [walletType, setWalletType] = useState(WALLET_TYPE_UNISAT);
+	const [wallet, setWallet] = useState<TWallet | null>(null)
+  const {
+    wallet: unisatWallet,
+    connect: connectUnisatWallet,
+    disconnect: disconnectUnisatWallet,
+  } = useUnisatWallet()
 
-	// * Wallet Variables
-	const [unisatInstalled, setUnisatInstalled] = useState<boolean>(false);
-	const [unisatWallet, setUnisatWallet] = useState<any | undefined>(undefined);
-	const [okxInstalled, setOkxInstalled] = useState<boolean>(false);
-	const [okxWallet, setOkxWallet] = useState<any | undefined>(undefined);
-	const unisatListeners = useRef(false);
-	const okxListeners = useRef(false);
+  const {
+    wallet: okxWallet,
+    connect: connectOkxWallet,
+    disconnect: disconnectOkxWallet,
+  } = useOkxWallet()
 
-	const [paymentAccount, setPaymentAccount] = useState<
-		IAccount | null | undefined
-	>();
-	const [ordinalsAccount, setOrdinalsAccount] = useState<
-		IAccount | null | undefined
-	>();
+  const {
+    wallet: xverseWallet,
+    connect: connectXVerseWallet,
+    disconnect: disconnectXVerseWallet,
+  } = useXverseWallet()
+
+  const {
+    wallet: bitgetWallet,
+    connect: connectBitgetWallet,
+    disconnect: disconnectBitgetWallet,
+  } = useBitgetWallet()
 
 	const connected_wallet: WalletType | null | undefined =
-		getCookie("connected_wallet");
+    getCookie('connected_wallet')
+		
+	const handleWalletSelect = () => {
+    switch (connected_wallet) {
+      case WalletType.UNISAT:
+        return setWallet({
+          ...unisatWallet,
+          disconnect: disconnectUnisatWallet,
+        })
+      case WalletType.OKX:
+        return setWallet({
+          ...okxWallet,
+          disconnect: disconnectOkxWallet,
+        })
+      case WalletType.XVERSE:
+        return setWallet({
+          ...xverseWallet,
+          disconnect: disconnectXVerseWallet,
+        })
+      case WalletType.BITGET:
+        return setWallet({
+          ...bitgetWallet,
+          disconnect: disconnectBitgetWallet,
+        })
 
-	const invalidateWalletQueries = (walletAddress: string) => {
-		queryClient.invalidateQueries({
-			predicate: (query) => {
-				return query.queryKey.includes(walletAddress);
-			},
-		});
-	};
+      default:
+        return
+    }
+  }
 
-	const connectUnisatWallet = useCallback(async () => {
-		if (connected_wallet === WalletType.UNISAT && paymentAccount) return;
-		if (!unisatInstalled || !unisatWallet) {
-			messageApi.Alert(WALLET_INSTALL("Unisat"));
-			return;
-		}
-		try {
-			await unisatWallet.switchNetwork(TEST_MODE ? "testnet" : "mainnet");
-			const _accounts = await unisatWallet.requestAccounts();
-			if (_accounts.length === 0) return;
-			const _publicKey = await unisatWallet.getPublicKey();
-			const _addressInfo = getAddressInfo(_accounts[0]);
-			const account = {
-				address: _accounts[0],
-				addressType: _addressInfo.type,
-				publicKey: _publicKey,
-			};
-			const { error, value } = AccountSchema.validate(account);
-			if (!error) {
-				setCookie("connected_wallet", WalletType.UNISAT);
+  useEffect(() => {
+    handleWalletSelect()
+  }, [connected_wallet, unisatWallet, okxWallet, xverseWallet, bitgetWallet])
 
-				setWalletType(WALLET_TYPE_UNISAT);
-				setPaymentAccount(value);
-				setOrdinalsAccount(value);
-			}
-		} catch (error) {
-			console.error("Error on connecting Unisat wallet", error);
-			messageApi.Alert(FAILED_WALLET_CONNECTION);
-		}
-	}, [unisatWallet, unisatInstalled, connected_wallet, paymentAccount]);
+  const WALLET_TYPE =
+    {
+      unisat: WALLET_TYPE_UNISAT,
+      okx: WALLET_TYPE_OKX,
+      xverse: WALLET_TYPE_XVERSE,
+      bitget: WALLET_TYPE_BITGET,
+    }[wallet?.type as string] ?? -1
 
-	const connectOkxWallet = useCallback(async () => {
-		if (connected_wallet === WalletType.OKX && paymentAccount) return;
-		if (!okxInstalled || !okxWallet) {
-			messageApi.Alert(WALLET_INSTALL("Okx"));
-			return;
-		}
-		try {
-			const _accounts = await okxWallet.requestAccounts();
-			if (_accounts.length === 0) return;
-			const _publicKey = await okxWallet.getPublicKey();
-			const _addressInfo = getAddressInfo(_accounts[0]);
-			const account = {
-				address: _accounts[0],
-				addressType: _addressInfo.type,
-				publicKey: _publicKey,
-			};
-			const { error, value } = AccountSchema.validate(account);
-			if (!error) {
-				setCookie("connected_wallet", WalletType.OKX);
+  return (
+    <AuthContext.Provider
+      value={{
+        authState: {
+          wallet,
+          walletType: WALLET_TYPE,
 
-				setWalletType(WALLET_TYPE_OKX);
-				setPaymentAccount(value);
-				setOrdinalsAccount(value);
-			}
-		} catch (error) {
-			console.error("Error on connecting Okx wallet", error);
-			messageApi.Alert(FAILED_WALLET_CONNECTION);
-		}
-	}, [okxWallet, okxInstalled, connected_wallet, paymentAccount]);
+          connected_wallet,
 
-	const connectXVerseWallet = async () => {
-		if (connected_wallet === WalletType.XVERSE && paymentAccount) return;
-		const getAddressOptions = {
-			payload: {
-				network: {
-					type: TEST_MODE
-						? satsConnect.BitcoinNetworkType.Testnet
-						: satsConnect.BitcoinNetworkType.Mainnet,
-				},
-				purposes: [
-					satsConnect.AddressPurpose.Payment,
-					satsConnect.AddressPurpose.Ordinals,
-				],
-				message: "Connect Wallet",
-			},
-			onFinish: (response: any) => {
-				const _accounts = response.addresses;
+          unisatWallet,
+          okxWallet,
+          xverseWallet,
+          bitgetWallet,
 
-				for (const account of _accounts) {
-					if (account.purpose === "payment") {
-						setPaymentAccount(account);
-					} else if (account.purpose === "ordinals") {
-						setOrdinalsAccount(account);
-					}
-				}
-				setCookie("connected_wallet", WalletType.XVERSE);
+          paymentAccount: wallet?.accounts?.payment,
+          ordinalsAccount: wallet?.accounts?.ordinals,
 
-				setWalletType(WALLET_TYPE_XVERSE);
-			},
-			onCancel: () => {
-				messageApi.Alert(FAILED_WALLET_CONNECTION);
-			},
-		};
+          sendBitcoinToHTLC: SendBitcoinToHTLC,
+        },
 
-		try {
-			await satsConnect.getAddress(getAddressOptions);
-		} catch (error) {
-			console.error("Error on connecting XVerse wallet", error);
-			messageApi.Alert(WALLET_INSTALL("XVerse"));
-		}
-	};
+        unisatInstalled: unisatWallet?.installed ?? false,
+        okxInstalled: okxWallet?.installed ?? false,
+        xverseInstalled: xverseWallet?.installed ?? false,
+        bitgetInstalled: bitgetWallet?.installed ?? false,
 
-	const disconnectWallet = () => {
-		clearCookie("connected_wallet");
-		setPaymentAccount(undefined);
-		setOrdinalsAccount(undefined);
-	};
+        connectUnisatWallet,
+        connectOkxWallet,
+        connectXVerseWallet,
+        connectBitgetWallet,
 
-	useEffect(() => {
-		if ("unisat" in window) {
-			const unisatProvider = window.unisat;
-			setUnisatWallet(unisatProvider);
-			setUnisatInstalled(true);
-
-			if (!unisatListeners.current) {
-				const handleAccountsChanged = async (accounts: string[]) => {
-					invalidateWalletQueries(accounts[0]);
-					setPaymentAccount(undefined);
-					setOrdinalsAccount(undefined);
-					connectUnisatWallet();
-				};
-
-				const handleNetworkChange = (network: "testnet" | "livenet") => {
-					if (TEST_MODE && network === "livenet") {
-						unisatProvider.switchNetwork("testnet");
-					} else if (!TEST_MODE && network === "testnet") {
-						unisatProvider.switchNetwork("livenet");
-					}
-				};
-
-				unisatProvider.on("accountsChanged", handleAccountsChanged);
-				unisatProvider.on("networkChanged", handleNetworkChange);
-
-				unisatListeners.current = true;
-				return () => {
-					unisatProvider.removeListener(
-						"accountsChanged",
-						handleAccountsChanged,
-					);
-					unisatProvider.removeListener("networkChanged", handleNetworkChange);
-					unisatListeners.current = false;
-				};
-			}
-		}
-	}, [connectUnisatWallet]);
-
-	useEffect(() => {
-		if ("okxwallet" in window && window.okxwallet.bitcoin) {
-			const okxProvider = window.okxwallet?.bitcoin;
-			setOkxWallet(okxProvider);
-			setOkxInstalled(true);
-
-			if (!okxListeners.current) {
-				const handleAccountsChanged = async (accounts: string[]) => {
-					invalidateWalletQueries(accounts[0]);
-					setPaymentAccount(undefined);
-					setOrdinalsAccount(undefined);
-					connectOkxWallet();
-				};
-				okxProvider.on("accountsChanged", handleAccountsChanged);
-				okxListeners.current = true;
-				return () => {
-					okxProvider.removeListener("accountsChanged", handleAccountsChanged);
-					okxListeners.current = false;
-				};
-			}
-		}
-	}, [connectOkxWallet]);
-
-	// * Reconnectors on page load
-	useEffect(() => {
-		if (!!unisatWallet && connected_wallet === WalletType.UNISAT) {
-			connectUnisatWallet();
-		}
-	}, [connectUnisatWallet, unisatWallet, connected_wallet]);
-
-	useEffect(() => {
-		if (!!okxWallet && connected_wallet === WalletType.OKX) {
-			connectOkxWallet();
-		}
-	}, [connectOkxWallet, okxWallet, connected_wallet]);
-
-	useEffect(() => {
-		if (connected_wallet === WalletType.XVERSE) {
-			connectXVerseWallet();
-		}
-	}, [connected_wallet]);
-
-	return (
-		<AuthContext.Provider
-			value={{
-				authState: {
-					paymentAccount,
-					ordinalsAccount,
-					walletType,
-					unisatWallet,
-					phantomWallet: null,
-					okxWallet,
-					connected_wallet,
-				},
-				unisatInstalled,
-				phantomInstalled: false,
-				connectUnisatWallet,
-				connectPhantomWallet: () => {
-					messageApi.Alert({
-						type: "Warning",
-						title: "Phantom Wallet has been unsupported temporarily.",
-						content: "Please use another wallet.",
-					});
-				},
-				connectOkxWallet,
-				connectXVerseWallet,
-				disconnectWallet,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
-	);
+        disconnectWallet: wallet?.disconnect ?? (() => {}),
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 };

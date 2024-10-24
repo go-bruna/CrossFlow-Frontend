@@ -5,7 +5,7 @@ import { Typography } from "@/components/typography"
 
 type Props = {
   labels: string[]
-  values: string[] | number[]
+  values: (string | number)[]
 }
 
 export const GovernanceStatsbar = (props: Props) => {

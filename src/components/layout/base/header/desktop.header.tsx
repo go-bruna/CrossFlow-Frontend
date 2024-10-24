@@ -1,9 +1,22 @@
 // import { Navbar } from "../../../nav";
 import { LogoIcon } from "@/assets/icons/logo";
 import { Typography } from "@/components/typography";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+// import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Button from "@/components/button";
 import { WalletIcon } from "@/assets/icons/wallet";
+import { 
+	useAccount, 
+	// checkWallet, 
+	// useActiveChains, 
+	// useConnect, 
+	// useDisconnect, 
+	// useSuggestChainAndConnect, 
+	// WalletType 
+} from "graz";
+// import { cosmoshub } from "@/config/graz";
+// import { WALLET_INSTALL } from "@/constants/message";
+// import { useToast } from "@/hooks/useToast";
+import { useModal } from "@/contexts/interface";
 
 export interface Props {
 	title: string
@@ -12,9 +25,40 @@ export interface Props {
 export const Header = ({
 	title,
 }: Props) => {
+	const { setModal } = useModal()
+	// const { messageApi } = useToast();
+	// const { suggestAndConnect } = useSuggestChainAndConnect();
+	// const activeChains = useActiveChains();
+	// const { connect } = useConnect()
+	const { data: account, isConnected } = useAccount()
+	// const { disconnect } = useDisconnect()
+	// const isKeplrSupported = checkWallet(WalletType.KEPLR);
+
 	const gotoMain = () => {
 		// window.open("https://main.d1zteq5olzyzc2.amplifyapp.com/", "_blank");
 	};
+
+	// const handleSuggestionAndConnect = () => {
+	// 	suggestAndConnect({
+  //     chainInfo: cosmoshub,
+  //     walletType: WalletType.KEPLR,
+  //   });
+	// }
+
+	// const connectWallet = async() => {
+	// 	if (isKeplrSupported) {
+	// 		if (isConnected)
+	// 			return disconnect()
+	// 		else {
+	// 			if (!activeChains) {
+	// 				return handleSuggestionAndConnect()
+	// 			} 
+	// 			return connect({ chainId: cosmoshub.chainId, walletType: WalletType.KEPLR });
+	// 		}
+	// 	} else {
+	// 		return messageApi.Alert(WALLET_INSTALL("Keplr"));
+	// 	}
+	// }
 
 	return (
 		<div className="flex justify-between items-center w-full">
@@ -32,13 +76,25 @@ export const Header = ({
 
 			{/* buttonrs group */}
 			<div className="flex items-center gap-5 h-12">
+				
 				<Button.Basic 
 					label={'Claim CFN'}
 					icon={<LogoIcon />}
 					className="gap-1 w-[130px] h-[36px] p-0 rounded-full"
 					textStyle="text-sm"
 				/>
-				<ConnectButton.Custom>
+
+				<Button.Basic
+					label={account && isConnected ? 'Connected' : 'Connect Wallet'}
+					isBadge={account && isConnected ? true : false}
+					icon={account && isConnected ? <WalletIcon /> : undefined}
+					className="gap-2 w-[150px] h-[36px] border border-[#36f5cf]/10 rounded-full"
+					textStyle="text-white text-sm"
+					// onClick={connectWallet}
+					onClick={() => setModal({ id: 'CONNECT_WALLET' })}
+				/>
+
+				{/* <ConnectButton.Custom>
 					{({
 						account,
 						chain,
@@ -94,15 +150,6 @@ export const Header = ({
 
 									return (
 										<div style={{ display: "flex", gap: 12 }}>
-											{/* <button 
-												className="flex items-center gap-2 font-base font-bold"
-												onClick={openAccountModal} 
-												type="button"
-											>
-												<img src={EthereumIMG} alt="BTC" width={26} />
-												{account.displayName}
-												<Avatar icon={<DropdownIcon />}/>
-											</button> */}
 											<Button.Basic
 												label={'Connected'}
 												isBadge={true}
@@ -117,7 +164,7 @@ export const Header = ({
 							</div>
 						);
 					}}
-				</ConnectButton.Custom>
+				</ConnectButton.Custom> */}
 			</div>
 		</div>
 	);

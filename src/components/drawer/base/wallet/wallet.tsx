@@ -3,7 +3,6 @@ import { ClipboardIcon } from '@/assets/icons/clipboard'
 import { DisconnectIcon } from '@/assets/icons/disconnect'
 import { Avatar } from '@/components/avatar'
 import Button from '@/components/button'
-import Card from '@/components/card'
 import { Typography } from '@/components/typography'
 import { useToast } from '@/hooks/useToast'
 import { copyText, displayAddress } from '@/utils'
@@ -32,7 +31,7 @@ export const Wallet = (props: Props) => {
   }
 
   return (
-    <div className="flex justify-between items-center pl-1 py-3 lg:p-3 cursor-pointer rounded-md hover:bg-slate-50">
+    <div className="flex justify-between items-center pl-1 py-3 lg:p-3 cursor-pointer rounded-md hover:bg-stone-950">
       <div
         className="flex items-center gap-4"
         onClick={() => {
@@ -68,7 +67,7 @@ export const Wallet = (props: Props) => {
         props.status &&
         _disconnect && (
           <div
-            className="hover:bg-slat-200 lg:px-[10px] py-0 rounded-xl"
+            className="hover:bg-slat-800 lg:px-[10px] py-0 rounded-xl"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={() => {
@@ -77,20 +76,13 @@ export const Wallet = (props: Props) => {
               props.status && props.onConnect()
             }}
           >
-            <Card.Wrapper
-              isShadow={false}
-              classOverride={{
-                subContainer: 'flex flex-col gap-2 p-0'
-              }}
-            >
-              <Button.Basic
-                className="justify-end gap-2 px-2 py-1 bg-white"
-                textStyle={twMerge('text-[13px] text-gray-900', isHovered && 'text-[#F00]')}
-                label="Disconnect"
-                icon={<DisconnectIcon stroke={isHovered ? 'red' : '#858585'} />}
-                iconStyle={'bg-transparent w-[12px] h-[12px]'}
-              />
-            </Card.Wrapper>
+            <Button.Basic
+              className="justify-end gap-2 px-2 py-1 bg-[#1b1b1b]"
+              textStyle={twMerge('text-[13px] text-gray-600', isHovered && 'text-[#F00]')}
+              label="Disconnect"
+              icon={<DisconnectIcon stroke={isHovered ? 'red' : '#858585'} />}
+              iconStyle={'bg-transparent w-[12px] h-[12px]'}
+            />
           </div>
         )
       )}

@@ -1,11 +1,16 @@
 import { Icon } from "@/components/icon";
 import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
-import { SUPPLIED_ASSETS_TABLE_DATA } from "@/constants/table";
+import { IAccountAssetsSupplies } from "@/types/api/account";
+import { numberFormat } from "@/utils";
 
-export const SuppliedAssetsTableBody = () => {
+export const SuppliedAssetsTableBody = ({
+  data
+}: {
+  data: IAccountAssetsSupplies[]
+}) => {
 
-  const Row = ({ data }: any) => {
+  const Row = ({ row }: {row: IAccountAssetsSupplies}) => {
     return (
       <tr 
         className="h-[68px] text-[13px] hover:bg-[#90d5c8]/10"
@@ -13,19 +18,19 @@ export const SuppliedAssetsTableBody = () => {
         <td>
           <div className="flex items-center gap-2 pl-5">
             <Icon src={EthereumIMG} />
-            <Typography variant="label-medium" className="text-[13px]">{data.ticker}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{row.asset_symbol}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">{data.apy_ltv}</Typography>
-            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{data.apy_ltv_percent}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.apy)}</Typography>
+            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">{`${numberFormat(row.loan_rate)}%`}</Typography>
           </div>
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">{data.balance}</Typography>
-            <Typography variant="label-medium" className="text-[13px]">{data.balance_price}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
           </div>
         </td>
         <td />
@@ -38,9 +43,9 @@ export const SuppliedAssetsTableBody = () => {
 
   return (
     <tbody className="text-gray-900 overflow-y-auto">
-    {SUPPLIED_ASSETS_TABLE_DATA.map((item, index) => (
+    {data.map((item: IAccountAssetsSupplies, index: number) => (
       <Row 
-        data={item}
+        row={item}
         key={index} 
       />
     ))}
