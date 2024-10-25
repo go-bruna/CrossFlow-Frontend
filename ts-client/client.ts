@@ -1,3 +1,4 @@
+// @ts-nocheck
 /// <reference path="./types.d.ts" />
 import {
   GeneratedType,
@@ -70,98 +71,98 @@ export class IgniteClient extends EventEmitter {
       this.signer = undefined;
       this.emit("signer-changed", this.signer);
   }
-  async useKeplr(keplrChainInfo: Partial<ChainInfo> = {}) {
-    // Using queryClients directly because BaseClient has no knowledge of the modules at this stage
-    try {
-      const queryClient = (
-        await import("./cosmos.base.tendermint.v1beta1/module")
-      ).queryClient;
-      const bankQueryClient = (await import("./cosmos.bank.v1beta1/module"))
-        .queryClient;
+  // async useKeplr(keplrChainInfo: Partial<ChainInfo> = {}) {
+  //   // Using queryClients directly because BaseClient has no knowledge of the modules at this stage
+  //   try {
+  //     const queryClient = (
+  //       await import("./cosmos.base.tendermint.v1beta1/module")
+  //     ).queryClient;
+  //     const bankQueryClient = (await import("./cosmos.bank.v1beta1/module"))
+  //       .queryClient;
       
-      const stakingQueryClient = (await import("./cosmos.staking.v1beta1/module")).queryClient;
-      const stakingqc = stakingQueryClient({ addr: this.env.apiURL });
-      const staking = await (await stakingqc.queryParams()).data;
+  //     const stakingQueryClient = (await import("./cosmos.staking.v1beta1/module")).queryClient;
+  //     const stakingqc = stakingQueryClient({ addr: this.env.apiURL });
+  //     const staking = await (await stakingqc.queryParams()).data;
       
-      const qc = queryClient({ addr: this.env.apiURL });
-      const node_info = await (await qc.serviceGetNodeInfo()).data;
-      const chainId = node_info.default_node_info?.network ?? "";
-      const chainName = chainId?.toUpperCase() + " Network";
-      const bankqc = bankQueryClient({ addr: this.env.apiURL });
-      const tokens = await (await bankqc.queryTotalSupply()).data;
-      const addrPrefix = this.env.prefix ?? "cosmos";
-      const rpc = this.env.rpcURL;
-      const rest = this.env.apiURL;
+  //     const qc = queryClient({ addr: this.env.apiURL });
+  //     const node_info = await (await qc.serviceGetNodeInfo()).data;
+  //     const chainId = node_info.default_node_info?.network ?? "";
+  //     const chainName = chainId?.toUpperCase() + " Network";
+  //     const bankqc = bankQueryClient({ addr: this.env.apiURL });
+  //     const tokens = await (await bankqc.queryTotalSupply()).data;
+  //     const addrPrefix = this.env.prefix ?? "cosmos";
+  //     const rpc = this.env.rpcURL;
+  //     const rest = this.env.apiURL;
 
-      let bip44 = {
-        coinType: 118,
-      };
+  //     let bip44 = {
+  //       coinType: 118,
+  //     };
 
-      let bech32Config = {
-        bech32PrefixAccAddr: addrPrefix,
-        bech32PrefixAccPub: addrPrefix + "pub",
-        bech32PrefixValAddr: addrPrefix + "valoper",
-        bech32PrefixValPub: addrPrefix + "valoperpub",
-        bech32PrefixConsAddr: addrPrefix + "valcons",
-        bech32PrefixConsPub: addrPrefix + "valconspub",
-      };
+  //     let bech32Config = {
+  //       bech32PrefixAccAddr: addrPrefix,
+  //       bech32PrefixAccPub: addrPrefix + "pub",
+  //       bech32PrefixValAddr: addrPrefix + "valoper",
+  //       bech32PrefixValPub: addrPrefix + "valoperpub",
+  //       bech32PrefixConsAddr: addrPrefix + "valcons",
+  //       bech32PrefixConsPub: addrPrefix + "valconspub",
+  //     };
 
-      let currencies =
-        tokens.supply?.map((x) => {
-          const y = {
-            coinDenom: x.denom?.toUpperCase() ?? "",
-            coinMinimalDenom: x.denom ?? "",
-            coinDecimals: 0,
-          };
-          return y;
-        }) ?? [];
+  //     let currencies =
+  //       tokens.supply?.map((x) => {
+  //         const y = {
+  //           coinDenom: x.denom?.toUpperCase() ?? "",
+  //           coinMinimalDenom: x.denom ?? "",
+  //           coinDecimals: 0,
+  //         };
+  //         return y;
+  //       }) ?? [];
 
       
-      let stakeCurrency = {
-              coinDenom: staking.params?.bond_denom?.toUpperCase() ?? "",
-              coinMinimalDenom: staking.params?.bond_denom ?? "",
-              coinDecimals: 0,
-            };
+  //     let stakeCurrency = {
+  //             coinDenom: staking.params?.bond_denom?.toUpperCase() ?? "",
+  //             coinMinimalDenom: staking.params?.bond_denom ?? "",
+  //             coinDecimals: 0,
+  //           };
       
-      let feeCurrencies =
-        tokens.supply?.map((x) => {
-          const y = {
-            coinDenom: x.denom?.toUpperCase() ?? "",
-            coinMinimalDenom: x.denom ?? "",
-            coinDecimals: 0,
-          };
-          return y;
-        }) ?? [];
+  //     let feeCurrencies =
+  //       tokens.supply?.map((x) => {
+  //         const y = {
+  //           coinDenom: x.denom?.toUpperCase() ?? "",
+  //           coinMinimalDenom: x.denom ?? "",
+  //           coinDecimals: 0,
+  //         };
+  //         return y;
+  //       }) ?? [];
 
-      if (chainId) {
-        const suggestOptions: ChainInfo = {
-          chainId,
-          chainName,
-          rpc,
-          rest,
-          stakeCurrency,
-          bip44,
-          bech32Config,
-          currencies,
-          feeCurrencies,
-          ...keplrChainInfo,
-        };
-        await window.keplr.experimentalSuggestChain(suggestOptions);
+  //     if (chainId) {
+  //       const suggestOptions: ChainInfo = {
+  //         chainId,
+  //         chainName,
+  //         rpc,
+  //         rest,
+  //         stakeCurrency,
+  //         bip44,
+  //         bech32Config,
+  //         currencies,
+  //         feeCurrencies,
+  //         ...keplrChainInfo,
+  //       };
+  //       await window.keplr.experimentalSuggestChain(suggestOptions);
 
-        window.keplr.defaultOptions = {
-          sign: {
-            preferNoSetFee: true,
-            preferNoSetMemo: true,
-          },
-        };
-      }
-      await window.keplr.enable(chainId);
-      this.signer = window.keplr.getOfflineSigner(chainId);
-      this.emit("signer-changed", this.signer);
-    } catch (e) {
-      throw new Error(
-        "Could not load tendermint, staking and bank modules. Please ensure your client loads them to use useKeplr()"
-      );
-    }
-  }
+  //       window.keplr.defaultOptions = {
+  //         sign: {
+  //           preferNoSetFee: true,
+  //           preferNoSetMemo: true,
+  //         },
+  //       };
+  //     }
+  //     await window.keplr.enable(chainId);
+  //     this.signer = window.keplr.getOfflineSigner(chainId);
+  //     this.emit("signer-changed", this.signer);
+  //   } catch (e) {
+  //     throw new Error(
+  //       "Could not load tendermint, staking and bank modules. Please ensure your client loads them to use useKeplr()"
+  //     );
+  //   }
+  // }
 }

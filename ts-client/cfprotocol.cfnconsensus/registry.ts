@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeneratedType } from "@cosmjs/proto-signing";
 import { Params } from "./types/cfprotocol/cfnconsensus/params";
 import { ConsensusPayload } from "./types/cfprotocol/cfnconsensus/consensus_payload";

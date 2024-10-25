@@ -18,7 +18,10 @@ import { Typography } from '@/components/typography'
 import { ITag } from '@/types/interfaces'
 import { queryClient } from '@/wagmi'
 import { GET_GOVERNANCE_VOTES } from '@/constants/query'
-// import { useGovernanceVotes } from '@/hooks/queries/useGovernanceVotes'
+import { useStakeSummary } from '@/hooks/queries/useStakeSummary'
+import { useAccount } from 'graz'
+import { pureNumberFormat } from '@/utils'
+// import { processVoting } from '@/apis/cfn-client'
 
 const tabs = [
   { title: 'Yes' },
@@ -31,10 +34,19 @@ export interface Props extends BaseProps {
 
 export const VotingDrawer = (props: Props) => {
   const { isDesktop } = useWindowSize()
+  const { data: account } = useAccount()
+  const { data: stakeSummary } = useStakeSummary(account?.bech32Address)
   const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
-  const [ amount, setAmount ] = useState<number | undefined>(undefined)
-  // const { data: votes } = useGovernanceVotes(props.proposal_id)
-  
+  const [ amount, setAmount ] = useState<number | undefined>(undefined)  
+
+  // Handle Vote
+  const handleVote = async () => {
+    // const voteData = {
+    //   amount,
+    // }
+    // await processVoting()
+  }
+
   // invalidate queries
   const invalidateQuery = async () => {
     Promise.all([
@@ -45,7 +57,6 @@ export const VotingDrawer = (props: Props) => {
   useEffect(() => {
     invalidateQuery()
   }, [])
-
 
   return (
     <Drawer
@@ -69,7 +80,7 @@ export const VotingDrawer = (props: Props) => {
                 <Typography variant="label-medium" className="text-[13px] mt-0.5">Your Voting Power</Typography>
               </div>
             )}
-            value={'113,312 CFN'}
+            value={`${pureNumberFormat(stakeSummary?.total_staked)}`}
             classOverride={{
               container: 'pt-4 pb-5 border-b border-[#36f5cf]/10',
               value: 'text-white'
@@ -85,9 +96,9 @@ export const VotingDrawer = (props: Props) => {
               icon={<LogoIcon fill='#f6851b' />}
               innerButtonLabel="Max"
               onMax={() => {}}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setAmount(Number(parseInt(e.target.value)))
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAmount(Number(e.target.value || 0))
+              }}
               classOverride={{
                 inputContainer: 'bg-black mt-[15px]',
                 input: 'bg-black ml-1',
@@ -96,7 +107,7 @@ export const VotingDrawer = (props: Props) => {
               }}
             />
 
-            <Paragraph.List 
+            {/* <Paragraph.List 
               label={(
                 <div className="flex items-center gap-2">
                   <Avatar icon={<LogoIcon fill='#9747ff'/>} className="w-[16px] justify-start"/>
@@ -108,7 +119,7 @@ export const VotingDrawer = (props: Props) => {
                 container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
                 value: 'text-white'
               }}
-            />
+            /> */}
 
             <Tab.List 
               tabs={tabs}
@@ -122,11 +133,11 @@ export const VotingDrawer = (props: Props) => {
 
             {/* Button group */}
             <div className='flex flex-col gap-[25px]'>
-              {amount && amount > 0 ? (
+              {amount && amount > 0  && amount < Number(stakeSummary?.total_staked ?? 0) ? (
                 <Button.Basic 
                   label="Vote"
                   className="w-full bg-[#0aab8b]"
-                  onClick={() => {}}
+                  onClick={handleVote}
                 />
               ) : (
                 <Button.Basic 

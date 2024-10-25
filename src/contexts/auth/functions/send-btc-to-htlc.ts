@@ -3,7 +3,7 @@ import * as satsConnect from 'sats-connect'
 import * as bitcoin from 'bitcoinjs-lib'
 import { createHTLCScript, htlcP2WSHAddress } from '@/utils/htlc'
 import { AuthStateProps } from '@/types/context/auth'
-import { offlineSigner, ordibankClient } from '../provider'
+import { offlineSigner, crossflowClient } from '../provider'
 import BigNumber from 'bignumber.js'
 import {
   INPUT_AMOUNT,
@@ -179,7 +179,7 @@ export const SendBitcoinToHTLC = async (
     creationVout: 0,
   }
 
-  const res = await ordibankClient.OrdibankprotocolLock.tx.sendMsgRequestLock({
+  const res = await crossflowClient.CfprotocolLock.tx.sendMsgRequestLock({
     value: MsgRequestLock.fromPartial(value),
   })
   console.log('MsgRequestLock res ===>', res)

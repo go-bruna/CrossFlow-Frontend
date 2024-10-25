@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeneratedType } from "@cosmjs/proto-signing";
 import { ObserveVote } from "./types/cfprotocol/loan/observe_vote";
 import { MsgRequestLoan } from "./types/cfprotocol/loan/tx";

@@ -117,8 +117,8 @@ export const useOkxWallet = () => {
 	};
 
 	useEffect(() => {
-		if ("okxwallet" in window && window.okxwallet.bitcoin) {
-			const provider = window.okxwallet?.bitcoin;
+		if ("okxwallet" in window && (window as unknown as any).okxwallet.bitcoin) {
+			const provider = (window as unknown as any).okxwallet.bitcoin
 			const newWallet = {
 				...wallet,
 				installed: true,
@@ -135,7 +135,7 @@ export const useOkxWallet = () => {
 		if (!!wallet?.methods && connected_wallet === WalletType.OKX) {
 			connect();
 
-			const provider = window.okxwallet?.bitcoin;
+			const provider = (window as unknown as any).okxwallet.bitcoin
 			const handleAccountsChanged = async (accounts: string[]) => {
 				invalidateWalletQueries(accounts[0]);
 				setWallet({

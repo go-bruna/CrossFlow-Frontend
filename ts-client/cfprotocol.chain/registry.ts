@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeneratedType } from "@cosmjs/proto-signing";
 import { Balance } from "./types/cfprotocol/chain/pool_balance";
 import { MsgRemoveChain } from "./types/cfprotocol/chain/tx";

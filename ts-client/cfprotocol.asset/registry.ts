@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeneratedType } from "@cosmjs/proto-signing";
 import { MsgUpdateParams } from "./types/cfprotocol/asset/tx";
 import { MsgUpdateParamsResponse } from "./types/cfprotocol/asset/tx";

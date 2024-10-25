@@ -6,7 +6,6 @@ import { EncodeObject, GeneratedType, OfflineSigner, Registry } from "@cosmjs/pr
 import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
-import { Api } from "./rest";
 import { Params } from "./types/cfprotocol/cfnconsensus/params";
 import { ConsensusPayload } from "./types/cfprotocol/cfnconsensus/consensus_payload";
 import { GenesisState } from "./types/cfprotocol/cfnconsensus/genesis";
@@ -310,23 +309,13 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 	}
 };
 
-interface QueryClientOptions {
-  addr: string
-}
-
-export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
-  return new Api({ baseURL: addr });
-};
-
 class SDKModule {
-	public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	public structure: Record<string,unknown>;
 	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
 	
-		this.query = queryClient({ addr: client.env.apiURL });		
 		this.updateTX(client);
 		this.structure =  {
 						

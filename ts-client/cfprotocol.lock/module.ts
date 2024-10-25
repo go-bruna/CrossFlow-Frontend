@@ -6,7 +6,6 @@ import { EncodeObject, GeneratedType, OfflineSigner, Registry } from "@cosmjs/pr
 import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
-import { Api } from "./rest";
 import { MsgVoteSupplyHashObserve } from "./types/cfprotocol/lock/tx";
 import { QueryGetSupplyTssObservationRequest } from "./types/cfprotocol/lock/query";
 import { MsgObserveVoteLocking } from "./types/cfprotocol/lock/tx";
@@ -1738,15 +1737,12 @@ export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http:/
 };
 
 class SDKModule {
-	public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	public structure: Record<string,unknown>;
 	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
-	
-		this.query = queryClient({ addr: client.env.apiURL });		
-		this.updateTX(client);
+			this.updateTX(client);
 		this.structure =  {
 						
 		};

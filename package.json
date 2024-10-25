@@ -12,6 +12,7 @@
     "postinstall": "if [ \"$SKIP_LEFTHOOK_INSTALL\" != \"true\" ]; then lefthook install; fi"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.2.0",
     "@cosmjs/cosmwasm-stargate": "^0.32.4",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.32.4",

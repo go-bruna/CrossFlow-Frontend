@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeneratedType } from "@cosmjs/proto-signing";
 import { MsgVoteSupplyHashObserve } from "./types/cfprotocol/lock/tx";
 import { QueryGetSupplyTssObservationRequest } from "./types/cfprotocol/lock/query";

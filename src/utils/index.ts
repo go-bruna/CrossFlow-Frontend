@@ -59,7 +59,9 @@ export const handleAnimation = async (setOpacityAnimation: Function) => {
   })
 }
 
-export const pureNumberFormat = (param: string | number, decimal=2) => {
+export const pureNumberFormat = (param?: string | number, decimal=2) => {
+  if (!param || param === 0)
+    return 0
   if (typeof param === 'number') {
     return Number(param.toFixed(decimal)).toLocaleString()
   } else {

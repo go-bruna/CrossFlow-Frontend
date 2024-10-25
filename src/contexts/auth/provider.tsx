@@ -44,7 +44,6 @@ declare global {
 		phantom?: any;
 		// okxwallet?: any
     bitkeep?: any;
-		// okxwallet?: any;
 	}
 }
 
@@ -58,7 +57,7 @@ const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
 }
 
 export const offlineSigner = await getSignerFromMnemonic()
-export const ordibankClient = new Client(
+export const crossflowClient = new Client(
   {
     rpcURL: cosmoshub.rpc,
     apiURL: cosmoshub.rest,
