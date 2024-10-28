@@ -21,8 +21,8 @@ import { GET_GOVERNANCE_VOTES } from '@/constants/query'
 import { useStakeSummary } from '@/hooks/queries/useStakeSummary'
 import { useAccount } from 'graz'
 import { pureNumberFormat } from '@/utils'
-import { refineVoteStatus } from '@/helper/status'
-import { processVoting } from '@/apis/cfn-client'
+// import { refineVoteStatus } from '@/helper/status'
+// import { processVoting } from '@/apis/cfn-client'
 
 const tabs = [
   { title: 'Yes' },
@@ -42,13 +42,12 @@ export const VotingDrawer = (props: Props) => {
 
   // Handle Vote
   const handleVote = async () => {
-    const voteData = {
-      proposalId: props.proposal_id,
-      voter: account?.bech32Address,
-      option: refineVoteStatus(currentTab.title),
-      // metadata: 
-    }
-    await processVoting(voteData)
+    // const voteData = {
+    //   proposalId: props.proposal_id,
+    //   voter: account?.bech32Address,
+    //   option: refineVoteStatus(currentTab.title),
+    // }
+    // await processVoting(voteData)
   }
 
   // invalidate queries

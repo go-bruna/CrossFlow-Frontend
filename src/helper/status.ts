@@ -6,7 +6,7 @@ import {
   PROPOSAL_STATUS_VOTING_PERIOD
 } from "@/constants/status"
 import { StatusProps } from "@/types/interfaces"
-import { VoteOption } from "@ts-client/cfprotocol.asset/types"
+// import { VoteOption } from "@ts-client/cfprotocol.asset/types"
 
 export const refineStatus = (status?: string) => {
   if (status === PROPOSAL_STATUS_PASSED)
@@ -28,13 +28,13 @@ export const statusClassOverride = (status: StatusProps) => {
   return colorByStatus
 }
 
-export const refineVoteStatus = (status?: string) => {
-  if (status === 'Yes') {
-    return VoteOption.VOTE_OPTION_YES
-  } else if (status === 'No') {
-    return VoteOption.VOTE_OPTION_NO
-  } else if (status === 'Abstain' ) {
-    return VoteOption.VOTE_OPTION_ABSTAIN
-  }
-  return VoteOption.VOTE_OPTION_YES
-}
+// export const refineVoteStatus = (status?: string) => {
+//   if (status === 'Yes') {
+//     return VoteOption.VOTE_OPTION_YES
+//   } else if (status === 'No') {
+//     return VoteOption.VOTE_OPTION_NO
+//   } else if (status === 'Abstain' ) {
+//     return VoteOption.VOTE_OPTION_ABSTAIN
+//   }
+//   return VoteOption.VOTE_OPTION_YES
+// }

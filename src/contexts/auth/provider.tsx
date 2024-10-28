@@ -52,7 +52,7 @@ const mnemonic =
 
 const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
   return DirectSecp256k1HdWallet.fromMnemonic(mnemonic.toString(), {
-    prefix: 'ordi',
+    prefix: 'cfn',
   })
 }
 
