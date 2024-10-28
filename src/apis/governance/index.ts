@@ -71,3 +71,11 @@ export const getGovernanceProposalVoteDetail = async (
     console.log("===error====", error)
   }
 }
+
+// /**
+//  * Send Vote Msg
+//  * @returns
+//  */
+// export const sendVoteMsg = async(
+//   data: 
+// ) => {}
