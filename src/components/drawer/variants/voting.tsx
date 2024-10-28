@@ -7,7 +7,7 @@ import { BaseProps } from '@/types/context/drawer'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import { twMerge } from 'tailwind-merge'
 import { 
-  ChangeEvent,
+  // ChangeEvent,
   useEffect, 
   useState 
 } from 'react'
@@ -19,9 +19,13 @@ import { ITag } from '@/types/interfaces'
 import { queryClient } from '@/wagmi'
 import { GET_GOVERNANCE_VOTES } from '@/constants/query'
 import { useStakeSummary } from '@/hooks/queries/useStakeSummary'
-import { useAccount } from 'graz'
+import { useAccount, useOfflineSigners } from 'graz'
 import { pureNumberFormat } from '@/utils'
-// import { refineVoteStatus } from '@/helper/status'
+import { refineVoteStatus } from '@/helper/status'
+import { useToast } from '@/hooks/useToast'
+import { FAILED_WALLET_CONNECTION, WALLET_INSTALL } from '@/constants/message'
+import { TxClient } from '@/cf-client/client'
+import { MsgVote } from '@/cf-client/cosmos.gov/tx'
 // import { processVoting } from '@/apis/cfn-client'
 
 const tabs = [
@@ -34,20 +38,42 @@ export interface Props extends BaseProps {
 }
 
 export const VotingDrawer = (props: Props) => {
+  const { messageApi } = useToast();
   const { isDesktop } = useWindowSize()
   const { data: account } = useAccount()
+  const { data: offlineSigners } = useOfflineSigners()
   const { data: stakeSummary } = useStakeSummary(account?.bech32Address)
   const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
-  const [ amount, setAmount ] = useState<number | undefined>(undefined)  
+  // const [ amount, setAmount ] = useState<number | undefined>(undefined)  
 
   // Handle Vote
   const handleVote = async () => {
-    // const voteData = {
-    //   proposalId: props.proposal_id,
-    //   voter: account?.bech32Address,
-    //   option: refineVoteStatus(currentTab.title),
-    // }
-    // await processVoting(voteData)
+    try {
+
+      if (!window.keplr) {
+        return messageApi.Alert(WALLET_INSTALL("Bitget"));
+      }
+      if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
+        return messageApi.Alert(FAILED_WALLET_CONNECTION);
+      }
+
+      const voteData: MsgVote = {
+        proposalId: Number(props?.proposal_id ?? "0"),
+        voter: account?.bech32Address,
+        option: refineVoteStatus(currentTab.title),
+        metadata: 'metadata'
+      }
+
+      console.log("voteData ===>", voteData)
+
+      const client = await TxClient(offlineSigners?.offlineSigner);
+      let msg = await client.msgVote(voteData);
+      const result = await client.signAndBroadcast([msg]);
+      console.log("voting result ====>", result);
+
+    } catch (error) {
+      console.log("handle Voting Msg Error ==>", error)
+    }
   }
 
   // invalidate queries
@@ -94,20 +120,22 @@ export const VotingDrawer = (props: Props) => {
             <Input 
               label='Amount'
               type="number"
-              value={amount ?? ''}
+              // value={amount ?? ''}
+              value={Number(stakeSummary?.total_staked ?? 0)}
               placeholder="0.00"
               icon={<LogoIcon fill='#f6851b' />}
               innerButtonLabel="Max"
               onMax={() => {}}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setAmount(Number(e.target.value || 0))
-              }}
+              // onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              //   setAmount(Number(e.target.value || 0))
+              // }}
               classOverride={{
                 inputContainer: 'bg-black mt-[15px]',
                 input: 'bg-black ml-1',
                 value: 'text-base text-white',
                 icon: 'w-8'
               }}
+              disabled={true}
             />
 
             {/* <Paragraph.List 
@@ -136,7 +164,8 @@ export const VotingDrawer = (props: Props) => {
 
             {/* Button group */}
             <div className='flex flex-col gap-[25px]'>
-              {amount && amount > 0  && amount < Number(stakeSummary?.total_staked ?? 0) ? (
+              {0 < Number(stakeSummary?.total_staked ?? 0) ? (
+              // {amount && amount > 0  && amount < Number(stakeSummary?.total_staked ?? 0) ? (
                 <Button.Basic 
                   label="Vote"
                   className="w-full bg-[#0aab8b]"

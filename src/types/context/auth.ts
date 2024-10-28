@@ -1,7 +1,7 @@
 import type { TWallet } from '@/contexts/auth'
 import type { IAccount, WalletType } from '@/types/interfaces.ts'
-import { DeliverTxResponse } from '@cosmjs/stargate'
-import BigNumber from 'bignumber.js'
+// import { DeliverTxResponse } from '@cosmjs/stargate'
+// import BigNumber from 'bignumber.js'
 
 export interface AuthStateProps {
   wallet: TWallet | null
@@ -17,15 +17,15 @@ export interface AuthStateProps {
   paymentAccount: IAccount | null | undefined
   ordinalsAccount: IAccount | null | undefined
 
-  sendBitcoinToHTLC: (
-    messageApi: any,
-    authState: AuthStateProps,
-    senderAddress: string,
-    recipientAddress: string,
-    htlcAmount: BigNumber,
-    publicKey: string,
-    htlctimeount?: number,
-  ) => Promise<DeliverTxResponse | undefined>
+  // sendBitcoinToHTLC: (
+  //   messageApi: any,
+  //   authState: AuthStateProps,
+  //   senderAddress: string,
+  //   recipientAddress: string,
+  //   htlcAmount: BigNumber,
+  //   publicKey: string,
+  //   htlctimeount?: number,
+  // ) => Promise<DeliverTxResponse | undefined>
 }
 
 export interface IAuthContext {

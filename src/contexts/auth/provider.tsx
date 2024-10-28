@@ -12,12 +12,12 @@ import {
 	WALLET_TYPE_XVERSE,
 } from "@/constants/wallets";
 import { queryClient } from "@/wagmi";
-import { 
-	DirectSecp256k1HdWallet, 
-	OfflineDirectSigner 
-} from "@cosmjs/proto-signing";
-import { Client } from '@ts-client/index'
-import { cosmoshub } from "@/config/graz";
+// import { 
+// 	DirectSecp256k1HdWallet, 
+// 	OfflineDirectSigner 
+// } from "@cosmjs/proto-signing";
+// import { Client } from '@ts-client/index'
+// import { cosmoshub } from "@/config/graz";
 
 // hooks
 import {
@@ -36,7 +36,7 @@ import {
 import { getCookie } from "@/utils";
 
 // functions
-import { SendBitcoinToHTLC } from './functions/send-btc-to-htlc'
+// import { SendBitcoinToHTLC } from './functions/send-btc-to-htlc'
 
 declare global {
 	interface Window {
@@ -47,24 +47,24 @@ declare global {
 	}
 }
 
-const mnemonic =
-  'betray theory cargo way left cricket doll room donkey wire reunion fall left surprise hamster corn village happy bulb token artist twelve whisper expire'
+// const mnemonic =
+//   'betray theory cargo way left cricket doll room donkey wire reunion fall left surprise hamster corn village happy bulb token artist twelve whisper expire'
 
-const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
-  return DirectSecp256k1HdWallet.fromMnemonic(mnemonic.toString(), {
-    prefix: 'cfn',
-  })
-}
+// const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
+//   return DirectSecp256k1HdWallet.fromMnemonic(mnemonic.toString(), {
+//     prefix: 'cfn',
+//   })
+// }
 
-export const offlineSigner = await getSignerFromMnemonic()
-export const crossflowClient = new Client(
-  {
-    rpcURL: cosmoshub.rpc,
-    apiURL: cosmoshub.rest,
-    prefix: 'cfn',
-  },
-  offlineSigner,
-)
+// export const offlineSigner = await getSignerFromMnemonic()
+// export const crossflowClient = new Client(
+//   {
+//     rpcURL: cosmoshub.rpc,
+//     apiURL: cosmoshub.rest,
+//     prefix: 'cfn',
+//   },
+//   offlineSigner,
+// )
 
 export const invalidateWalletQueries = (walletAddress: string) => {
   queryClient.invalidateQueries({
@@ -171,7 +171,7 @@ export const AuthStateProvider: React.FC<IContextChildrenProps> = ({
           paymentAccount: wallet?.accounts?.payment,
           ordinalsAccount: wallet?.accounts?.ordinals,
 
-          sendBitcoinToHTLC: SendBitcoinToHTLC,
+          // sendBitcoinToHTLC: SendBitcoinToHTLC,
         },
 
         unisatInstalled: unisatWallet?.installed ?? false,

@@ -19,14 +19,14 @@ const types = [
 
 export const registry = new Registry(<any>types);
 
-export const TxClient = async (wallet: OfflineSigner) => {
+export const TxClient = async (offlineSinger: OfflineSigner) => {
   const client = await SigningStargateClient.connectWithSigner(
     // process.env.CROSSFLOW_TESTNET_RPC,
     cosmoshub.rpc,
-    wallet,
+    offlineSinger,
     { registry }
   );
-  const { address } = (await wallet.getAccounts())[0];
+  const { address } = (await offlineSinger.getAccounts())[0];
 
   return {
     signAndBroadcast: (
@@ -34,7 +34,7 @@ export const TxClient = async (wallet: OfflineSigner) => {
       { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
     ) => client.signAndBroadcast(address, msgs, fee, memo),
     msgVote: (data: MsgVote): EncodeObject => ({
-      typeUrl: "/cosmos.vote.v1.MsgVote",
+      typeUrl: "/cosmos.gov.v1.MsgVote",
       value: MsgVote.fromPartial(data),
     }),
   };

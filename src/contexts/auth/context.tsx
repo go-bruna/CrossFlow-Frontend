@@ -16,7 +16,7 @@ const initialState = {
   paymentAccount: undefined,
   ordinalsAccount: undefined,
 
-  sendBitcoinToHTLC: () => ({}) as any,
+  // sendBitcoinToHTLC: () => ({}) as any,
 }
 
 export const AuthContext = createContext<IAuthContext>({
