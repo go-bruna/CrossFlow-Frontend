@@ -6,20 +6,27 @@ import { EncodeObject, GeneratedType, OfflineSigner, Registry } from "@cosmjs/pr
 import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
+// import { Api } from "./rest";
 import { Params } from "./types/cfprotocol/cfnconsensus/params";
-import { ConsensusPayload } from "./types/cfprotocol/cfnconsensus/consensus_payload";
-import { GenesisState } from "./types/cfprotocol/cfnconsensus/genesis";
-import { QueryParamsRequest } from "./types/cfprotocol/cfnconsensus/query";
-import { QueryParamsResponse } from "./types/cfprotocol/cfnconsensus/query";
-import { MsgUpdateParams } from "./types/cfprotocol/cfnconsensus/tx";
 import { MsgUpdateParamsResponse } from "./types/cfprotocol/cfnconsensus/tx";
+import { ConsensusPayload } from "./types/cfprotocol/cfnconsensus/consensus_payload";
+import { QueryParamsResponse } from "./types/cfprotocol/cfnconsensus/query";
+import { QueryParamsRequest } from "./types/cfprotocol/cfnconsensus/query";
+import { MsgUpdateParams } from "./types/cfprotocol/cfnconsensus/tx";
+import { GenesisState } from "./types/cfprotocol/cfnconsensus/genesis";
 import { Payload } from "./types/cfprotocol/cfnconsensus/consensus_payload";
 
 
-export { Params, ConsensusPayload, GenesisState, QueryParamsRequest, QueryParamsResponse, MsgUpdateParams, MsgUpdateParamsResponse, Payload };
+export { Params, MsgUpdateParamsResponse, ConsensusPayload, QueryParamsResponse, QueryParamsRequest, MsgUpdateParams, GenesisState, Payload };
 
 type sendParamsParams = {
   value: Params,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -30,8 +37,8 @@ type sendConsensusPayloadParams = {
   memo?: string
 };
 
-type sendGenesisStateParams = {
-  value: GenesisState,
+type sendQueryParamsResponseParams = {
+  value: QueryParamsResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -42,20 +49,14 @@ type sendQueryParamsRequestParams = {
   memo?: string
 };
 
-type sendQueryParamsResponseParams = {
-  value: QueryParamsResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
 type sendMsgUpdateParamsParams = {
   value: MsgUpdateParams,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
+type sendGenesisStateParams = {
+  value: GenesisState,
   fee?: StdFee,
   memo?: string
 };
@@ -71,28 +72,28 @@ type paramsParams = {
   value: Params,
 };
 
+type msgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
+};
+
 type consensusPayloadParams = {
   value: ConsensusPayload,
-};
-
-type genesisStateParams = {
-  value: GenesisState,
-};
-
-type queryParamsRequestParams = {
-  value: QueryParamsRequest,
 };
 
 type queryParamsResponseParams = {
   value: QueryParamsResponse,
 };
 
+type queryParamsRequestParams = {
+  value: QueryParamsRequest,
+};
+
 type msgUpdateParamsParams = {
   value: MsgUpdateParams,
 };
 
-type msgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
+type genesisStateParams = {
+  value: GenesisState,
 };
 
 type payloadParams = {
@@ -143,6 +144,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendConsensusPayload({ value, fee, memo }: sendConsensusPayloadParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendConsensusPayload: Unable to sign Tx. Signer is not present.')
@@ -154,34 +169,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendConsensusPayload: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -199,6 +186,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
@@ -213,17 +214,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
+		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
+				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -250,27 +251,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.cfnconsensus.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
+			}
+		},
+		
 		consensusPayload({ value }: consensusPayloadParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.cfnconsensus.ConsensusPayload", value: ConsensusPayload.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:ConsensusPayload: Could not create message: ' + e.message)
-			}
-		},
-		
-		genesisState({ value }: genesisStateParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.cfnconsensus.GenesisState", value: GenesisState.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.cfnconsensus.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -282,6 +275,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.cfnconsensus.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
+			}
+		},
+		
 		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.cfnconsensus.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
@@ -290,11 +291,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
+		genesisState({ value }: genesisStateParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.cfnconsensus.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.cfnconsensus.GenesisState", value: GenesisState.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -309,13 +310,23 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 	}
 };
 
+// interface QueryClientOptions {
+//   addr: string
+// }
+
+// export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
+//   return new Api({ baseURL: addr });
+// };
+
 class SDKModule {
+	// public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	public structure: Record<string,unknown>;
 	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
 	
+		// this.query = queryClient({ addr: client.env.apiURL });		
 		this.updateTX(client);
 		this.structure =  {
 						

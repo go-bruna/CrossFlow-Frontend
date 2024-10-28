@@ -5,7 +5,6 @@
 // source: cfprotocol/asset/profile.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { AssetType, assetTypeFromJSON, assetTypeToJSON } from "./type";
 

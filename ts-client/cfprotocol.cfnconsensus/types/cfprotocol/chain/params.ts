@@ -5,7 +5,6 @@
 // source: cfprotocol/chain/params.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cfprotocol.chain";

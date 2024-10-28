@@ -5,7 +5,6 @@
 // source: cfprotocol/cfnconsensus/consensus_payload.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cfprotocol.cfnconsensus";

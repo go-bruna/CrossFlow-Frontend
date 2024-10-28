@@ -5,7 +5,6 @@
 // source: cfprotocol/cfnconsensus/query.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Params } from "./params";
 

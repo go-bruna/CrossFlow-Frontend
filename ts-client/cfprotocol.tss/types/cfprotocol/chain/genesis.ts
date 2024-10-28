@@ -5,7 +5,6 @@
 // source: cfprotocol/chain/genesis.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { BalanceObservation } from "./balance_observation";
 import { Chain } from "./chain";

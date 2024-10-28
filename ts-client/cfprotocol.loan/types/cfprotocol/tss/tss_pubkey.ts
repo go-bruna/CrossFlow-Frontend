@@ -5,7 +5,6 @@
 // source: cfprotocol/tss/tss_pubkey.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cfprotocol.tss";

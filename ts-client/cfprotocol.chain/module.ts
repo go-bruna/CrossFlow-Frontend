@@ -6,49 +6,62 @@ import { EncodeObject, GeneratedType, OfflineSigner, Registry } from "@cosmjs/pr
 import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
+// import { Api } from "./rest";
+import { MsgAddChain } from "./types/cfprotocol/chain/tx";
+import { StakeSummary } from "./types/cfprotocol/chain/stake_summary";
 import { Balance } from "./types/cfprotocol/chain/pool_balance";
-import { MsgRemoveChain } from "./types/cfprotocol/chain/tx";
-import { GenesisState } from "./types/cfprotocol/chain/genesis";
+import { PoolBalance } from "./types/cfprotocol/chain/pool_balance";
+import { MsgRemoveTokenResponse } from "./types/cfprotocol/chain/tx";
 import { GovSummary } from "./types/cfprotocol/chain/gov_summary";
 import { QueryParamsRequest } from "./types/cfprotocol/chain/query";
-import { Chain } from "./types/cfprotocol/chain/chain";
-import { MsgUpdateBalanceResponse } from "./types/cfprotocol/chain/tx";
-import { Params } from "./types/cfprotocol/chain/params";
-import { MsgUpdateNativeBalance } from "./types/cfprotocol/chain/tx";
-import { QueryParamsResponse } from "./types/cfprotocol/chain/query";
-import { QueryChainAllRequest } from "./types/cfprotocol/chain/query";
-import { QueryBalanceObservationAllRequest } from "./types/cfprotocol/chain/query";
-import { QueryGetStakeSummaryRequest } from "./types/cfprotocol/chain/query";
-import { QueryGetStakeSummaryResponse } from "./types/cfprotocol/chain/query";
-import { MsgAddChainResponse } from "./types/cfprotocol/chain/tx";
-import { MsgRemoveTokenResponse } from "./types/cfprotocol/chain/tx";
-import { MsgAddTokenResponse } from "./types/cfprotocol/chain/tx";
-import { MsgAddToken } from "./types/cfprotocol/chain/tx";
-import { QueryChainAllResponse } from "./types/cfprotocol/chain/query";
-import { QueryPoolBalanceResponse } from "./types/cfprotocol/chain/query";
-import { QueryBalanceObservationRequest } from "./types/cfprotocol/chain/query";
-import { QueryBalanceObservationResponse } from "./types/cfprotocol/chain/query";
-import { QueryPoolBalanceAllRequest } from "./types/cfprotocol/chain/query";
-import { QueryPoolBalanceAllResponse } from "./types/cfprotocol/chain/query";
-import { MsgUpdateNativeBalanceResponse } from "./types/cfprotocol/chain/tx";
-import { MsgAddChain } from "./types/cfprotocol/chain/tx";
-import { BalanceObservation } from "./types/cfprotocol/chain/balance_observation";
-import { QueryPoolBalanceRequest } from "./types/cfprotocol/chain/query";
-import { QueryBalanceObservationAllResponse } from "./types/cfprotocol/chain/query";
-import { QueryGetGovSummaryRequest } from "./types/cfprotocol/chain/query";
 import { MsgUpdateParams } from "./types/cfprotocol/chain/tx";
 import { MsgUpdateParamsResponse } from "./types/cfprotocol/chain/tx";
-import { MsgRemoveToken } from "./types/cfprotocol/chain/tx";
-import { QueryChainRequest } from "./types/cfprotocol/chain/query";
+import { QueryParamsResponse } from "./types/cfprotocol/chain/query";
 import { QueryChainResponse } from "./types/cfprotocol/chain/query";
-import { MsgUpdateBalance } from "./types/cfprotocol/chain/tx";
-import { PoolBalance } from "./types/cfprotocol/chain/pool_balance";
+import { QueryPoolBalanceAllRequest } from "./types/cfprotocol/chain/query";
+import { BalanceObservation } from "./types/cfprotocol/chain/balance_observation";
+import { MsgUpdateBalanceResponse } from "./types/cfprotocol/chain/tx";
+import { MsgRemoveChain } from "./types/cfprotocol/chain/tx";
+import { QueryChainRequest } from "./types/cfprotocol/chain/query";
+import { QueryBalanceObservationRequest } from "./types/cfprotocol/chain/query";
+import { QueryGetStakeSummaryResponse } from "./types/cfprotocol/chain/query";
 import { QueryGetGovSummaryResponse } from "./types/cfprotocol/chain/query";
-import { StakeSummary } from "./types/cfprotocol/chain/stake_summary";
+import { MsgUpdateBalance } from "./types/cfprotocol/chain/tx";
+import { QueryChainAllResponse } from "./types/cfprotocol/chain/query";
+import { QueryPoolBalanceResponse } from "./types/cfprotocol/chain/query";
+import { QueryPoolBalanceAllResponse } from "./types/cfprotocol/chain/query";
+import { QueryBalanceObservationAllRequest } from "./types/cfprotocol/chain/query";
+import { Params } from "./types/cfprotocol/chain/params";
+import { Chain } from "./types/cfprotocol/chain/chain";
+import { MsgUpdateNativeBalanceResponse } from "./types/cfprotocol/chain/tx";
+import { MsgRemoveToken } from "./types/cfprotocol/chain/tx";
+import { QueryChainAllRequest } from "./types/cfprotocol/chain/query";
+import { QueryPoolBalanceRequest } from "./types/cfprotocol/chain/query";
+import { QueryBalanceObservationResponse } from "./types/cfprotocol/chain/query";
+import { QueryBalanceObservationAllResponse } from "./types/cfprotocol/chain/query";
+import { MsgAddToken } from "./types/cfprotocol/chain/tx";
+import { MsgAddTokenResponse } from "./types/cfprotocol/chain/tx";
+import { QueryGetGovSummaryRequest } from "./types/cfprotocol/chain/query";
+import { MsgAddChainResponse } from "./types/cfprotocol/chain/tx";
 import { MsgRemoveChainResponse } from "./types/cfprotocol/chain/tx";
+import { MsgUpdateNativeBalance } from "./types/cfprotocol/chain/tx";
+import { QueryGetStakeSummaryRequest } from "./types/cfprotocol/chain/query";
+import { GenesisState } from "./types/cfprotocol/chain/genesis";
 
 
-export { Balance, MsgRemoveChain, GenesisState, GovSummary, QueryParamsRequest, Chain, MsgUpdateBalanceResponse, Params, MsgUpdateNativeBalance, QueryParamsResponse, QueryChainAllRequest, QueryBalanceObservationAllRequest, QueryGetStakeSummaryRequest, QueryGetStakeSummaryResponse, MsgAddChainResponse, MsgRemoveTokenResponse, MsgAddTokenResponse, MsgAddToken, QueryChainAllResponse, QueryPoolBalanceResponse, QueryBalanceObservationRequest, QueryBalanceObservationResponse, QueryPoolBalanceAllRequest, QueryPoolBalanceAllResponse, MsgUpdateNativeBalanceResponse, MsgAddChain, BalanceObservation, QueryPoolBalanceRequest, QueryBalanceObservationAllResponse, QueryGetGovSummaryRequest, MsgUpdateParams, MsgUpdateParamsResponse, MsgRemoveToken, QueryChainRequest, QueryChainResponse, MsgUpdateBalance, PoolBalance, QueryGetGovSummaryResponse, StakeSummary, MsgRemoveChainResponse };
+export { MsgAddChain, StakeSummary, Balance, PoolBalance, MsgRemoveTokenResponse, GovSummary, QueryParamsRequest, MsgUpdateParams, MsgUpdateParamsResponse, QueryParamsResponse, QueryChainResponse, QueryPoolBalanceAllRequest, BalanceObservation, MsgUpdateBalanceResponse, MsgRemoveChain, QueryChainRequest, QueryBalanceObservationRequest, QueryGetStakeSummaryResponse, QueryGetGovSummaryResponse, MsgUpdateBalance, QueryChainAllResponse, QueryPoolBalanceResponse, QueryPoolBalanceAllResponse, QueryBalanceObservationAllRequest, Params, Chain, MsgUpdateNativeBalanceResponse, MsgRemoveToken, QueryChainAllRequest, QueryPoolBalanceRequest, QueryBalanceObservationResponse, QueryBalanceObservationAllResponse, MsgAddToken, MsgAddTokenResponse, QueryGetGovSummaryRequest, MsgAddChainResponse, MsgRemoveChainResponse, MsgUpdateNativeBalance, QueryGetStakeSummaryRequest, GenesisState };
+
+type sendMsgAddChainParams = {
+  value: MsgAddChain,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendStakeSummaryParams = {
+  value: StakeSummary,
+  fee?: StdFee,
+  memo?: string
+};
 
 type sendBalanceParams = {
   value: Balance,
@@ -56,14 +69,14 @@ type sendBalanceParams = {
   memo?: string
 };
 
-type sendMsgRemoveChainParams = {
-  value: MsgRemoveChain,
+type sendPoolBalanceParams = {
+  value: PoolBalance,
   fee?: StdFee,
   memo?: string
 };
 
-type sendGenesisStateParams = {
-  value: GenesisState,
+type sendMsgRemoveTokenResponseParams = {
+  value: MsgRemoveTokenResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -80,26 +93,14 @@ type sendQueryParamsRequestParams = {
   memo?: string
 };
 
-type sendChainParams = {
-  value: Chain,
+type sendMsgUpdateParamsParams = {
+  value: MsgUpdateParams,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgUpdateBalanceResponseParams = {
-  value: MsgUpdateBalanceResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendParamsParams = {
-  value: Params,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateNativeBalanceParams = {
-  value: MsgUpdateNativeBalance,
+type sendMsgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -110,20 +111,44 @@ type sendQueryParamsResponseParams = {
   memo?: string
 };
 
-type sendQueryChainAllRequestParams = {
-  value: QueryChainAllRequest,
+type sendQueryChainResponseParams = {
+  value: QueryChainResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryBalanceObservationAllRequestParams = {
-  value: QueryBalanceObservationAllRequest,
+type sendQueryPoolBalanceAllRequestParams = {
+  value: QueryPoolBalanceAllRequest,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryGetStakeSummaryRequestParams = {
-  value: QueryGetStakeSummaryRequest,
+type sendBalanceObservationParams = {
+  value: BalanceObservation,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateBalanceResponseParams = {
+  value: MsgUpdateBalanceResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRemoveChainParams = {
+  value: MsgRemoveChain,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryChainRequestParams = {
+  value: QueryChainRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryBalanceObservationRequestParams = {
+  value: QueryBalanceObservationRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -134,26 +159,14 @@ type sendQueryGetStakeSummaryResponseParams = {
   memo?: string
 };
 
-type sendMsgAddChainResponseParams = {
-  value: MsgAddChainResponse,
+type sendQueryGetGovSummaryResponseParams = {
+  value: QueryGetGovSummaryResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgRemoveTokenResponseParams = {
-  value: MsgRemoveTokenResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgAddTokenResponseParams = {
-  value: MsgAddTokenResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgAddTokenParams = {
-  value: MsgAddToken,
+type sendMsgUpdateBalanceParams = {
+  value: MsgUpdateBalance,
   fee?: StdFee,
   memo?: string
 };
@@ -170,26 +183,26 @@ type sendQueryPoolBalanceResponseParams = {
   memo?: string
 };
 
-type sendQueryBalanceObservationRequestParams = {
-  value: QueryBalanceObservationRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryBalanceObservationResponseParams = {
-  value: QueryBalanceObservationResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryPoolBalanceAllRequestParams = {
-  value: QueryPoolBalanceAllRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
 type sendQueryPoolBalanceAllResponseParams = {
   value: QueryPoolBalanceAllResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryBalanceObservationAllRequestParams = {
+  value: QueryBalanceObservationAllRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendParamsParams = {
+  value: Params,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendChainParams = {
+  value: Chain,
   fee?: StdFee,
   memo?: string
 };
@@ -200,14 +213,14 @@ type sendMsgUpdateNativeBalanceResponseParams = {
   memo?: string
 };
 
-type sendMsgAddChainParams = {
-  value: MsgAddChain,
+type sendMsgRemoveTokenParams = {
+  value: MsgRemoveToken,
   fee?: StdFee,
   memo?: string
 };
 
-type sendBalanceObservationParams = {
-  value: BalanceObservation,
+type sendQueryChainAllRequestParams = {
+  value: QueryChainAllRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -218,8 +231,26 @@ type sendQueryPoolBalanceRequestParams = {
   memo?: string
 };
 
+type sendQueryBalanceObservationResponseParams = {
+  value: QueryBalanceObservationResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
 type sendQueryBalanceObservationAllResponseParams = {
   value: QueryBalanceObservationAllResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgAddTokenParams = {
+  value: MsgAddToken,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgAddTokenResponseParams = {
+  value: MsgAddTokenResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -230,56 +261,8 @@ type sendQueryGetGovSummaryRequestParams = {
   memo?: string
 };
 
-type sendMsgUpdateParamsParams = {
-  value: MsgUpdateParams,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRemoveTokenParams = {
-  value: MsgRemoveToken,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryChainRequestParams = {
-  value: QueryChainRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryChainResponseParams = {
-  value: QueryChainResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateBalanceParams = {
-  value: MsgUpdateBalance,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendPoolBalanceParams = {
-  value: PoolBalance,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetGovSummaryResponseParams = {
-  value: QueryGetGovSummaryResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendStakeSummaryParams = {
-  value: StakeSummary,
+type sendMsgAddChainResponseParams = {
+  value: MsgAddChainResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -290,17 +273,43 @@ type sendMsgRemoveChainResponseParams = {
   memo?: string
 };
 
+type sendMsgUpdateNativeBalanceParams = {
+  value: MsgUpdateNativeBalance,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGetStakeSummaryRequestParams = {
+  value: QueryGetStakeSummaryRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGenesisStateParams = {
+  value: GenesisState,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgAddChainParams = {
+  value: MsgAddChain,
+};
+
+type stakeSummaryParams = {
+  value: StakeSummary,
+};
 
 type balanceParams = {
   value: Balance,
 };
 
-type msgRemoveChainParams = {
-  value: MsgRemoveChain,
+type poolBalanceParams = {
+  value: PoolBalance,
 };
 
-type genesisStateParams = {
-  value: GenesisState,
+type msgRemoveTokenResponseParams = {
+  value: MsgRemoveTokenResponse,
 };
 
 type govSummaryParams = {
@@ -311,56 +320,56 @@ type queryParamsRequestParams = {
   value: QueryParamsRequest,
 };
 
-type chainParams = {
-  value: Chain,
+type msgUpdateParamsParams = {
+  value: MsgUpdateParams,
 };
 
-type msgUpdateBalanceResponseParams = {
-  value: MsgUpdateBalanceResponse,
-};
-
-type paramsParams = {
-  value: Params,
-};
-
-type msgUpdateNativeBalanceParams = {
-  value: MsgUpdateNativeBalance,
+type msgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
 };
 
 type queryParamsResponseParams = {
   value: QueryParamsResponse,
 };
 
-type queryChainAllRequestParams = {
-  value: QueryChainAllRequest,
+type queryChainResponseParams = {
+  value: QueryChainResponse,
 };
 
-type queryBalanceObservationAllRequestParams = {
-  value: QueryBalanceObservationAllRequest,
+type queryPoolBalanceAllRequestParams = {
+  value: QueryPoolBalanceAllRequest,
 };
 
-type queryGetStakeSummaryRequestParams = {
-  value: QueryGetStakeSummaryRequest,
+type balanceObservationParams = {
+  value: BalanceObservation,
+};
+
+type msgUpdateBalanceResponseParams = {
+  value: MsgUpdateBalanceResponse,
+};
+
+type msgRemoveChainParams = {
+  value: MsgRemoveChain,
+};
+
+type queryChainRequestParams = {
+  value: QueryChainRequest,
+};
+
+type queryBalanceObservationRequestParams = {
+  value: QueryBalanceObservationRequest,
 };
 
 type queryGetStakeSummaryResponseParams = {
   value: QueryGetStakeSummaryResponse,
 };
 
-type msgAddChainResponseParams = {
-  value: MsgAddChainResponse,
+type queryGetGovSummaryResponseParams = {
+  value: QueryGetGovSummaryResponse,
 };
 
-type msgRemoveTokenResponseParams = {
-  value: MsgRemoveTokenResponse,
-};
-
-type msgAddTokenResponseParams = {
-  value: MsgAddTokenResponse,
-};
-
-type msgAddTokenParams = {
-  value: MsgAddToken,
+type msgUpdateBalanceParams = {
+  value: MsgUpdateBalance,
 };
 
 type queryChainAllResponseParams = {
@@ -371,84 +380,76 @@ type queryPoolBalanceResponseParams = {
   value: QueryPoolBalanceResponse,
 };
 
-type queryBalanceObservationRequestParams = {
-  value: QueryBalanceObservationRequest,
-};
-
-type queryBalanceObservationResponseParams = {
-  value: QueryBalanceObservationResponse,
-};
-
-type queryPoolBalanceAllRequestParams = {
-  value: QueryPoolBalanceAllRequest,
-};
-
 type queryPoolBalanceAllResponseParams = {
   value: QueryPoolBalanceAllResponse,
+};
+
+type queryBalanceObservationAllRequestParams = {
+  value: QueryBalanceObservationAllRequest,
+};
+
+type paramsParams = {
+  value: Params,
+};
+
+type chainParams = {
+  value: Chain,
 };
 
 type msgUpdateNativeBalanceResponseParams = {
   value: MsgUpdateNativeBalanceResponse,
 };
 
-type msgAddChainParams = {
-  value: MsgAddChain,
+type msgRemoveTokenParams = {
+  value: MsgRemoveToken,
 };
 
-type balanceObservationParams = {
-  value: BalanceObservation,
+type queryChainAllRequestParams = {
+  value: QueryChainAllRequest,
 };
 
 type queryPoolBalanceRequestParams = {
   value: QueryPoolBalanceRequest,
 };
 
+type queryBalanceObservationResponseParams = {
+  value: QueryBalanceObservationResponse,
+};
+
 type queryBalanceObservationAllResponseParams = {
   value: QueryBalanceObservationAllResponse,
+};
+
+type msgAddTokenParams = {
+  value: MsgAddToken,
+};
+
+type msgAddTokenResponseParams = {
+  value: MsgAddTokenResponse,
 };
 
 type queryGetGovSummaryRequestParams = {
   value: QueryGetGovSummaryRequest,
 };
 
-type msgUpdateParamsParams = {
-  value: MsgUpdateParams,
-};
-
-type msgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
-};
-
-type msgRemoveTokenParams = {
-  value: MsgRemoveToken,
-};
-
-type queryChainRequestParams = {
-  value: QueryChainRequest,
-};
-
-type queryChainResponseParams = {
-  value: QueryChainResponse,
-};
-
-type msgUpdateBalanceParams = {
-  value: MsgUpdateBalance,
-};
-
-type poolBalanceParams = {
-  value: PoolBalance,
-};
-
-type queryGetGovSummaryResponseParams = {
-  value: QueryGetGovSummaryResponse,
-};
-
-type stakeSummaryParams = {
-  value: StakeSummary,
+type msgAddChainResponseParams = {
+  value: MsgAddChainResponse,
 };
 
 type msgRemoveChainResponseParams = {
   value: MsgRemoveChainResponse,
+};
+
+type msgUpdateNativeBalanceParams = {
+  value: MsgUpdateNativeBalance,
+};
+
+type queryGetStakeSummaryRequestParams = {
+  value: QueryGetStakeSummaryRequest,
+};
+
+type genesisStateParams = {
+  value: GenesisState,
 };
 
 
@@ -481,6 +482,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgAddChain({ value, fee, memo }: sendMsgAddChainParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddChain: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgAddChain({ value: MsgAddChain.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgAddChain: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendStakeSummary({ value, fee, memo }: sendStakeSummaryParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendStakeSummary: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.stakeSummary({ value: StakeSummary.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendStakeSummary: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendBalance({ value, fee, memo }: sendBalanceParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendBalance: Unable to sign Tx. Signer is not present.')
@@ -495,31 +524,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgRemoveChain({ value, fee, memo }: sendMsgRemoveChainParams): Promise<DeliverTxResponse> {
+		async sendPoolBalance({ value, fee, memo }: sendPoolBalanceParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgRemoveChain: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendPoolBalance: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRemoveChain({ value: MsgRemoveChain.fromPartial(value) })
+				let msg = this.poolBalance({ value: PoolBalance.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRemoveChain: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendPoolBalance: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+		async sendMsgRemoveTokenResponse({ value, fee, memo }: sendMsgRemoveTokenResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgRemoveTokenResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				let msg = this.msgRemoveTokenResponse({ value: MsgRemoveTokenResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgRemoveTokenResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -551,59 +580,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendChain({ value, fee, memo }: sendChainParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendChain: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.chain({ value: Chain.fromPartial(value) })
+				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendChain: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgUpdateBalanceResponse({ value, fee, memo }: sendMsgUpdateBalanceResponseParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateBalanceResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateBalanceResponse({ value: MsgUpdateBalanceResponse.fromPartial(value) })
+				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateBalanceResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.params({ value: Params.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateNativeBalance({ value, fee, memo }: sendMsgUpdateNativeBalanceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateNativeBalance: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateNativeBalance({ value: MsgUpdateNativeBalance.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateNativeBalance: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -621,45 +622,101 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendQueryChainAllRequest({ value, fee, memo }: sendQueryChainAllRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryChainResponse({ value, fee, memo }: sendQueryChainResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryChainAllRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryChainResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryChainAllRequest({ value: QueryChainAllRequest.fromPartial(value) })
+				let msg = this.queryChainResponse({ value: QueryChainResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryChainAllRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryChainResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryBalanceObservationAllRequest({ value, fee, memo }: sendQueryBalanceObservationAllRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryPoolBalanceAllRequest({ value, fee, memo }: sendQueryPoolBalanceAllRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryBalanceObservationAllRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryPoolBalanceAllRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryBalanceObservationAllRequest({ value: QueryBalanceObservationAllRequest.fromPartial(value) })
+				let msg = this.queryPoolBalanceAllRequest({ value: QueryPoolBalanceAllRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryBalanceObservationAllRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryPoolBalanceAllRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryGetStakeSummaryRequest({ value, fee, memo }: sendQueryGetStakeSummaryRequestParams): Promise<DeliverTxResponse> {
+		async sendBalanceObservation({ value, fee, memo }: sendBalanceObservationParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryGetStakeSummaryRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendBalanceObservation: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetStakeSummaryRequest({ value: QueryGetStakeSummaryRequest.fromPartial(value) })
+				let msg = this.balanceObservation({ value: BalanceObservation.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetStakeSummaryRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendBalanceObservation: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUpdateBalanceResponse({ value, fee, memo }: sendMsgUpdateBalanceResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateBalanceResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateBalanceResponse({ value: MsgUpdateBalanceResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateBalanceResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRemoveChain({ value, fee, memo }: sendMsgRemoveChainParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRemoveChain: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRemoveChain({ value: MsgRemoveChain.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRemoveChain: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryChainRequest({ value, fee, memo }: sendQueryChainRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryChainRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryChainRequest({ value: QueryChainRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryChainRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryBalanceObservationRequest({ value, fee, memo }: sendQueryBalanceObservationRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryBalanceObservationRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryBalanceObservationRequest({ value: QueryBalanceObservationRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryBalanceObservationRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -677,59 +734,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgAddChainResponse({ value, fee, memo }: sendMsgAddChainResponseParams): Promise<DeliverTxResponse> {
+		async sendQueryGetGovSummaryResponse({ value, fee, memo }: sendQueryGetGovSummaryResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgAddChainResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryGetGovSummaryResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgAddChainResponse({ value: MsgAddChainResponse.fromPartial(value) })
+				let msg = this.queryGetGovSummaryResponse({ value: QueryGetGovSummaryResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddChainResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryGetGovSummaryResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgRemoveTokenResponse({ value, fee, memo }: sendMsgRemoveTokenResponseParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateBalance({ value, fee, memo }: sendMsgUpdateBalanceParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgRemoveTokenResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateBalance: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRemoveTokenResponse({ value: MsgRemoveTokenResponse.fromPartial(value) })
+				let msg = this.msgUpdateBalance({ value: MsgUpdateBalance.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRemoveTokenResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgAddTokenResponse({ value, fee, memo }: sendMsgAddTokenResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgAddTokenResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgAddTokenResponse({ value: MsgAddTokenResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddTokenResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgAddToken({ value, fee, memo }: sendMsgAddTokenParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgAddToken: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgAddToken({ value: MsgAddToken.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddToken: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateBalance: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -761,48 +790,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendQueryBalanceObservationRequest({ value, fee, memo }: sendQueryBalanceObservationRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryBalanceObservationRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryBalanceObservationRequest({ value: QueryBalanceObservationRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryBalanceObservationRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryBalanceObservationResponse({ value, fee, memo }: sendQueryBalanceObservationResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryBalanceObservationResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryBalanceObservationResponse({ value: QueryBalanceObservationResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryBalanceObservationResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryPoolBalanceAllRequest({ value, fee, memo }: sendQueryPoolBalanceAllRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryPoolBalanceAllRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryPoolBalanceAllRequest({ value: QueryPoolBalanceAllRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryPoolBalanceAllRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendQueryPoolBalanceAllResponse({ value, fee, memo }: sendQueryPoolBalanceAllResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendQueryPoolBalanceAllResponse: Unable to sign Tx. Signer is not present.')
@@ -814,6 +801,48 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendQueryPoolBalanceAllResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryBalanceObservationAllRequest({ value, fee, memo }: sendQueryBalanceObservationAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryBalanceObservationAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryBalanceObservationAllRequest({ value: QueryBalanceObservationAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryBalanceObservationAllRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.params({ value: Params.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendChain({ value, fee, memo }: sendChainParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendChain: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.chain({ value: Chain.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendChain: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -831,31 +860,31 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgAddChain({ value, fee, memo }: sendMsgAddChainParams): Promise<DeliverTxResponse> {
+		async sendMsgRemoveToken({ value, fee, memo }: sendMsgRemoveTokenParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgAddChain: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgRemoveToken: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgAddChain({ value: MsgAddChain.fromPartial(value) })
+				let msg = this.msgRemoveToken({ value: MsgRemoveToken.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddChain: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgRemoveToken: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendBalanceObservation({ value, fee, memo }: sendBalanceObservationParams): Promise<DeliverTxResponse> {
+		async sendQueryChainAllRequest({ value, fee, memo }: sendQueryChainAllRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendBalanceObservation: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryChainAllRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.balanceObservation({ value: BalanceObservation.fromPartial(value) })
+				let msg = this.queryChainAllRequest({ value: QueryChainAllRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendBalanceObservation: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryChainAllRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -873,6 +902,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendQueryBalanceObservationResponse({ value, fee, memo }: sendQueryBalanceObservationResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryBalanceObservationResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryBalanceObservationResponse({ value: QueryBalanceObservationResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryBalanceObservationResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendQueryBalanceObservationAllResponse({ value, fee, memo }: sendQueryBalanceObservationAllResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendQueryBalanceObservationAllResponse: Unable to sign Tx. Signer is not present.')
@@ -884,6 +927,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendQueryBalanceObservationAllResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgAddToken({ value, fee, memo }: sendMsgAddTokenParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddToken: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgAddToken({ value: MsgAddToken.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgAddToken: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgAddTokenResponse({ value, fee, memo }: sendMsgAddTokenResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddTokenResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgAddTokenResponse({ value: MsgAddTokenResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgAddTokenResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -901,129 +972,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+		async sendMsgAddChainResponse({ value, fee, memo }: sendMsgAddChainResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgAddChainResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				let msg = this.msgAddChainResponse({ value: MsgAddChainResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRemoveToken({ value, fee, memo }: sendMsgRemoveTokenParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRemoveToken: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRemoveToken({ value: MsgRemoveToken.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRemoveToken: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryChainRequest({ value, fee, memo }: sendQueryChainRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryChainRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryChainRequest({ value: QueryChainRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryChainRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryChainResponse({ value, fee, memo }: sendQueryChainResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryChainResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryChainResponse({ value: QueryChainResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryChainResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateBalance({ value, fee, memo }: sendMsgUpdateBalanceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateBalance: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateBalance({ value: MsgUpdateBalance.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateBalance: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendPoolBalance({ value, fee, memo }: sendPoolBalanceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendPoolBalance: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.poolBalance({ value: PoolBalance.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendPoolBalance: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetGovSummaryResponse({ value, fee, memo }: sendQueryGetGovSummaryResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetGovSummaryResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetGovSummaryResponse({ value: QueryGetGovSummaryResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetGovSummaryResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendStakeSummary({ value, fee, memo }: sendStakeSummaryParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendStakeSummary: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.stakeSummary({ value: StakeSummary.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendStakeSummary: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgAddChainResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1041,6 +1000,64 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgUpdateNativeBalance({ value, fee, memo }: sendMsgUpdateNativeBalanceParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateNativeBalance: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateNativeBalance({ value: MsgUpdateNativeBalance.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateNativeBalance: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryGetStakeSummaryRequest({ value, fee, memo }: sendQueryGetStakeSummaryRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetStakeSummaryRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetStakeSummaryRequest({ value: QueryGetStakeSummaryRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryGetStakeSummaryRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgAddChain({ value }: msgAddChainParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgAddChain", value: MsgAddChain.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddChain: Could not create message: ' + e.message)
+			}
+		},
+		
+		stakeSummary({ value }: stakeSummaryParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.StakeSummary", value: StakeSummary.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:StakeSummary: Could not create message: ' + e.message)
+			}
+		},
 		
 		balance({ value }: balanceParams): EncodeObject {
 			try {
@@ -1050,19 +1067,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgRemoveChain({ value }: msgRemoveChainParams): EncodeObject {
+		poolBalance({ value }: poolBalanceParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgRemoveChain", value: MsgRemoveChain.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.PoolBalance", value: PoolBalance.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRemoveChain: Could not create message: ' + e.message)
+				throw new Error('TxClient:PoolBalance: Could not create message: ' + e.message)
 			}
 		},
 		
-		genesisState({ value }: genesisStateParams): EncodeObject {
+		msgRemoveTokenResponse({ value }: msgRemoveTokenResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.GenesisState", value: GenesisState.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgRemoveTokenResponse", value: MsgRemoveTokenResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRemoveTokenResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1082,35 +1099,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		chain({ value }: chainParams): EncodeObject {
+		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.Chain", value: Chain.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:Chain: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgUpdateBalanceResponse({ value }: msgUpdateBalanceResponseParams): EncodeObject {
+		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgUpdateBalanceResponse", value: MsgUpdateBalanceResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateBalanceResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		params({ value }: paramsParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.Params", value: Params.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:Params: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateNativeBalance({ value }: msgUpdateNativeBalanceParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgUpdateNativeBalance", value: MsgUpdateNativeBalance.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateNativeBalance: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1122,27 +1123,59 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		queryChainAllRequest({ value }: queryChainAllRequestParams): EncodeObject {
+		queryChainResponse({ value }: queryChainResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.QueryChainAllRequest", value: QueryChainAllRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.QueryChainResponse", value: QueryChainResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryChainAllRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryChainResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryBalanceObservationAllRequest({ value }: queryBalanceObservationAllRequestParams): EncodeObject {
+		queryPoolBalanceAllRequest({ value }: queryPoolBalanceAllRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationAllRequest", value: QueryBalanceObservationAllRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.QueryPoolBalanceAllRequest", value: QueryPoolBalanceAllRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryBalanceObservationAllRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryPoolBalanceAllRequest: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryGetStakeSummaryRequest({ value }: queryGetStakeSummaryRequestParams): EncodeObject {
+		balanceObservation({ value }: balanceObservationParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.QueryGetStakeSummaryRequest", value: QueryGetStakeSummaryRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.BalanceObservation", value: BalanceObservation.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetStakeSummaryRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:BalanceObservation: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateBalanceResponse({ value }: msgUpdateBalanceResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgUpdateBalanceResponse", value: MsgUpdateBalanceResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateBalanceResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRemoveChain({ value }: msgRemoveChainParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgRemoveChain", value: MsgRemoveChain.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRemoveChain: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryChainRequest({ value }: queryChainRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.QueryChainRequest", value: QueryChainRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryChainRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryBalanceObservationRequest({ value }: queryBalanceObservationRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationRequest", value: QueryBalanceObservationRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryBalanceObservationRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1154,35 +1187,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgAddChainResponse({ value }: msgAddChainResponseParams): EncodeObject {
+		queryGetGovSummaryResponse({ value }: queryGetGovSummaryResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgAddChainResponse", value: MsgAddChainResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.QueryGetGovSummaryResponse", value: QueryGetGovSummaryResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgAddChainResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryGetGovSummaryResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgRemoveTokenResponse({ value }: msgRemoveTokenResponseParams): EncodeObject {
+		msgUpdateBalance({ value }: msgUpdateBalanceParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgRemoveTokenResponse", value: MsgRemoveTokenResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgUpdateBalance", value: MsgUpdateBalance.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRemoveTokenResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgAddTokenResponse({ value }: msgAddTokenResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgAddTokenResponse", value: MsgAddTokenResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgAddTokenResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgAddToken({ value }: msgAddTokenParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgAddToken", value: MsgAddToken.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgAddToken: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdateBalance: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1202,35 +1219,35 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		queryBalanceObservationRequest({ value }: queryBalanceObservationRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationRequest", value: QueryBalanceObservationRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryBalanceObservationRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryBalanceObservationResponse({ value }: queryBalanceObservationResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationResponse", value: QueryBalanceObservationResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryBalanceObservationResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryPoolBalanceAllRequest({ value }: queryPoolBalanceAllRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryPoolBalanceAllRequest", value: QueryPoolBalanceAllRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryPoolBalanceAllRequest: Could not create message: ' + e.message)
-			}
-		},
-		
 		queryPoolBalanceAllResponse({ value }: queryPoolBalanceAllResponseParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.chain.QueryPoolBalanceAllResponse", value: QueryPoolBalanceAllResponse.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:QueryPoolBalanceAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryBalanceObservationAllRequest({ value }: queryBalanceObservationAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationAllRequest", value: QueryBalanceObservationAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryBalanceObservationAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		params({ value }: paramsParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.Params", value: Params.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Params: Could not create message: ' + e.message)
+			}
+		},
+		
+		chain({ value }: chainParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.Chain", value: Chain.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Chain: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1242,19 +1259,19 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgAddChain({ value }: msgAddChainParams): EncodeObject {
+		msgRemoveToken({ value }: msgRemoveTokenParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgAddChain", value: MsgAddChain.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgRemoveToken", value: MsgRemoveToken.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgAddChain: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgRemoveToken: Could not create message: ' + e.message)
 			}
 		},
 		
-		balanceObservation({ value }: balanceObservationParams): EncodeObject {
+		queryChainAllRequest({ value }: queryChainAllRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.BalanceObservation", value: BalanceObservation.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.QueryChainAllRequest", value: QueryChainAllRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:BalanceObservation: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryChainAllRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1266,11 +1283,35 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		queryBalanceObservationResponse({ value }: queryBalanceObservationResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationResponse", value: QueryBalanceObservationResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryBalanceObservationResponse: Could not create message: ' + e.message)
+			}
+		},
+		
 		queryBalanceObservationAllResponse({ value }: queryBalanceObservationAllResponseParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.chain.QueryBalanceObservationAllResponse", value: QueryBalanceObservationAllResponse.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:QueryBalanceObservationAllResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgAddToken({ value }: msgAddTokenParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgAddToken", value: MsgAddToken.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddToken: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgAddTokenResponse({ value }: msgAddTokenResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgAddTokenResponse", value: MsgAddTokenResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddTokenResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1282,75 +1323,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+		msgAddChainResponse({ value }: msgAddChainResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.chain.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.chain.MsgAddChainResponse", value: MsgAddChainResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgRemoveToken({ value }: msgRemoveTokenParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgRemoveToken", value: MsgRemoveToken.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRemoveToken: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryChainRequest({ value }: queryChainRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryChainRequest", value: QueryChainRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryChainRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryChainResponse({ value }: queryChainResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryChainResponse", value: QueryChainResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryChainResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateBalance({ value }: msgUpdateBalanceParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.MsgUpdateBalance", value: MsgUpdateBalance.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateBalance: Could not create message: ' + e.message)
-			}
-		},
-		
-		poolBalance({ value }: poolBalanceParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.PoolBalance", value: PoolBalance.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:PoolBalance: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetGovSummaryResponse({ value }: queryGetGovSummaryResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.QueryGetGovSummaryResponse", value: QueryGetGovSummaryResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetGovSummaryResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		stakeSummary({ value }: stakeSummaryParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.chain.StakeSummary", value: StakeSummary.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:StakeSummary: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgAddChainResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1362,15 +1339,50 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgUpdateNativeBalance({ value }: msgUpdateNativeBalanceParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.MsgUpdateNativeBalance", value: MsgUpdateNativeBalance.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateNativeBalance: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetStakeSummaryRequest({ value }: queryGetStakeSummaryRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.QueryGetStakeSummaryRequest", value: QueryGetStakeSummaryRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetStakeSummaryRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		genesisState({ value }: genesisStateParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.chain.GenesisState", value: GenesisState.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
+			}
+		},
+		
 	}
 };
 
+// interface QueryClientOptions {
+//   addr: string
+// }
+
+// export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
+//   return new Api({ baseURL: addr });
+// };
+
 class SDKModule {
+	// public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	public structure: Record<string,unknown>;
 	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
+	
+		// this.query = queryClient({ addr: client.env.apiURL });		
 		this.updateTX(client);
 		this.structure =  {
 						

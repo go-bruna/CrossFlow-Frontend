@@ -5,7 +5,6 @@
 // source: cosmos/base/query/v1beta1/pagination.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cosmos.base.query.v1beta1";

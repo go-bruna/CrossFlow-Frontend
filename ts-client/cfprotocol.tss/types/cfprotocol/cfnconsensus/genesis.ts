@@ -5,7 +5,6 @@
 // source: cfprotocol/cfnconsensus/genesis.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Params } from "./params";
 

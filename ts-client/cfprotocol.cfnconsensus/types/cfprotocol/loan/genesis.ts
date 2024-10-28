@@ -5,7 +5,6 @@
 // source: cfprotocol/loan/genesis.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { LoanEntity } from "./loan_entity";
 import { LoanObservation } from "./loan_observation";

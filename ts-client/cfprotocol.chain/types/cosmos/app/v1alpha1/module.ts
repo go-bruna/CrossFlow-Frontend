@@ -5,7 +5,6 @@
 // source: cosmos/app/v1alpha1/module.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cosmos.app.v1alpha1";

@@ -5,7 +5,6 @@
 // source: cfprotocol/lock/genesis.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { AssetLockTransaction } from "./asset_lock_transaction";
 import { LockBalance } from "./lock_balance";

@@ -123,50 +123,66 @@ export const AccountPage = () => {
         {/* Supplied Assets Table */}
         {currentTag.title === tabs[1].title ? (
           <>
-            <BaseItem
-              title="Supplied assets"
-              classOverride={{
-                container: "gap-[6px]",
-                title: "text-base font-medium",
-                textGap: "flex-row items-center",
-              }}
-            />
-            {accountAssetSupplies && <Table.SuppliedAssets data={accountAssetSupplies}/>}
+            {accountAssetSupplies && (
+              <>
+                <BaseItem
+                  title="Supplied assets"
+                  classOverride={{
+                    container: "gap-[6px]",
+                    title: "text-base font-medium",
+                    textGap: "flex-row items-center",
+                  }}
+                />
+                <Table.SuppliedAssets data={accountAssetSupplies}/>
+              </>
+            )}
           </>
         ) : currentTag.title === tabs[2].title  ? (
           <>
-            {/* Borrowed Assets Table */}
-            <BaseItem
-              title="Borrowed assets"
-              classOverride={{
-                container: "gap-[6px]",
-                title: "text-base font-medium",
-                textGap: "flex-row items-center",
-              }}
-            />
-            {accountassetBorrowed && <Table.BorrowedAssets data={accountassetBorrowed}/>}
+            {accountassetBorrowed && (
+              <>
+              {/* Borrowed Assets Table */}
+                <BaseItem
+                  title="Borrowed assets"
+                  classOverride={{
+                    container: "gap-[6px]",
+                    title: "text-base font-medium",
+                    textGap: "flex-row items-center",
+                  }}
+                />
+                <Table.BorrowedAssets data={accountassetBorrowed}/>
+              </>
+            )}
           </>
         ) : (
           <>
-            <BaseItem
-              title="Supplied assets"
-              classOverride={{
-                container: "gap-[6px]",
-                title: "text-base font-medium",
-                textGap: "flex-row items-center",
-              }}
-            />
-            {accountAssetSupplies && <Table.SuppliedAssets data={accountAssetSupplies}/>}
-            {/* Borrowed Assets Table */}
-            <BaseItem
-              title="Borrowed assets"
-              classOverride={{
-                container: "gap-[6px]",
-                title: "text-base font-medium",
-                textGap: "flex-row items-center",
-              }}
-            />
-            {accountassetBorrowed && <Table.BorrowedAssets data={accountassetBorrowed}/>}
+            {accountAssetSupplies && (
+              <>
+                <BaseItem
+                  title="Supplied assets"
+                  classOverride={{
+                    container: "gap-[6px]",
+                    title: "text-base font-medium",
+                    textGap: "flex-row items-center",
+                  }}
+                />
+                <Table.SuppliedAssets data={accountAssetSupplies}/>
+              </>
+            )}
+            {accountassetBorrowed && (
+              <>
+                // Borrowed Assets Table */
+                <BaseItem
+                  title="Borrowed assets"
+                  classOverride={{
+                    container: "gap-[6px]",
+                    title: "text-base font-medium",
+                    textGap: "flex-row items-center",
+                  }}
+                />
+                <Table.BorrowedAssets data={accountassetBorrowed}/>
+              </>
+            )}
           </>
         ) }
 

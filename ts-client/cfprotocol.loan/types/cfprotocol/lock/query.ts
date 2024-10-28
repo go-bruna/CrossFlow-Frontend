@@ -5,7 +5,6 @@
 // source: cfprotocol/lock/query.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
 import { AssetLockTransaction } from "./asset_lock_transaction";

@@ -5,7 +5,6 @@
 // source: cfprotocol/chain/query.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { PageRequest, PageResponse } from "../../cosmos/base/query/v1beta1/pagination";
 import { BalanceObservation } from "./balance_observation";

@@ -5,7 +5,6 @@
 // source: cfprotocol/loan/module/module.proto
 
 /* eslint-disable */
-// @ts-nocheck
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "cfprotocol.loan.module";

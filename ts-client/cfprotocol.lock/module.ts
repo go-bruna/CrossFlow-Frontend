@@ -6,195 +6,64 @@ import { EncodeObject, GeneratedType, OfflineSigner, Registry } from "@cosmjs/pr
 import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
-import { MsgVoteSupplyHashObserve } from "./types/cfprotocol/lock/tx";
-import { QueryGetSupplyTssObservationRequest } from "./types/cfprotocol/lock/query";
-import { MsgObserveVoteLocking } from "./types/cfprotocol/lock/tx";
-import { MsgHtlcReclaim } from "./types/cfprotocol/lock/tx";
-import { SupplyTssObservation } from "./types/cfprotocol/lock/supply_tss_observation";
-import { MsgObserveVoteLockingResponse } from "./types/cfprotocol/lock/tx";
-import { MsgRequestSupplyResponse } from "./types/cfprotocol/lock/tx";
-import { QueryAllAssetLockTransactionRequest } from "./types/cfprotocol/lock/query";
-import { QueryGetAvailableLockTransactionRequest } from "./types/cfprotocol/lock/query";
-import { GetLockBalanceResponse } from "./types/cfprotocol/lock/query";
-import { QueryGetSupplyTssObservationResponse } from "./types/cfprotocol/lock/query";
-import { Balance } from "./types/cfprotocol/lock/lock_balance";
-import { ObserveVoteLockingAllResponse } from "./types/cfprotocol/lock/query";
-import { QueryAllSupplyHashObservationResponse } from "./types/cfprotocol/lock/query";
-import { MsgVoteSupplyTransactionResponse } from "./types/cfprotocol/lock/tx";
-import { ObserveVoteLockingResponse } from "./types/cfprotocol/lock/query";
-import { LockBalanceAllRequest } from "./types/cfprotocol/lock/query";
-import { QueryGetSupplyHashObservationResponse } from "./types/cfprotocol/lock/query";
-import { QueryAssetLockTransactionRequest } from "./types/cfprotocol/lock/query";
-import { QueryGetSupplyTransactionRequest } from "./types/cfprotocol/lock/query";
+// import { Api } from "./rest";
 import { QueryAllSupplyTssObservationRequest } from "./types/cfprotocol/lock/query";
-import { QueryGetSupplyHashObservationRequest } from "./types/cfprotocol/lock/query";
-import { MsgVoteSupplyHashObserveResponse } from "./types/cfprotocol/lock/tx";
 import { QueryAllSupplyHashObservationRequest } from "./types/cfprotocol/lock/query";
-import { SupplyHashObservation } from "./types/cfprotocol/lock/supply_hash_observation";
-import { MsgVoteSupplyTransaction } from "./types/cfprotocol/lock/tx";
+import { MsgVoteSupplyTransactionResponse } from "./types/cfprotocol/lock/tx";
 import { LockBalanceAllResponse } from "./types/cfprotocol/lock/query";
-import { GenesisState } from "./types/cfprotocol/lock/genesis";
-import { MsgUpdateParamsResponse } from "./types/cfprotocol/lock/tx";
-import { QueryGetObserveVoteLockingRequest } from "./types/cfprotocol/lock/query";
-import { QueryAllSupplyTransactionRequest } from "./types/cfprotocol/lock/query";
+import { QueryGetSupplyHashObservationResponse } from "./types/cfprotocol/lock/query";
+import { LockBalance } from "./types/cfprotocol/lock/lock_balance";
+import { ObserveVoteLockingAllResponse } from "./types/cfprotocol/lock/query";
+import { GetLockBalanceRequest } from "./types/cfprotocol/lock/query";
 import { QueryAllSupplyTransactionResponse } from "./types/cfprotocol/lock/query";
-import { MsgRequestLock } from "./types/cfprotocol/lock/tx";
+import { MsgHtlcReclaim } from "./types/cfprotocol/lock/tx";
+import { GenesisState } from "./types/cfprotocol/lock/genesis";
+import { QueryGetSupplyTssObservationRequest } from "./types/cfprotocol/lock/query";
+import { QueryGetSupplyTssObservationResponse } from "./types/cfprotocol/lock/query";
+import { MsgRequestSupplyResponse } from "./types/cfprotocol/lock/tx";
+import { Balance } from "./types/cfprotocol/lock/lock_balance";
 import { QueryAssetLockTransactionAllResponse } from "./types/cfprotocol/lock/query";
+import { MsgObserveVoteLocking } from "./types/cfprotocol/lock/tx";
 import { ObserveVoteLocking } from "./types/cfprotocol/lock/observe_vote_locking";
-import { AssetLockTransaction } from "./types/cfprotocol/lock/asset_lock_transaction";
-import { QueryAssetLockTransactionResponse } from "./types/cfprotocol/lock/query";
-import { QueryAllObserveVoteLockingRequest } from "./types/cfprotocol/lock/query";
-import { MsgRequestLockResponse } from "./types/cfprotocol/lock/tx";
-import { MsgHtlcReclaimResponse } from "./types/cfprotocol/lock/tx";
-import { QueryParamsResponse } from "./types/cfprotocol/lock/query";
+import { QueryGetSupplyTransactionRequest } from "./types/cfprotocol/lock/query";
+import { MsgObserveVoteLockingResponse } from "./types/cfprotocol/lock/tx";
+import { QueryAllAssetLockTransactionRequest } from "./types/cfprotocol/lock/query";
+import { SupplyHashObservation } from "./types/cfprotocol/lock/supply_hash_observation";
+import { MsgUpdateParamsResponse } from "./types/cfprotocol/lock/tx";
+import { QueryAllSupplyTransactionRequest } from "./types/cfprotocol/lock/query";
 import { QueryGetSupplyTransactionResponse } from "./types/cfprotocol/lock/query";
 import { QueryAllSupplyTssObservationResponse } from "./types/cfprotocol/lock/query";
-import { MsgUpdateParams } from "./types/cfprotocol/lock/tx";
-import { LockBalance } from "./types/cfprotocol/lock/lock_balance";
-import { Params } from "./types/cfprotocol/lock/params";
-import { QueryParamsRequest } from "./types/cfprotocol/lock/query";
-import { QueryGetAvailableLockTransactionResponse } from "./types/cfprotocol/lock/query";
-import { MsgRequestSupply } from "./types/cfprotocol/lock/tx";
-import { GetLockBalanceRequest } from "./types/cfprotocol/lock/query";
+import { MsgHtlcReclaimResponse } from "./types/cfprotocol/lock/tx";
+import { AssetLockTransaction } from "./types/cfprotocol/lock/asset_lock_transaction";
+import { QueryAssetLockTransactionRequest } from "./types/cfprotocol/lock/query";
+import { QueryGetSupplyHashObservationRequest } from "./types/cfprotocol/lock/query";
 import { SupplyTransaction } from "./types/cfprotocol/lock/supply_transaction";
+import { GetLockBalanceResponse } from "./types/cfprotocol/lock/query";
+import { SupplyTssObservation } from "./types/cfprotocol/lock/supply_tss_observation";
+import { QueryAssetLockTransactionResponse } from "./types/cfprotocol/lock/query";
+import { QueryAllObserveVoteLockingRequest } from "./types/cfprotocol/lock/query";
+import { QueryAllSupplyHashObservationResponse } from "./types/cfprotocol/lock/query";
+import { QueryGetObserveVoteLockingRequest } from "./types/cfprotocol/lock/query";
+import { Params } from "./types/cfprotocol/lock/params";
+import { QueryParamsResponse } from "./types/cfprotocol/lock/query";
+import { MsgRequestLockResponse } from "./types/cfprotocol/lock/tx";
+import { MsgRequestSupply } from "./types/cfprotocol/lock/tx";
+import { MsgUpdateParams } from "./types/cfprotocol/lock/tx";
+import { QueryGetAvailableLockTransactionRequest } from "./types/cfprotocol/lock/query";
+import { LockBalanceAllRequest } from "./types/cfprotocol/lock/query";
+import { MsgRequestLock } from "./types/cfprotocol/lock/tx";
+import { MsgVoteSupplyHashObserveResponse } from "./types/cfprotocol/lock/tx";
+import { ObserveVoteLockingResponse } from "./types/cfprotocol/lock/query";
+import { QueryGetAvailableLockTransactionResponse } from "./types/cfprotocol/lock/query";
+import { MsgVoteSupplyHashObserve } from "./types/cfprotocol/lock/tx";
+import { MsgVoteSupplyTransaction } from "./types/cfprotocol/lock/tx";
+import { QueryParamsRequest } from "./types/cfprotocol/lock/query";
 
 
-export { MsgVoteSupplyHashObserve, QueryGetSupplyTssObservationRequest, MsgObserveVoteLocking, MsgHtlcReclaim, SupplyTssObservation, MsgObserveVoteLockingResponse, MsgRequestSupplyResponse, QueryAllAssetLockTransactionRequest, QueryGetAvailableLockTransactionRequest, GetLockBalanceResponse, QueryGetSupplyTssObservationResponse, Balance, ObserveVoteLockingAllResponse, QueryAllSupplyHashObservationResponse, MsgVoteSupplyTransactionResponse, ObserveVoteLockingResponse, LockBalanceAllRequest, QueryGetSupplyHashObservationResponse, QueryAssetLockTransactionRequest, QueryGetSupplyTransactionRequest, QueryAllSupplyTssObservationRequest, QueryGetSupplyHashObservationRequest, MsgVoteSupplyHashObserveResponse, QueryAllSupplyHashObservationRequest, SupplyHashObservation, MsgVoteSupplyTransaction, LockBalanceAllResponse, GenesisState, MsgUpdateParamsResponse, QueryGetObserveVoteLockingRequest, QueryAllSupplyTransactionRequest, QueryAllSupplyTransactionResponse, MsgRequestLock, QueryAssetLockTransactionAllResponse, ObserveVoteLocking, AssetLockTransaction, QueryAssetLockTransactionResponse, QueryAllObserveVoteLockingRequest, MsgRequestLockResponse, MsgHtlcReclaimResponse, QueryParamsResponse, QueryGetSupplyTransactionResponse, QueryAllSupplyTssObservationResponse, MsgUpdateParams, LockBalance, Params, QueryParamsRequest, QueryGetAvailableLockTransactionResponse, MsgRequestSupply, GetLockBalanceRequest, SupplyTransaction };
-
-type sendMsgVoteSupplyHashObserveParams = {
-  value: MsgVoteSupplyHashObserve,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetSupplyTssObservationRequestParams = {
-  value: QueryGetSupplyTssObservationRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgObserveVoteLockingParams = {
-  value: MsgObserveVoteLocking,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgHtlcReclaimParams = {
-  value: MsgHtlcReclaim,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendSupplyTssObservationParams = {
-  value: SupplyTssObservation,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgObserveVoteLockingResponseParams = {
-  value: MsgObserveVoteLockingResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRequestSupplyResponseParams = {
-  value: MsgRequestSupplyResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllAssetLockTransactionRequestParams = {
-  value: QueryAllAssetLockTransactionRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAvailableLockTransactionRequestParams = {
-  value: QueryGetAvailableLockTransactionRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendGetLockBalanceResponseParams = {
-  value: GetLockBalanceResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetSupplyTssObservationResponseParams = {
-  value: QueryGetSupplyTssObservationResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendBalanceParams = {
-  value: Balance,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendObserveVoteLockingAllResponseParams = {
-  value: ObserveVoteLockingAllResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAllSupplyHashObservationResponseParams = {
-  value: QueryAllSupplyHashObservationResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgVoteSupplyTransactionResponseParams = {
-  value: MsgVoteSupplyTransactionResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendObserveVoteLockingResponseParams = {
-  value: ObserveVoteLockingResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendLockBalanceAllRequestParams = {
-  value: LockBalanceAllRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetSupplyHashObservationResponseParams = {
-  value: QueryGetSupplyHashObservationResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryAssetLockTransactionRequestParams = {
-  value: QueryAssetLockTransactionRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetSupplyTransactionRequestParams = {
-  value: QueryGetSupplyTransactionRequest,
-  fee?: StdFee,
-  memo?: string
-};
+export { QueryAllSupplyTssObservationRequest, QueryAllSupplyHashObservationRequest, MsgVoteSupplyTransactionResponse, LockBalanceAllResponse, QueryGetSupplyHashObservationResponse, LockBalance, ObserveVoteLockingAllResponse, GetLockBalanceRequest, QueryAllSupplyTransactionResponse, MsgHtlcReclaim, GenesisState, QueryGetSupplyTssObservationRequest, QueryGetSupplyTssObservationResponse, MsgRequestSupplyResponse, Balance, QueryAssetLockTransactionAllResponse, MsgObserveVoteLocking, ObserveVoteLocking, QueryGetSupplyTransactionRequest, MsgObserveVoteLockingResponse, QueryAllAssetLockTransactionRequest, SupplyHashObservation, MsgUpdateParamsResponse, QueryAllSupplyTransactionRequest, QueryGetSupplyTransactionResponse, QueryAllSupplyTssObservationResponse, MsgHtlcReclaimResponse, AssetLockTransaction, QueryAssetLockTransactionRequest, QueryGetSupplyHashObservationRequest, SupplyTransaction, GetLockBalanceResponse, SupplyTssObservation, QueryAssetLockTransactionResponse, QueryAllObserveVoteLockingRequest, QueryAllSupplyHashObservationResponse, QueryGetObserveVoteLockingRequest, Params, QueryParamsResponse, MsgRequestLockResponse, MsgRequestSupply, MsgUpdateParams, QueryGetAvailableLockTransactionRequest, LockBalanceAllRequest, MsgRequestLock, MsgVoteSupplyHashObserveResponse, ObserveVoteLockingResponse, QueryGetAvailableLockTransactionResponse, MsgVoteSupplyHashObserve, MsgVoteSupplyTransaction, QueryParamsRequest };
 
 type sendQueryAllSupplyTssObservationRequestParams = {
   value: QueryAllSupplyTssObservationRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetSupplyHashObservationRequestParams = {
-  value: QueryGetSupplyHashObservationRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgVoteSupplyHashObserveResponseParams = {
-  value: MsgVoteSupplyHashObserveResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -205,14 +74,8 @@ type sendQueryAllSupplyHashObservationRequestParams = {
   memo?: string
 };
 
-type sendSupplyHashObservationParams = {
-  value: SupplyHashObservation,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgVoteSupplyTransactionParams = {
-  value: MsgVoteSupplyTransaction,
+type sendMsgVoteSupplyTransactionResponseParams = {
+  value: MsgVoteSupplyTransactionResponse,
   fee?: StdFee,
   memo?: string
 };
@@ -223,26 +86,26 @@ type sendLockBalanceAllResponseParams = {
   memo?: string
 };
 
-type sendGenesisStateParams = {
-  value: GenesisState,
+type sendQueryGetSupplyHashObservationResponseParams = {
+  value: QueryGetSupplyHashObservationResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
+type sendLockBalanceParams = {
+  value: LockBalance,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryGetObserveVoteLockingRequestParams = {
-  value: QueryGetObserveVoteLockingRequest,
+type sendObserveVoteLockingAllResponseParams = {
+  value: ObserveVoteLockingAllResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryAllSupplyTransactionRequestParams = {
-  value: QueryAllSupplyTransactionRequest,
+type sendGetLockBalanceRequestParams = {
+  value: GetLockBalanceRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -253,8 +116,38 @@ type sendQueryAllSupplyTransactionResponseParams = {
   memo?: string
 };
 
-type sendMsgRequestLockParams = {
-  value: MsgRequestLock,
+type sendMsgHtlcReclaimParams = {
+  value: MsgHtlcReclaim,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendGenesisStateParams = {
+  value: GenesisState,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGetSupplyTssObservationRequestParams = {
+  value: QueryGetSupplyTssObservationRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGetSupplyTssObservationResponseParams = {
+  value: QueryGetSupplyTssObservationResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRequestSupplyResponseParams = {
+  value: MsgRequestSupplyResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendBalanceParams = {
+  value: Balance,
   fee?: StdFee,
   memo?: string
 };
@@ -265,44 +158,50 @@ type sendQueryAssetLockTransactionAllResponseParams = {
   memo?: string
 };
 
+type sendMsgObserveVoteLockingParams = {
+  value: MsgObserveVoteLocking,
+  fee?: StdFee,
+  memo?: string
+};
+
 type sendObserveVoteLockingParams = {
   value: ObserveVoteLocking,
   fee?: StdFee,
   memo?: string
 };
 
-type sendAssetLockTransactionParams = {
-  value: AssetLockTransaction,
+type sendQueryGetSupplyTransactionRequestParams = {
+  value: QueryGetSupplyTransactionRequest,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryAssetLockTransactionResponseParams = {
-  value: QueryAssetLockTransactionResponse,
+type sendMsgObserveVoteLockingResponseParams = {
+  value: MsgObserveVoteLockingResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryAllObserveVoteLockingRequestParams = {
-  value: QueryAllObserveVoteLockingRequest,
+type sendQueryAllAssetLockTransactionRequestParams = {
+  value: QueryAllAssetLockTransactionRequest,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgRequestLockResponseParams = {
-  value: MsgRequestLockResponse,
+type sendSupplyHashObservationParams = {
+  value: SupplyHashObservation,
   fee?: StdFee,
   memo?: string
 };
 
-type sendMsgHtlcReclaimResponseParams = {
-  value: MsgHtlcReclaimResponse,
+type sendMsgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryParamsResponseParams = {
-  value: QueryParamsResponse,
+type sendQueryAllSupplyTransactionRequestParams = {
+  value: QueryAllSupplyTransactionRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -319,44 +218,26 @@ type sendQueryAllSupplyTssObservationResponseParams = {
   memo?: string
 };
 
-type sendMsgUpdateParamsParams = {
-  value: MsgUpdateParams,
+type sendMsgHtlcReclaimResponseParams = {
+  value: MsgHtlcReclaimResponse,
   fee?: StdFee,
   memo?: string
 };
 
-type sendLockBalanceParams = {
-  value: LockBalance,
+type sendAssetLockTransactionParams = {
+  value: AssetLockTransaction,
   fee?: StdFee,
   memo?: string
 };
 
-type sendParamsParams = {
-  value: Params,
+type sendQueryAssetLockTransactionRequestParams = {
+  value: QueryAssetLockTransactionRequest,
   fee?: StdFee,
   memo?: string
 };
 
-type sendQueryParamsRequestParams = {
-  value: QueryParamsRequest,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendQueryGetAvailableLockTransactionResponseParams = {
-  value: QueryGetAvailableLockTransactionResponse,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgRequestSupplyParams = {
-  value: MsgRequestSupply,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendGetLockBalanceRequestParams = {
-  value: GetLockBalanceRequest,
+type sendQueryGetSupplyHashObservationRequestParams = {
+  value: QueryGetSupplyHashObservationRequest,
   fee?: StdFee,
   memo?: string
 };
@@ -367,169 +248,221 @@ type sendSupplyTransactionParams = {
   memo?: string
 };
 
-
-type msgVoteSupplyHashObserveParams = {
-  value: MsgVoteSupplyHashObserve,
-};
-
-type queryGetSupplyTssObservationRequestParams = {
-  value: QueryGetSupplyTssObservationRequest,
-};
-
-type msgObserveVoteLockingParams = {
-  value: MsgObserveVoteLocking,
-};
-
-type msgHtlcReclaimParams = {
-  value: MsgHtlcReclaim,
-};
-
-type supplyTssObservationParams = {
-  value: SupplyTssObservation,
-};
-
-type msgObserveVoteLockingResponseParams = {
-  value: MsgObserveVoteLockingResponse,
-};
-
-type msgRequestSupplyResponseParams = {
-  value: MsgRequestSupplyResponse,
-};
-
-type queryAllAssetLockTransactionRequestParams = {
-  value: QueryAllAssetLockTransactionRequest,
-};
-
-type queryGetAvailableLockTransactionRequestParams = {
-  value: QueryGetAvailableLockTransactionRequest,
-};
-
-type getLockBalanceResponseParams = {
+type sendGetLockBalanceResponseParams = {
   value: GetLockBalanceResponse,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryGetSupplyTssObservationResponseParams = {
-  value: QueryGetSupplyTssObservationResponse,
+type sendSupplyTssObservationParams = {
+  value: SupplyTssObservation,
+  fee?: StdFee,
+  memo?: string
 };
 
-type balanceParams = {
-  value: Balance,
+type sendQueryAssetLockTransactionResponseParams = {
+  value: QueryAssetLockTransactionResponse,
+  fee?: StdFee,
+  memo?: string
 };
 
-type observeVoteLockingAllResponseParams = {
-  value: ObserveVoteLockingAllResponse,
+type sendQueryAllObserveVoteLockingRequestParams = {
+  value: QueryAllObserveVoteLockingRequest,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryAllSupplyHashObservationResponseParams = {
+type sendQueryAllSupplyHashObservationResponseParams = {
   value: QueryAllSupplyHashObservationResponse,
+  fee?: StdFee,
+  memo?: string
 };
 
-type msgVoteSupplyTransactionResponseParams = {
-  value: MsgVoteSupplyTransactionResponse,
+type sendQueryGetObserveVoteLockingRequestParams = {
+  value: QueryGetObserveVoteLockingRequest,
+  fee?: StdFee,
+  memo?: string
 };
 
-type observeVoteLockingResponseParams = {
-  value: ObserveVoteLockingResponse,
+type sendParamsParams = {
+  value: Params,
+  fee?: StdFee,
+  memo?: string
 };
 
-type lockBalanceAllRequestParams = {
+type sendQueryParamsResponseParams = {
+  value: QueryParamsResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRequestLockResponseParams = {
+  value: MsgRequestLockResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRequestSupplyParams = {
+  value: MsgRequestSupply,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUpdateParamsParams = {
+  value: MsgUpdateParams,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryGetAvailableLockTransactionRequestParams = {
+  value: QueryGetAvailableLockTransactionRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendLockBalanceAllRequestParams = {
   value: LockBalanceAllRequest,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryGetSupplyHashObservationResponseParams = {
-  value: QueryGetSupplyHashObservationResponse,
+type sendMsgRequestLockParams = {
+  value: MsgRequestLock,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryAssetLockTransactionRequestParams = {
-  value: QueryAssetLockTransactionRequest,
+type sendMsgVoteSupplyHashObserveResponseParams = {
+  value: MsgVoteSupplyHashObserveResponse,
+  fee?: StdFee,
+  memo?: string
 };
 
-type queryGetSupplyTransactionRequestParams = {
-  value: QueryGetSupplyTransactionRequest,
+type sendObserveVoteLockingResponseParams = {
+  value: ObserveVoteLockingResponse,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendQueryGetAvailableLockTransactionResponseParams = {
+  value: QueryGetAvailableLockTransactionResponse,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgVoteSupplyHashObserveParams = {
+  value: MsgVoteSupplyHashObserve,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgVoteSupplyTransactionParams = {
+  value: MsgVoteSupplyTransaction,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendQueryParamsRequestParams = {
+  value: QueryParamsRequest,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type queryAllSupplyTssObservationRequestParams = {
   value: QueryAllSupplyTssObservationRequest,
-};
-
-type queryGetSupplyHashObservationRequestParams = {
-  value: QueryGetSupplyHashObservationRequest,
-};
-
-type msgVoteSupplyHashObserveResponseParams = {
-  value: MsgVoteSupplyHashObserveResponse,
 };
 
 type queryAllSupplyHashObservationRequestParams = {
   value: QueryAllSupplyHashObservationRequest,
 };
 
-type supplyHashObservationParams = {
-  value: SupplyHashObservation,
-};
-
-type msgVoteSupplyTransactionParams = {
-  value: MsgVoteSupplyTransaction,
+type msgVoteSupplyTransactionResponseParams = {
+  value: MsgVoteSupplyTransactionResponse,
 };
 
 type lockBalanceAllResponseParams = {
   value: LockBalanceAllResponse,
 };
 
-type genesisStateParams = {
-  value: GenesisState,
+type queryGetSupplyHashObservationResponseParams = {
+  value: QueryGetSupplyHashObservationResponse,
 };
 
-type msgUpdateParamsResponseParams = {
-  value: MsgUpdateParamsResponse,
+type lockBalanceParams = {
+  value: LockBalance,
 };
 
-type queryGetObserveVoteLockingRequestParams = {
-  value: QueryGetObserveVoteLockingRequest,
+type observeVoteLockingAllResponseParams = {
+  value: ObserveVoteLockingAllResponse,
 };
 
-type queryAllSupplyTransactionRequestParams = {
-  value: QueryAllSupplyTransactionRequest,
+type getLockBalanceRequestParams = {
+  value: GetLockBalanceRequest,
 };
 
 type queryAllSupplyTransactionResponseParams = {
   value: QueryAllSupplyTransactionResponse,
 };
 
-type msgRequestLockParams = {
-  value: MsgRequestLock,
+type msgHtlcReclaimParams = {
+  value: MsgHtlcReclaim,
+};
+
+type genesisStateParams = {
+  value: GenesisState,
+};
+
+type queryGetSupplyTssObservationRequestParams = {
+  value: QueryGetSupplyTssObservationRequest,
+};
+
+type queryGetSupplyTssObservationResponseParams = {
+  value: QueryGetSupplyTssObservationResponse,
+};
+
+type msgRequestSupplyResponseParams = {
+  value: MsgRequestSupplyResponse,
+};
+
+type balanceParams = {
+  value: Balance,
 };
 
 type queryAssetLockTransactionAllResponseParams = {
   value: QueryAssetLockTransactionAllResponse,
 };
 
+type msgObserveVoteLockingParams = {
+  value: MsgObserveVoteLocking,
+};
+
 type observeVoteLockingParams = {
   value: ObserveVoteLocking,
 };
 
-type assetLockTransactionParams = {
-  value: AssetLockTransaction,
+type queryGetSupplyTransactionRequestParams = {
+  value: QueryGetSupplyTransactionRequest,
 };
 
-type queryAssetLockTransactionResponseParams = {
-  value: QueryAssetLockTransactionResponse,
+type msgObserveVoteLockingResponseParams = {
+  value: MsgObserveVoteLockingResponse,
 };
 
-type queryAllObserveVoteLockingRequestParams = {
-  value: QueryAllObserveVoteLockingRequest,
+type queryAllAssetLockTransactionRequestParams = {
+  value: QueryAllAssetLockTransactionRequest,
 };
 
-type msgRequestLockResponseParams = {
-  value: MsgRequestLockResponse,
+type supplyHashObservationParams = {
+  value: SupplyHashObservation,
 };
 
-type msgHtlcReclaimResponseParams = {
-  value: MsgHtlcReclaimResponse,
+type msgUpdateParamsResponseParams = {
+  value: MsgUpdateParamsResponse,
 };
 
-type queryParamsResponseParams = {
-  value: QueryParamsResponse,
+type queryAllSupplyTransactionRequestParams = {
+  value: QueryAllSupplyTransactionRequest,
 };
 
 type queryGetSupplyTransactionResponseParams = {
@@ -540,36 +473,104 @@ type queryAllSupplyTssObservationResponseParams = {
   value: QueryAllSupplyTssObservationResponse,
 };
 
-type msgUpdateParamsParams = {
-  value: MsgUpdateParams,
+type msgHtlcReclaimResponseParams = {
+  value: MsgHtlcReclaimResponse,
 };
 
-type lockBalanceParams = {
-  value: LockBalance,
+type assetLockTransactionParams = {
+  value: AssetLockTransaction,
+};
+
+type queryAssetLockTransactionRequestParams = {
+  value: QueryAssetLockTransactionRequest,
+};
+
+type queryGetSupplyHashObservationRequestParams = {
+  value: QueryGetSupplyHashObservationRequest,
+};
+
+type supplyTransactionParams = {
+  value: SupplyTransaction,
+};
+
+type getLockBalanceResponseParams = {
+  value: GetLockBalanceResponse,
+};
+
+type supplyTssObservationParams = {
+  value: SupplyTssObservation,
+};
+
+type queryAssetLockTransactionResponseParams = {
+  value: QueryAssetLockTransactionResponse,
+};
+
+type queryAllObserveVoteLockingRequestParams = {
+  value: QueryAllObserveVoteLockingRequest,
+};
+
+type queryAllSupplyHashObservationResponseParams = {
+  value: QueryAllSupplyHashObservationResponse,
+};
+
+type queryGetObserveVoteLockingRequestParams = {
+  value: QueryGetObserveVoteLockingRequest,
 };
 
 type paramsParams = {
   value: Params,
 };
 
-type queryParamsRequestParams = {
-  value: QueryParamsRequest,
+type queryParamsResponseParams = {
+  value: QueryParamsResponse,
 };
 
-type queryGetAvailableLockTransactionResponseParams = {
-  value: QueryGetAvailableLockTransactionResponse,
+type msgRequestLockResponseParams = {
+  value: MsgRequestLockResponse,
 };
 
 type msgRequestSupplyParams = {
   value: MsgRequestSupply,
 };
 
-type getLockBalanceRequestParams = {
-  value: GetLockBalanceRequest,
+type msgUpdateParamsParams = {
+  value: MsgUpdateParams,
 };
 
-type supplyTransactionParams = {
-  value: SupplyTransaction,
+type queryGetAvailableLockTransactionRequestParams = {
+  value: QueryGetAvailableLockTransactionRequest,
+};
+
+type lockBalanceAllRequestParams = {
+  value: LockBalanceAllRequest,
+};
+
+type msgRequestLockParams = {
+  value: MsgRequestLock,
+};
+
+type msgVoteSupplyHashObserveResponseParams = {
+  value: MsgVoteSupplyHashObserveResponse,
+};
+
+type observeVoteLockingResponseParams = {
+  value: ObserveVoteLockingResponse,
+};
+
+type queryGetAvailableLockTransactionResponseParams = {
+  value: QueryGetAvailableLockTransactionResponse,
+};
+
+type msgVoteSupplyHashObserveParams = {
+  value: MsgVoteSupplyHashObserve,
+};
+
+type msgVoteSupplyTransactionParams = {
+  value: MsgVoteSupplyTransaction,
+};
+
+type queryParamsRequestParams = {
+  value: QueryParamsRequest,
 };
 
 
@@ -602,286 +603,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgVoteSupplyHashObserve({ value, fee, memo }: sendMsgVoteSupplyHashObserveParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgVoteSupplyHashObserve: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgVoteSupplyHashObserve({ value: MsgVoteSupplyHashObserve.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgVoteSupplyHashObserve: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetSupplyTssObservationRequest({ value, fee, memo }: sendQueryGetSupplyTssObservationRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetSupplyTssObservationRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetSupplyTssObservationRequest({ value: QueryGetSupplyTssObservationRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetSupplyTssObservationRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgObserveVoteLocking({ value, fee, memo }: sendMsgObserveVoteLockingParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgObserveVoteLocking: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgObserveVoteLocking({ value: MsgObserveVoteLocking.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgObserveVoteLocking: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgHtlcReclaim({ value, fee, memo }: sendMsgHtlcReclaimParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgHtlcReclaim: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgHtlcReclaim({ value: MsgHtlcReclaim.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgHtlcReclaim: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendSupplyTssObservation({ value, fee, memo }: sendSupplyTssObservationParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendSupplyTssObservation: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.supplyTssObservation({ value: SupplyTssObservation.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendSupplyTssObservation: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgObserveVoteLockingResponse({ value, fee, memo }: sendMsgObserveVoteLockingResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgObserveVoteLockingResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgObserveVoteLockingResponse({ value: MsgObserveVoteLockingResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgObserveVoteLockingResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRequestSupplyResponse({ value, fee, memo }: sendMsgRequestSupplyResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRequestSupplyResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRequestSupplyResponse({ value: MsgRequestSupplyResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRequestSupplyResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllAssetLockTransactionRequest({ value, fee, memo }: sendQueryAllAssetLockTransactionRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllAssetLockTransactionRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllAssetLockTransactionRequest({ value: QueryAllAssetLockTransactionRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllAssetLockTransactionRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAvailableLockTransactionRequest({ value, fee, memo }: sendQueryGetAvailableLockTransactionRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAvailableLockTransactionRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAvailableLockTransactionRequest({ value: QueryGetAvailableLockTransactionRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAvailableLockTransactionRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendGetLockBalanceResponse({ value, fee, memo }: sendGetLockBalanceResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendGetLockBalanceResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.getLockBalanceResponse({ value: GetLockBalanceResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendGetLockBalanceResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetSupplyTssObservationResponse({ value, fee, memo }: sendQueryGetSupplyTssObservationResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetSupplyTssObservationResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetSupplyTssObservationResponse({ value: QueryGetSupplyTssObservationResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetSupplyTssObservationResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendBalance({ value, fee, memo }: sendBalanceParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendBalance: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.balance({ value: Balance.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendBalance: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendObserveVoteLockingAllResponse({ value, fee, memo }: sendObserveVoteLockingAllResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendObserveVoteLockingAllResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.observeVoteLockingAllResponse({ value: ObserveVoteLockingAllResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendObserveVoteLockingAllResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAllSupplyHashObservationResponse({ value, fee, memo }: sendQueryAllSupplyHashObservationResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAllSupplyHashObservationResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllSupplyHashObservationResponse({ value: QueryAllSupplyHashObservationResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllSupplyHashObservationResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgVoteSupplyTransactionResponse({ value, fee, memo }: sendMsgVoteSupplyTransactionResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgVoteSupplyTransactionResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgVoteSupplyTransactionResponse({ value: MsgVoteSupplyTransactionResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgVoteSupplyTransactionResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendObserveVoteLockingResponse({ value, fee, memo }: sendObserveVoteLockingResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendObserveVoteLockingResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.observeVoteLockingResponse({ value: ObserveVoteLockingResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendObserveVoteLockingResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendLockBalanceAllRequest({ value, fee, memo }: sendLockBalanceAllRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendLockBalanceAllRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.lockBalanceAllRequest({ value: LockBalanceAllRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendLockBalanceAllRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetSupplyHashObservationResponse({ value, fee, memo }: sendQueryGetSupplyHashObservationResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetSupplyHashObservationResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetSupplyHashObservationResponse({ value: QueryGetSupplyHashObservationResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetSupplyHashObservationResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryAssetLockTransactionRequest({ value, fee, memo }: sendQueryAssetLockTransactionRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryAssetLockTransactionRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAssetLockTransactionRequest({ value: QueryAssetLockTransactionRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAssetLockTransactionRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetSupplyTransactionRequest({ value, fee, memo }: sendQueryGetSupplyTransactionRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetSupplyTransactionRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetSupplyTransactionRequest({ value: QueryGetSupplyTransactionRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetSupplyTransactionRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendQueryAllSupplyTssObservationRequest({ value, fee, memo }: sendQueryAllSupplyTssObservationRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendQueryAllSupplyTssObservationRequest: Unable to sign Tx. Signer is not present.')
@@ -893,34 +614,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendQueryAllSupplyTssObservationRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetSupplyHashObservationRequest({ value, fee, memo }: sendQueryGetSupplyHashObservationRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetSupplyHashObservationRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetSupplyHashObservationRequest({ value: QueryGetSupplyHashObservationRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetSupplyHashObservationRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgVoteSupplyHashObserveResponse({ value, fee, memo }: sendMsgVoteSupplyHashObserveResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgVoteSupplyHashObserveResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgVoteSupplyHashObserveResponse({ value: MsgVoteSupplyHashObserveResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgVoteSupplyHashObserveResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -938,31 +631,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendSupplyHashObservation({ value, fee, memo }: sendSupplyHashObservationParams): Promise<DeliverTxResponse> {
+		async sendMsgVoteSupplyTransactionResponse({ value, fee, memo }: sendMsgVoteSupplyTransactionResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendSupplyHashObservation: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgVoteSupplyTransactionResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.supplyHashObservation({ value: SupplyHashObservation.fromPartial(value) })
+				let msg = this.msgVoteSupplyTransactionResponse({ value: MsgVoteSupplyTransactionResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendSupplyHashObservation: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgVoteSupplyTransaction({ value, fee, memo }: sendMsgVoteSupplyTransactionParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgVoteSupplyTransaction: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgVoteSupplyTransaction({ value: MsgVoteSupplyTransaction.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgVoteSupplyTransaction: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgVoteSupplyTransactionResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -980,59 +659,59 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+		async sendQueryGetSupplyHashObservationResponse({ value, fee, memo }: sendQueryGetSupplyHashObservationResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryGetSupplyHashObservationResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				let msg = this.queryGetSupplyHashObservationResponse({ value: QueryGetSupplyHashObservationResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryGetSupplyHashObservationResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
+		async sendLockBalance({ value, fee, memo }: sendLockBalanceParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendLockBalance: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
+				let msg = this.lockBalance({ value: LockBalance.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendLockBalance: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryGetObserveVoteLockingRequest({ value, fee, memo }: sendQueryGetObserveVoteLockingRequestParams): Promise<DeliverTxResponse> {
+		async sendObserveVoteLockingAllResponse({ value, fee, memo }: sendObserveVoteLockingAllResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryGetObserveVoteLockingRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendObserveVoteLockingAllResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetObserveVoteLockingRequest({ value: QueryGetObserveVoteLockingRequest.fromPartial(value) })
+				let msg = this.observeVoteLockingAllResponse({ value: ObserveVoteLockingAllResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetObserveVoteLockingRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendObserveVoteLockingAllResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryAllSupplyTransactionRequest({ value, fee, memo }: sendQueryAllSupplyTransactionRequestParams): Promise<DeliverTxResponse> {
+		async sendGetLockBalanceRequest({ value, fee, memo }: sendGetLockBalanceRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryAllSupplyTransactionRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendGetLockBalanceRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllSupplyTransactionRequest({ value: QueryAllSupplyTransactionRequest.fromPartial(value) })
+				let msg = this.getLockBalanceRequest({ value: GetLockBalanceRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllSupplyTransactionRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendGetLockBalanceRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1050,17 +729,87 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgRequestLock({ value, fee, memo }: sendMsgRequestLockParams): Promise<DeliverTxResponse> {
+		async sendMsgHtlcReclaim({ value, fee, memo }: sendMsgHtlcReclaimParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgRequestLock: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgHtlcReclaim: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRequestLock({ value: MsgRequestLock.fromPartial(value) })
+				let msg = this.msgHtlcReclaim({ value: MsgHtlcReclaim.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRequestLock: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgHtlcReclaim: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendGenesisState({ value, fee, memo }: sendGenesisStateParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGenesisState: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.genesisState({ value: GenesisState.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendGenesisState: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryGetSupplyTssObservationRequest({ value, fee, memo }: sendQueryGetSupplyTssObservationRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetSupplyTssObservationRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetSupplyTssObservationRequest({ value: QueryGetSupplyTssObservationRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryGetSupplyTssObservationRequest: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendQueryGetSupplyTssObservationResponse({ value, fee, memo }: sendQueryGetSupplyTssObservationResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetSupplyTssObservationResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetSupplyTssObservationResponse({ value: QueryGetSupplyTssObservationResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendQueryGetSupplyTssObservationResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRequestSupplyResponse({ value, fee, memo }: sendMsgRequestSupplyResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRequestSupplyResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRequestSupplyResponse({ value: MsgRequestSupplyResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRequestSupplyResponse: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendBalance({ value, fee, memo }: sendBalanceParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendBalance: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.balance({ value: Balance.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendBalance: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1078,6 +827,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgObserveVoteLocking({ value, fee, memo }: sendMsgObserveVoteLockingParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgObserveVoteLocking: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgObserveVoteLocking({ value: MsgObserveVoteLocking.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgObserveVoteLocking: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendObserveVoteLocking({ value, fee, memo }: sendObserveVoteLockingParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendObserveVoteLocking: Unable to sign Tx. Signer is not present.')
@@ -1092,87 +855,87 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendAssetLockTransaction({ value, fee, memo }: sendAssetLockTransactionParams): Promise<DeliverTxResponse> {
+		async sendQueryGetSupplyTransactionRequest({ value, fee, memo }: sendQueryGetSupplyTransactionRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendAssetLockTransaction: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryGetSupplyTransactionRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.assetLockTransaction({ value: AssetLockTransaction.fromPartial(value) })
+				let msg = this.queryGetSupplyTransactionRequest({ value: QueryGetSupplyTransactionRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendAssetLockTransaction: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryGetSupplyTransactionRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryAssetLockTransactionResponse({ value, fee, memo }: sendQueryAssetLockTransactionResponseParams): Promise<DeliverTxResponse> {
+		async sendMsgObserveVoteLockingResponse({ value, fee, memo }: sendMsgObserveVoteLockingResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryAssetLockTransactionResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgObserveVoteLockingResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAssetLockTransactionResponse({ value: QueryAssetLockTransactionResponse.fromPartial(value) })
+				let msg = this.msgObserveVoteLockingResponse({ value: MsgObserveVoteLockingResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAssetLockTransactionResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgObserveVoteLockingResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryAllObserveVoteLockingRequest({ value, fee, memo }: sendQueryAllObserveVoteLockingRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryAllAssetLockTransactionRequest({ value, fee, memo }: sendQueryAllAssetLockTransactionRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryAllObserveVoteLockingRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryAllAssetLockTransactionRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryAllObserveVoteLockingRequest({ value: QueryAllObserveVoteLockingRequest.fromPartial(value) })
+				let msg = this.queryAllAssetLockTransactionRequest({ value: QueryAllAssetLockTransactionRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryAllObserveVoteLockingRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryAllAssetLockTransactionRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgRequestLockResponse({ value, fee, memo }: sendMsgRequestLockResponseParams): Promise<DeliverTxResponse> {
+		async sendSupplyHashObservation({ value, fee, memo }: sendSupplyHashObservationParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgRequestLockResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendSupplyHashObservation: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRequestLockResponse({ value: MsgRequestLockResponse.fromPartial(value) })
+				let msg = this.supplyHashObservation({ value: SupplyHashObservation.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRequestLockResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendSupplyHashObservation: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendMsgHtlcReclaimResponse({ value, fee, memo }: sendMsgHtlcReclaimResponseParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdateParamsResponse({ value, fee, memo }: sendMsgUpdateParamsResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgHtlcReclaimResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdateParamsResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgHtlcReclaimResponse({ value: MsgHtlcReclaimResponse.fromPartial(value) })
+				let msg = this.msgUpdateParamsResponse({ value: MsgUpdateParamsResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgHtlcReclaimResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdateParamsResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryParamsResponse({ value, fee, memo }: sendQueryParamsResponseParams): Promise<DeliverTxResponse> {
+		async sendQueryAllSupplyTransactionRequest({ value, fee, memo }: sendQueryAllSupplyTransactionRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryParamsResponse: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryAllSupplyTransactionRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryParamsResponse({ value: QueryParamsResponse.fromPartial(value) })
+				let msg = this.queryAllSupplyTransactionRequest({ value: QueryAllSupplyTransactionRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryParamsResponse: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryAllSupplyTransactionRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1204,101 +967,59 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+		async sendMsgHtlcReclaimResponse({ value, fee, memo }: sendMsgHtlcReclaimResponseParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgHtlcReclaimResponse: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				let msg = this.msgHtlcReclaimResponse({ value: MsgHtlcReclaimResponse.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgHtlcReclaimResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendLockBalance({ value, fee, memo }: sendLockBalanceParams): Promise<DeliverTxResponse> {
+		async sendAssetLockTransaction({ value, fee, memo }: sendAssetLockTransactionParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendLockBalance: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendAssetLockTransaction: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.lockBalance({ value: LockBalance.fromPartial(value) })
+				let msg = this.assetLockTransaction({ value: AssetLockTransaction.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendLockBalance: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendAssetLockTransaction: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
+		async sendQueryAssetLockTransactionRequest({ value, fee, memo }: sendQueryAssetLockTransactionRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryAssetLockTransactionRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.params({ value: Params.fromPartial(value) })
+				let msg = this.queryAssetLockTransactionRequest({ value: QueryAssetLockTransactionRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryAssetLockTransactionRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
+		async sendQueryGetSupplyHashObservationRequest({ value, fee, memo }: sendQueryGetSupplyHashObservationRequestParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendQueryGetSupplyHashObservationRequest: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
+				let msg = this.queryGetSupplyHashObservationRequest({ value: QueryGetSupplyHashObservationRequest.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendQueryGetAvailableLockTransactionResponse({ value, fee, memo }: sendQueryGetAvailableLockTransactionResponseParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendQueryGetAvailableLockTransactionResponse: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.queryGetAvailableLockTransactionResponse({ value: QueryGetAvailableLockTransactionResponse.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendQueryGetAvailableLockTransactionResponse: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgRequestSupply({ value, fee, memo }: sendMsgRequestSupplyParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgRequestSupply: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.msgRequestSupply({ value: MsgRequestSupply.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgRequestSupply: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendGetLockBalanceRequest({ value, fee, memo }: sendGetLockBalanceRequestParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendGetLockBalanceRequest: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
-				let msg = this.getLockBalanceRequest({ value: GetLockBalanceRequest.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendGetLockBalanceRequest: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendQueryGetSupplyHashObservationRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -1316,188 +1037,292 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgVoteSupplyHashObserve({ value }: msgVoteSupplyHashObserveParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyHashObserve", value: MsgVoteSupplyHashObserve.fromPartial( value ) }  
+		async sendGetLockBalanceResponse({ value, fee, memo }: sendGetLockBalanceResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendGetLockBalanceResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.getLockBalanceResponse({ value: GetLockBalanceResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgVoteSupplyHashObserve: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendGetLockBalanceResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetSupplyTssObservationRequest({ value }: queryGetSupplyTssObservationRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTssObservationRequest", value: QueryGetSupplyTssObservationRequest.fromPartial( value ) }  
+		async sendSupplyTssObservation({ value, fee, memo }: sendSupplyTssObservationParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendSupplyTssObservation: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.supplyTssObservation({ value: SupplyTssObservation.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetSupplyTssObservationRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendSupplyTssObservation: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgObserveVoteLocking({ value }: msgObserveVoteLockingParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgObserveVoteLocking", value: MsgObserveVoteLocking.fromPartial( value ) }  
+		async sendQueryAssetLockTransactionResponse({ value, fee, memo }: sendQueryAssetLockTransactionResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAssetLockTransactionResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAssetLockTransactionResponse({ value: QueryAssetLockTransactionResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgObserveVoteLocking: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryAssetLockTransactionResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgHtlcReclaim({ value }: msgHtlcReclaimParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgHtlcReclaim", value: MsgHtlcReclaim.fromPartial( value ) }  
+		async sendQueryAllObserveVoteLockingRequest({ value, fee, memo }: sendQueryAllObserveVoteLockingRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAllObserveVoteLockingRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAllObserveVoteLockingRequest({ value: QueryAllObserveVoteLockingRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgHtlcReclaim: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryAllObserveVoteLockingRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		supplyTssObservation({ value }: supplyTssObservationParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.SupplyTssObservation", value: SupplyTssObservation.fromPartial( value ) }  
+		async sendQueryAllSupplyHashObservationResponse({ value, fee, memo }: sendQueryAllSupplyHashObservationResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryAllSupplyHashObservationResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryAllSupplyHashObservationResponse({ value: QueryAllSupplyHashObservationResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:SupplyTssObservation: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryAllSupplyHashObservationResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgObserveVoteLockingResponse({ value }: msgObserveVoteLockingResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgObserveVoteLockingResponse", value: MsgObserveVoteLockingResponse.fromPartial( value ) }  
+		async sendQueryGetObserveVoteLockingRequest({ value, fee, memo }: sendQueryGetObserveVoteLockingRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetObserveVoteLockingRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetObserveVoteLockingRequest({ value: QueryGetObserveVoteLockingRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgObserveVoteLockingResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryGetObserveVoteLockingRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgRequestSupplyResponse({ value }: msgRequestSupplyResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgRequestSupplyResponse", value: MsgRequestSupplyResponse.fromPartial( value ) }  
+		async sendParams({ value, fee, memo }: sendParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.params({ value: Params.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRequestSupplyResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendParams: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryAllAssetLockTransactionRequest({ value }: queryAllAssetLockTransactionRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAllAssetLockTransactionRequest", value: QueryAllAssetLockTransactionRequest.fromPartial( value ) }  
+		async sendQueryParamsResponse({ value, fee, memo }: sendQueryParamsResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryParamsResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryParamsResponse({ value: QueryParamsResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllAssetLockTransactionRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryParamsResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetAvailableLockTransactionRequest({ value }: queryGetAvailableLockTransactionRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetAvailableLockTransactionRequest", value: QueryGetAvailableLockTransactionRequest.fromPartial( value ) }  
+		async sendMsgRequestLockResponse({ value, fee, memo }: sendMsgRequestLockResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRequestLockResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRequestLockResponse({ value: MsgRequestLockResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAvailableLockTransactionRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRequestLockResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		getLockBalanceResponse({ value }: getLockBalanceResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.GetLockBalanceResponse", value: GetLockBalanceResponse.fromPartial( value ) }  
+		async sendMsgRequestSupply({ value, fee, memo }: sendMsgRequestSupplyParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRequestSupply: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRequestSupply({ value: MsgRequestSupply.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:GetLockBalanceResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRequestSupply: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetSupplyTssObservationResponse({ value }: queryGetSupplyTssObservationResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTssObservationResponse", value: QueryGetSupplyTssObservationResponse.fromPartial( value ) }  
+		async sendMsgUpdateParams({ value, fee, memo }: sendMsgUpdateParamsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateParams: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgUpdateParams({ value: MsgUpdateParams.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetSupplyTssObservationResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgUpdateParams: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		balance({ value }: balanceParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.Balance", value: Balance.fromPartial( value ) }  
+		async sendQueryGetAvailableLockTransactionRequest({ value, fee, memo }: sendQueryGetAvailableLockTransactionRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetAvailableLockTransactionRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetAvailableLockTransactionRequest({ value: QueryGetAvailableLockTransactionRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:Balance: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryGetAvailableLockTransactionRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		observeVoteLockingAllResponse({ value }: observeVoteLockingAllResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.ObserveVoteLockingAllResponse", value: ObserveVoteLockingAllResponse.fromPartial( value ) }  
+		async sendLockBalanceAllRequest({ value, fee, memo }: sendLockBalanceAllRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendLockBalanceAllRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.lockBalanceAllRequest({ value: LockBalanceAllRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:ObserveVoteLockingAllResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendLockBalanceAllRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryAllSupplyHashObservationResponse({ value }: queryAllSupplyHashObservationResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAllSupplyHashObservationResponse", value: QueryAllSupplyHashObservationResponse.fromPartial( value ) }  
+		async sendMsgRequestLock({ value, fee, memo }: sendMsgRequestLockParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRequestLock: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgRequestLock({ value: MsgRequestLock.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllSupplyHashObservationResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgRequestLock: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgVoteSupplyTransactionResponse({ value }: msgVoteSupplyTransactionResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyTransactionResponse", value: MsgVoteSupplyTransactionResponse.fromPartial( value ) }  
+		async sendMsgVoteSupplyHashObserveResponse({ value, fee, memo }: sendMsgVoteSupplyHashObserveResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgVoteSupplyHashObserveResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgVoteSupplyHashObserveResponse({ value: MsgVoteSupplyHashObserveResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgVoteSupplyTransactionResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgVoteSupplyHashObserveResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		observeVoteLockingResponse({ value }: observeVoteLockingResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.ObserveVoteLockingResponse", value: ObserveVoteLockingResponse.fromPartial( value ) }  
+		async sendObserveVoteLockingResponse({ value, fee, memo }: sendObserveVoteLockingResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendObserveVoteLockingResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.observeVoteLockingResponse({ value: ObserveVoteLockingResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:ObserveVoteLockingResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendObserveVoteLockingResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		lockBalanceAllRequest({ value }: lockBalanceAllRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.LockBalanceAllRequest", value: LockBalanceAllRequest.fromPartial( value ) }  
+		async sendQueryGetAvailableLockTransactionResponse({ value, fee, memo }: sendQueryGetAvailableLockTransactionResponseParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryGetAvailableLockTransactionResponse: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryGetAvailableLockTransactionResponse({ value: QueryGetAvailableLockTransactionResponse.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:LockBalanceAllRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryGetAvailableLockTransactionResponse: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetSupplyHashObservationResponse({ value }: queryGetSupplyHashObservationResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyHashObservationResponse", value: QueryGetSupplyHashObservationResponse.fromPartial( value ) }  
+		async sendMsgVoteSupplyHashObserve({ value, fee, memo }: sendMsgVoteSupplyHashObserveParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgVoteSupplyHashObserve: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgVoteSupplyHashObserve({ value: MsgVoteSupplyHashObserve.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetSupplyHashObservationResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgVoteSupplyHashObserve: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryAssetLockTransactionRequest({ value }: queryAssetLockTransactionRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAssetLockTransactionRequest", value: QueryAssetLockTransactionRequest.fromPartial( value ) }  
+		async sendMsgVoteSupplyTransaction({ value, fee, memo }: sendMsgVoteSupplyTransactionParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgVoteSupplyTransaction: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.msgVoteSupplyTransaction({ value: MsgVoteSupplyTransaction.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAssetLockTransactionRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgVoteSupplyTransaction: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		queryGetSupplyTransactionRequest({ value }: queryGetSupplyTransactionRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTransactionRequest", value: QueryGetSupplyTransactionRequest.fromPartial( value ) }  
+		async sendQueryParamsRequest({ value, fee, memo }: sendQueryParamsRequestParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendQueryParamsRequest: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry});
+				let msg = this.queryParamsRequest({ value: QueryParamsRequest.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetSupplyTransactionRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendQueryParamsRequest: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		queryAllSupplyTssObservationRequest({ value }: queryAllSupplyTssObservationRequestParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.lock.QueryAllSupplyTssObservationRequest", value: QueryAllSupplyTssObservationRequest.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:QueryAllSupplyTssObservationRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetSupplyHashObservationRequest({ value }: queryGetSupplyHashObservationRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyHashObservationRequest", value: QueryGetSupplyHashObservationRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetSupplyHashObservationRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgVoteSupplyHashObserveResponse({ value }: msgVoteSupplyHashObserveResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyHashObserveResponse", value: MsgVoteSupplyHashObserveResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgVoteSupplyHashObserveResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1509,19 +1334,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		supplyHashObservation({ value }: supplyHashObservationParams): EncodeObject {
+		msgVoteSupplyTransactionResponse({ value }: msgVoteSupplyTransactionResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.SupplyHashObservation", value: SupplyHashObservation.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyTransactionResponse", value: MsgVoteSupplyTransactionResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:SupplyHashObservation: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgVoteSupplyTransaction({ value }: msgVoteSupplyTransactionParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyTransaction", value: MsgVoteSupplyTransaction.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgVoteSupplyTransaction: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgVoteSupplyTransactionResponse: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1533,35 +1350,35 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		genesisState({ value }: genesisStateParams): EncodeObject {
+		queryGetSupplyHashObservationResponse({ value }: queryGetSupplyHashObservationResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.GenesisState", value: GenesisState.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyHashObservationResponse", value: QueryGetSupplyHashObservationResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryGetSupplyHashObservationResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
+		lockBalance({ value }: lockBalanceParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.LockBalance", value: LockBalance.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:LockBalance: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryGetObserveVoteLockingRequest({ value }: queryGetObserveVoteLockingRequestParams): EncodeObject {
+		observeVoteLockingAllResponse({ value }: observeVoteLockingAllResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetObserveVoteLockingRequest", value: QueryGetObserveVoteLockingRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.ObserveVoteLockingAllResponse", value: ObserveVoteLockingAllResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryGetObserveVoteLockingRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:ObserveVoteLockingAllResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryAllSupplyTransactionRequest({ value }: queryAllSupplyTransactionRequestParams): EncodeObject {
+		getLockBalanceRequest({ value }: getLockBalanceRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAllSupplyTransactionRequest", value: QueryAllSupplyTransactionRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.GetLockBalanceRequest", value: GetLockBalanceRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllSupplyTransactionRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:GetLockBalanceRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1573,11 +1390,51 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgRequestLock({ value }: msgRequestLockParams): EncodeObject {
+		msgHtlcReclaim({ value }: msgHtlcReclaimParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.MsgRequestLock", value: MsgRequestLock.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.MsgHtlcReclaim", value: MsgHtlcReclaim.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRequestLock: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgHtlcReclaim: Could not create message: ' + e.message)
+			}
+		},
+		
+		genesisState({ value }: genesisStateParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.GenesisState", value: GenesisState.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GenesisState: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetSupplyTssObservationRequest({ value }: queryGetSupplyTssObservationRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTssObservationRequest", value: QueryGetSupplyTssObservationRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetSupplyTssObservationRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetSupplyTssObservationResponse({ value }: queryGetSupplyTssObservationResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTssObservationResponse", value: QueryGetSupplyTssObservationResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetSupplyTssObservationResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRequestSupplyResponse({ value }: msgRequestSupplyResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgRequestSupplyResponse", value: MsgRequestSupplyResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRequestSupplyResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		balance({ value }: balanceParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.Balance", value: Balance.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Balance: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1589,6 +1446,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgObserveVoteLocking({ value }: msgObserveVoteLockingParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgObserveVoteLocking", value: MsgObserveVoteLocking.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgObserveVoteLocking: Could not create message: ' + e.message)
+			}
+		},
+		
 		observeVoteLocking({ value }: observeVoteLockingParams): EncodeObject {
 			try {
 				return { typeUrl: "/cfprotocol.lock.ObserveVoteLocking", value: ObserveVoteLocking.fromPartial( value ) }  
@@ -1597,51 +1462,51 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		assetLockTransaction({ value }: assetLockTransactionParams): EncodeObject {
+		queryGetSupplyTransactionRequest({ value }: queryGetSupplyTransactionRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.AssetLockTransaction", value: AssetLockTransaction.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyTransactionRequest", value: QueryGetSupplyTransactionRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:AssetLockTransaction: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryGetSupplyTransactionRequest: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryAssetLockTransactionResponse({ value }: queryAssetLockTransactionResponseParams): EncodeObject {
+		msgObserveVoteLockingResponse({ value }: msgObserveVoteLockingResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAssetLockTransactionResponse", value: QueryAssetLockTransactionResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.MsgObserveVoteLockingResponse", value: MsgObserveVoteLockingResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAssetLockTransactionResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgObserveVoteLockingResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryAllObserveVoteLockingRequest({ value }: queryAllObserveVoteLockingRequestParams): EncodeObject {
+		queryAllAssetLockTransactionRequest({ value }: queryAllAssetLockTransactionRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryAllObserveVoteLockingRequest", value: QueryAllObserveVoteLockingRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryAllAssetLockTransactionRequest", value: QueryAllAssetLockTransactionRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryAllObserveVoteLockingRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryAllAssetLockTransactionRequest: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgRequestLockResponse({ value }: msgRequestLockResponseParams): EncodeObject {
+		supplyHashObservation({ value }: supplyHashObservationParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.MsgRequestLockResponse", value: MsgRequestLockResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.SupplyHashObservation", value: SupplyHashObservation.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgRequestLockResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:SupplyHashObservation: Could not create message: ' + e.message)
 			}
 		},
 		
-		msgHtlcReclaimResponse({ value }: msgHtlcReclaimResponseParams): EncodeObject {
+		msgUpdateParamsResponse({ value }: msgUpdateParamsResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.MsgHtlcReclaimResponse", value: MsgHtlcReclaimResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.MsgUpdateParamsResponse", value: MsgUpdateParamsResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgHtlcReclaimResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdateParamsResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryParamsResponse({ value }: queryParamsResponseParams): EncodeObject {
+		queryAllSupplyTransactionRequest({ value }: queryAllSupplyTransactionRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryParamsResponse", value: QueryParamsResponse.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryAllSupplyTransactionRequest", value: QueryAllSupplyTransactionRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryParamsResponse: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryAllSupplyTransactionRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1661,59 +1526,35 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+		msgHtlcReclaimResponse({ value }: msgHtlcReclaimResponseParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.MsgHtlcReclaimResponse", value: MsgHtlcReclaimResponse.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgHtlcReclaimResponse: Could not create message: ' + e.message)
 			}
 		},
 		
-		lockBalance({ value }: lockBalanceParams): EncodeObject {
+		assetLockTransaction({ value }: assetLockTransactionParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.LockBalance", value: LockBalance.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.AssetLockTransaction", value: AssetLockTransaction.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:LockBalance: Could not create message: ' + e.message)
+				throw new Error('TxClient:AssetLockTransaction: Could not create message: ' + e.message)
 			}
 		},
 		
-		params({ value }: paramsParams): EncodeObject {
+		queryAssetLockTransactionRequest({ value }: queryAssetLockTransactionRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.Params", value: Params.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryAssetLockTransactionRequest", value: QueryAssetLockTransactionRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:Params: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryAssetLockTransactionRequest: Could not create message: ' + e.message)
 			}
 		},
 		
-		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
+		queryGetSupplyHashObservationRequest({ value }: queryGetSupplyHashObservationRequestParams): EncodeObject {
 			try {
-				return { typeUrl: "/cfprotocol.lock.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
+				return { typeUrl: "/cfprotocol.lock.QueryGetSupplyHashObservationRequest", value: QueryGetSupplyHashObservationRequest.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
-			}
-		},
-		
-		queryGetAvailableLockTransactionResponse({ value }: queryGetAvailableLockTransactionResponseParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.QueryGetAvailableLockTransactionResponse", value: QueryGetAvailableLockTransactionResponse.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:QueryGetAvailableLockTransactionResponse: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgRequestSupply({ value }: msgRequestSupplyParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.MsgRequestSupply", value: MsgRequestSupply.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgRequestSupply: Could not create message: ' + e.message)
-			}
-		},
-		
-		getLockBalanceRequest({ value }: getLockBalanceRequestParams): EncodeObject {
-			try {
-				return { typeUrl: "/cfprotocol.lock.GetLockBalanceRequest", value: GetLockBalanceRequest.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:GetLockBalanceRequest: Could not create message: ' + e.message)
+				throw new Error('TxClient:QueryGetSupplyHashObservationRequest: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -1725,24 +1566,187 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		getLockBalanceResponse({ value }: getLockBalanceResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.GetLockBalanceResponse", value: GetLockBalanceResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:GetLockBalanceResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		supplyTssObservation({ value }: supplyTssObservationParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.SupplyTssObservation", value: SupplyTssObservation.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:SupplyTssObservation: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAssetLockTransactionResponse({ value }: queryAssetLockTransactionResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryAssetLockTransactionResponse", value: QueryAssetLockTransactionResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAssetLockTransactionResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAllObserveVoteLockingRequest({ value }: queryAllObserveVoteLockingRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryAllObserveVoteLockingRequest", value: QueryAllObserveVoteLockingRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAllObserveVoteLockingRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryAllSupplyHashObservationResponse({ value }: queryAllSupplyHashObservationResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryAllSupplyHashObservationResponse", value: QueryAllSupplyHashObservationResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryAllSupplyHashObservationResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetObserveVoteLockingRequest({ value }: queryGetObserveVoteLockingRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryGetObserveVoteLockingRequest", value: QueryGetObserveVoteLockingRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetObserveVoteLockingRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		params({ value }: paramsParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.Params", value: Params.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:Params: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryParamsResponse({ value }: queryParamsResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryParamsResponse", value: QueryParamsResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryParamsResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRequestLockResponse({ value }: msgRequestLockResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgRequestLockResponse", value: MsgRequestLockResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRequestLockResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRequestSupply({ value }: msgRequestSupplyParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgRequestSupply", value: MsgRequestSupply.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRequestSupply: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateParams({ value }: msgUpdateParamsParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgUpdateParams", value: MsgUpdateParams.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateParams: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetAvailableLockTransactionRequest({ value }: queryGetAvailableLockTransactionRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryGetAvailableLockTransactionRequest", value: QueryGetAvailableLockTransactionRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetAvailableLockTransactionRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		lockBalanceAllRequest({ value }: lockBalanceAllRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.LockBalanceAllRequest", value: LockBalanceAllRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:LockBalanceAllRequest: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRequestLock({ value }: msgRequestLockParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgRequestLock", value: MsgRequestLock.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRequestLock: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgVoteSupplyHashObserveResponse({ value }: msgVoteSupplyHashObserveResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyHashObserveResponse", value: MsgVoteSupplyHashObserveResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgVoteSupplyHashObserveResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		observeVoteLockingResponse({ value }: observeVoteLockingResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.ObserveVoteLockingResponse", value: ObserveVoteLockingResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:ObserveVoteLockingResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryGetAvailableLockTransactionResponse({ value }: queryGetAvailableLockTransactionResponseParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryGetAvailableLockTransactionResponse", value: QueryGetAvailableLockTransactionResponse.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryGetAvailableLockTransactionResponse: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgVoteSupplyHashObserve({ value }: msgVoteSupplyHashObserveParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyHashObserve", value: MsgVoteSupplyHashObserve.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgVoteSupplyHashObserve: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgVoteSupplyTransaction({ value }: msgVoteSupplyTransactionParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.MsgVoteSupplyTransaction", value: MsgVoteSupplyTransaction.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgVoteSupplyTransaction: Could not create message: ' + e.message)
+			}
+		},
+		
+		queryParamsRequest({ value }: queryParamsRequestParams): EncodeObject {
+			try {
+				return { typeUrl: "/cfprotocol.lock.QueryParamsRequest", value: QueryParamsRequest.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:QueryParamsRequest: Could not create message: ' + e.message)
+			}
+		},
+		
 	}
 };
 
-interface QueryClientOptions {
-  addr: string
-}
+// interface QueryClientOptions {
+//   addr: string
+// }
 
-export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
-  return new Api({ baseURL: addr });
-};
+// export const queryClient = ({ addr: addr }: QueryClientOptions = { addr: "http://localhost:1317" }) => {
+//   return new Api({ baseURL: addr });
+// };
 
 class SDKModule {
+	// public query: ReturnType<typeof queryClient>;
 	public tx: ReturnType<typeof txClient>;
 	public structure: Record<string,unknown>;
 	public registry: Array<[string, GeneratedType]> = [];
 
 	constructor(client: IgniteClient) {		
-			this.updateTX(client);
+	
+		// this.query = queryClient({ addr: client.env.apiURL });		
+		this.updateTX(client);
 		this.structure =  {
 						
 		};
