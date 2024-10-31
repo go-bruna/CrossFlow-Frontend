@@ -129,13 +129,13 @@ export const BorrowContainer = () => {
     if (!activeLock)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'There is no any suppliable asset'})
 
-    // check whether collateral amount is larger than 0 or less than max suppliable amount
+    // check whether collateral amount is greater than 0 or less than max suppliable amount
     if (!collateralAmount)
-      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Collateral amount should be larger than 0'})
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Collateral amount should be greater than 0'})
     else if (collateralAmount > calcuateMaxCollateralAmount)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Collateral amount should be less than borrowabled amount'})
 
-    // check whether interest_rate is valid number and larger than min_interest_rate
+    // check whether interest_rate is valid number and greater than min_interest_rate
     if (!interestRate || getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > (interestRate ?? 0))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Set interest rate'})
 
@@ -256,7 +256,7 @@ export const BorrowContainer = () => {
         onMax={() => setInterestRate( getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) )}
         errorMsg={
           loanRateData && getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > (interestRate ?? 0) 
-            ? `Interest rate should be larger than ${(Number(loanRateData?.min_interest_rate) * 100).toFixed(0)} %`
+            ? `Interest rate should be greater than ${(Number(loanRateData?.min_interest_rate) * 100).toFixed(0)} %`
             : null
         }
         onChange={(e: ChangeEvent<HTMLInputElement>) =>

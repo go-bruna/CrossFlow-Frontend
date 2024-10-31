@@ -9,6 +9,7 @@ import { useAccount } from "graz"
 import { IBaseLockTransaction } from "@/types/api/pool"
 import { queryClient } from "@/wagmi"
 import { GET_ASSET_LOCK_TRANSACTION } from "@/constants/query"
+import { LogoIcon } from "@/assets/icons/logo"
 // const orderArr = ['Ascending', 'Decending']
 
 export const LockTable = () => {
@@ -65,7 +66,7 @@ export const LockTable = () => {
             <div className="flex flex-col justify-center items-center gap-3 h-[136px]">
               <Avatar 
                 className="w-[44px] h-[44px]"
-                icon={<StakeIcon />}
+                icon={<LogoIcon />}
               />
               <Typography variant="label-small" className="font-bold">You still have No locked assets</Typography>
             </div>

@@ -171,7 +171,7 @@ export const SupplyContainer = () => {
       </div>
 
       <Input 
-        label="Interest Rate"
+        label="Interest Rate ( % )"
         value={rate ?? ''}
         placeholder="0"
         icon={<AmountIcon />}
