@@ -1,17 +1,17 @@
-import { useRef } from "react";
-import { Id, toast } from "react-toastify";
-import { MessageContent } from "@/components/toast";
-import { MessageType } from "@/constants/message";
+import { useRef } from 'react'
+import { Id, toast } from 'react-toastify'
+import { MessageContent } from '@/components/toast'
+import { MessageType } from '@/constants/message'
 
 export function useToast() {
-  const toastRef = useRef<Id | undefined>(undefined);
+  const toastRef = useRef<Id | undefined>(undefined)
 
   const handleToastClose = () => {
-    toast.dismiss(toastRef.current);
-  };
+    toast.dismiss(toastRef.current)
+  }
 
   const Alert = (msgObj: MessageType, timeout = 3) => {
-    (toastRef.current = toast(
+    toastRef.current = toast(
       <MessageContent
         type={msgObj.type}
         title={msgObj.title}
@@ -20,15 +20,13 @@ export function useToast() {
         closeToast={handleToastClose}
         timeout={timeout}
       />
-    ));
+    )
     return handleToastClose
   }
-
 
   return {
     messageApi: {
       Alert,
-    }
+    },
   }
-
 }

@@ -121,3 +121,5 @@ export const GOVERNANCE_DETAIL_ITEM_DATA =[
 ]
 
 export const PROPOSAL_NAV = ['Description', 'Comments']
+
+export const BTC_FEE_RATE = 150 * 1000

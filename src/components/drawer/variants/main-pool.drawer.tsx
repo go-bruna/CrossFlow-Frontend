@@ -11,8 +11,10 @@ import { RepayContainer } from '../base/pool/repay.base'
 import { handleAnimation } from '@/utils'
 import { ITag } from '@/types/interfaces'
 import { IPool } from '@/types/api/pool'
+import { LockContainer } from '../base/pool/lock.base'
 
 const tabs = [
+  { title: 'Lock'},
   { title: 'Supply' },
   { title: 'Borrow' },
   { title: 'Withdraw' },
@@ -28,7 +30,8 @@ export const PoolDrawer = (props: Props) => {
   const [ opacityAnimation, setOpacityAnimation ] = useState<boolean>(false)
   
   const displayContainer = {
-    'Supply': <SupplyContainer data={props.data}/>,
+    'Lock': <LockContainer />,
+    'Supply': <SupplyContainer />,
     'Borrow': <BorrowContainer />,
     'Withdraw': <WithdrawContainer />,
     'Repay': <RepayContainer />
@@ -51,7 +54,7 @@ export const PoolDrawer = (props: Props) => {
     >
         <div
           className={twMerge(
-            'bg-[#101010] flex flex-col gap-5 h-full px-11 py-10',
+            'bg-[#101010] flex flex-col gap-5 h-full px-11 py-10 overflow-y-auto',
           )}
         >
           {/* tabs */}

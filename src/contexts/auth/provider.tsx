@@ -36,7 +36,7 @@ import {
 import { getCookie } from "@/utils";
 
 // functions
-// import { SendBitcoinToHTLC } from './functions/send-btc-to-htlc'
+import { SendBitcoinToHTLC } from './functions/send-btc-to-htlc'
 
 declare global {
 	interface Window {
@@ -171,7 +171,7 @@ export const AuthStateProvider: React.FC<IContextChildrenProps> = ({
           paymentAccount: wallet?.accounts?.payment,
           ordinalsAccount: wallet?.accounts?.ordinals,
 
-          // sendBitcoinToHTLC: SendBitcoinToHTLC,
+          sendBitcoinToHTLC: SendBitcoinToHTLC,
         },
 
         unisatInstalled: unisatWallet?.installed ?? false,

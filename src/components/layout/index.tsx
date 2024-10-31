@@ -34,9 +34,9 @@ export const PageLayout: React.FC<ILayoutProps> = ({ children }) => {
           hideProgressBar={true}
           newestOnTop={true}
           closeButton={false}
-          className={'z-[100] w-[440px]'}
+          className={'z-[200] w-[440px]'}
           toastClassName={
-            'bg-gradient-to-b from-zinc-100 to-sky-100 rounded-[10px] w-full py-1'
+            'bg-[#212121] rounded-[10px] w-full py-1'
           }
         />
       </div>

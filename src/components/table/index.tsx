@@ -1,6 +1,7 @@
 import { BorrowedAssetsTable } from "./borrowed-asset/table";
 import { DeletegateTable } from "./delegate/table";
 import { GovernanceTable } from "./governance/table";
+import { LockTable } from "./locked-asset/table";
 import { MainPoolsTable } from "./main-pool/table";
 import { StakeTable } from "./stake/table";
 import { SuppliedAssetsTable } from "./supplied-asset/table";
@@ -12,4 +13,5 @@ export default {
   SuppliedAssets: SuppliedAssetsTable,
   BorrowedAssets: BorrowedAssetsTable,
   Governance: GovernanceTable,
+  LockAssets: LockTable,
 }

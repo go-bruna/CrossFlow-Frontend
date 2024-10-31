@@ -1,7 +1,7 @@
-import { WalletType } from "@/types/interfaces"
-import dayjs from "dayjs"
-import { BigNumberish, ethers } from "ethers"
 import Cookies from 'js-cookie'
+import dayjs from "dayjs"
+import { WalletType } from "@/types/interfaces"
+import { BigNumberish, ethers } from "ethers"
 
 // Manage Ether wei
 export function fromWei(amount: BigNumberish, decimal = 18): number {
@@ -99,3 +99,32 @@ export const dayDiff = (startTimeString?: string, endTimeString?: string) => {
     return 'Today'
   return `${diff} Day(s)`
 }
+
+export const dayDiffWithSecond = (endTimeString?: string) => {
+  if (!endTimeString)
+    return 'NaN'
+  const _date = dayjs()
+  const _s_time = dayjs(endTimeString)
+  const diff = _s_time.diff(_date.valueOf(), 'second')
+  return diff
+}
+
+export const truncateAddress = (address: string, length = 4) => {
+  const firstPart = address.slice(0, length)
+  const lastPart = address.slice(-length)
+  return `${firstPart}...${lastPart}`
+}
+
+export const getFixedNumber = (param: number | string | undefined, decimal = 2) => {
+  if (!param || param === 0)
+    return 0
+  if (typeof param === 'number') {
+    return Number(param.toFixed(decimal))
+  } else {
+    return (Number(Number(param).toFixed(decimal)))  
+  }
+}
+
+export const validateEthereumAddress = (addr: string) => {
+	return ethers.isAddress(addr);
+};

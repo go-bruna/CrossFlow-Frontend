@@ -29,3 +29,33 @@ export interface IChainStatsRes {
   chain_stats: IChainStats
   mempool_stats: IChainStats
 }
+
+export interface IBaseBalance {
+  asset_id: string
+  balance: string
+  interest_rate: string
+}
+export interface IBaseLockBalance {
+  balances: IBaseBalance[]
+  creator: string
+  id: string
+  owner_wallet: string
+}
+
+export interface ILockBalance {
+  lock_balance: IBaseLockBalance[]
+  pagination: PaginationProps
+}
+
+export interface IMaxInterestRate {
+  max_interest_rate: string
+  epoch_length: string
+}
+
+export interface ILoanRate {
+  min_interest_rate: string
+  max_loan_rate: string
+  min_liquidation: string
+  max_duration: string
+  epoch_length: string
+}

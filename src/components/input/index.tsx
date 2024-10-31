@@ -19,8 +19,10 @@ interface Props {
   defaultValue?: string
   placeholder?: string
   suffixLabel?: string
+  suffixIcon?: JSX.Element | null
   disabled?: boolean
   innerButtonLabel?: string
+  errorMsg?: string | null
   classOverride?: ClassOverrideProps
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   onMax?: () => void
@@ -39,7 +41,12 @@ export const Input = (props: Props) => {
       )}
     >
       {props?.label && (
-        <Typography variant="label-medium">{props.label}</Typography>
+        <Typography 
+          variant="label-medium" 
+          className='text-[13px]'
+        >
+          {props.label}
+        </Typography>
       )}
       <div
         className={twMerge(
@@ -84,7 +91,19 @@ export const Input = (props: Props) => {
             {props.suffixLabel}
           </Typography>
         )}
+        {props?.suffixIcon && (
+          <div
+            className={twMerge('w-[0.9rem]', props?.classOverride?.icon)}
+          >
+            {props.suffixIcon}
+          </div>
+        )}
       </div>
+      {props?.errorMsg && (
+        <Typography variant='label-small' className='text-orange-500 my-1 ml-2'>
+          {props.errorMsg}
+        </Typography>
+      )}
     </div>
   )
 }

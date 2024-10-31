@@ -26,6 +26,7 @@ import { useToast } from '@/hooks/useToast'
 import { FAILED_WALLET_CONNECTION, WALLET_INSTALL } from '@/constants/message'
 import { TxClient } from '@/cf-client/client'
 import { MsgVote } from '@/cf-client/cosmos.gov/tx'
+import { TailSpin } from 'react-loader-spinner'
 // import { processVoting } from '@/apis/cfn-client'
 
 const tabs = [
@@ -44,6 +45,7 @@ export const VotingDrawer = (props: Props) => {
   const { data: offlineSigners } = useOfflineSigners()
   const { data: stakeSummary } = useStakeSummary(account?.bech32Address)
   const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
+  const [loading, setLoading] = useState<boolean>(false)
   // const [ amount, setAmount ] = useState<number | undefined>(undefined)  
 
   // Handle Vote
@@ -51,7 +53,7 @@ export const VotingDrawer = (props: Props) => {
     try {
 
       if (!window.keplr) {
-        return messageApi.Alert(WALLET_INSTALL("Bitget"));
+        return messageApi.Alert(WALLET_INSTALL("Kelpr"));
       }
       if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
         return messageApi.Alert(FAILED_WALLET_CONNECTION);
@@ -64,12 +66,12 @@ export const VotingDrawer = (props: Props) => {
         metadata: 'metadata'
       }
 
-      console.log("voteData ===>", voteData)
-
+      setLoading(true)
       const client = await TxClient(offlineSigners?.offlineSigner);
       let msg = await client.msgVote(voteData);
       const result = await client.signAndBroadcast([msg]);
       console.log("voting result ====>", result);
+      setLoading(false)
 
     } catch (error) {
       console.log("handle Voting Msg Error ==>", error)
@@ -164,7 +166,19 @@ export const VotingDrawer = (props: Props) => {
 
             {/* Button group */}
             <div className='flex flex-col gap-[25px]'>
-              {0 < Number(stakeSummary?.total_staked ?? 0) ? (
+              {loading ? (
+                <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[14px]">
+                  <TailSpin
+                    visible={true}
+                    height="20"
+                    width="20"
+                    color="#fff"
+                    ariaLabel="tail-spin-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                </div>
+              ) : Number(stakeSummary?.total_staked ?? 0) > 0 ? (
               // {amount && amount > 0  && amount < Number(stakeSummary?.total_staked ?? 0) ? (
                 <Button.Basic 
                   label="Vote"

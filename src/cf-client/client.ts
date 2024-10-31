@@ -2,6 +2,8 @@ import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { MsgVote } from "./cosmos.gov/tx";
 import { cosmoshub } from "@/config/graz";
+import { MsgRequestLock, MsgRequestSupply } from "./cfprotocol.lock/tx";
+import { MsgRequestLoan } from "./cfprotocol.loan/tx";
 
 const defaultFee = {
   amount: [],
@@ -15,7 +17,11 @@ interface SignAndBroadcastOptions {
 
 const types = [
   ["/cosmos.gov.v1.MsgVote", MsgVote],
+  ["/cfprotocol.lock.MsgRequestLock", MsgRequestLock],
+  ["/cfprotocol.lock.MsgRequestSupply", MsgRequestSupply],
+  ["/cfprotocol.loan.MsgRequestLoan", MsgRequestLoan],
 ];
+
 
 export const registry = new Registry(<any>types);
 
@@ -36,6 +42,18 @@ export const TxClient = async (offlineSinger: OfflineSigner) => {
     msgVote: (data: MsgVote): EncodeObject => ({
       typeUrl: "/cosmos.gov.v1.MsgVote",
       value: MsgVote.fromPartial(data),
+    }),
+    msgRequestLock: (data: MsgRequestLock): EncodeObject => ({
+      typeUrl: "/cfprotocol.lock.MsgRequestLock",
+      value: MsgRequestLock.fromPartial(data),
+    }),
+    msgRequestSupply: (data: MsgRequestSupply): EncodeObject => ({
+      typeUrl: "/cfprotocol.lock.MsgRequestSupply",
+      value: MsgRequestSupply.fromPartial(data),
+    }),
+    msgRequestLoan: (data: MsgRequestLoan): EncodeObject => ({
+      typeUrl: "/cfprotocol.loan.MsgRequestLoan",
+      value: MsgRequestLoan.fromPartial(data),
     }),
   };
 };

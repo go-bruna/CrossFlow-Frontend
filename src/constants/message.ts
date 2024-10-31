@@ -2,7 +2,7 @@ export type MsgType = 'Warning' | 'Success' | 'Error'
 export type MessageType = {
   type: MsgType
   title: string
-  content: string
+  content?: string
   link?: string
 }
 
