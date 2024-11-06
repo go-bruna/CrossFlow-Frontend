@@ -7,7 +7,7 @@ type ClassOverrideProps = {
 }
 interface Props {
   tabs: ITag[]
-  selected: ITag
+  selected: ITag | undefined
   onSelect?: (id: ITag) => void
   classOverride?: ClassOverrideProps
 }
@@ -25,7 +25,7 @@ export const ItemsTab = (props: Props) => {
           className={twMerge(
             'flex justify-center items-center gap-1 bg-[#101010] border border-[#36f5cf]/10 text-white py-[3px] rounded-full',
             props?.classOverride?.tabButton,
-            tag.title === props.selected.title && 'bg-[#203933]',
+            tag.title === props.selected?.title && 'bg-[#203933]',
             'hover:bg-[#203933]'
           )}
           onClick={() => props?.onSelect && props.onSelect(tag)}

@@ -97,7 +97,7 @@ export const useOkxWallet = () => {
 			setWallet(newWallet);
 		} catch (error) {
 			console.error("Error on connecting Okx wallet", error);
-			messageApi.Alert(FAILED_WALLET_CONNECTION);
+			messageApi.Alert(FAILED_WALLET_CONNECTION(`OKX`));
 		}
 	};
 

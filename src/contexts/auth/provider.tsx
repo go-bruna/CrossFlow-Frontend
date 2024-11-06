@@ -47,25 +47,6 @@ declare global {
 	}
 }
 
-// const mnemonic =
-//   'betray theory cargo way left cricket doll room donkey wire reunion fall left surprise hamster corn village happy bulb token artist twelve whisper expire'
-
-// const getSignerFromMnemonic = async (): Promise<OfflineDirectSigner> => {
-//   return DirectSecp256k1HdWallet.fromMnemonic(mnemonic.toString(), {
-//     prefix: 'cfn',
-//   })
-// }
-
-// export const offlineSigner = await getSignerFromMnemonic()
-// export const crossflowClient = new Client(
-//   {
-//     rpcURL: cosmoshub.rpc,
-//     apiURL: cosmoshub.rest,
-//     prefix: 'cfn',
-//   },
-//   offlineSigner,
-// )
-
 export const invalidateWalletQueries = (walletAddress: string) => {
   queryClient.invalidateQueries({
     predicate: (query) => {

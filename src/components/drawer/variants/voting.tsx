@@ -56,7 +56,7 @@ export const VotingDrawer = (props: Props) => {
         return messageApi.Alert(WALLET_INSTALL("Kelpr"));
       }
       if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
-        return messageApi.Alert(FAILED_WALLET_CONNECTION);
+        return messageApi.Alert(FAILED_WALLET_CONNECTION(`Kelpr`));
       }
 
       const voteData: MsgVote = {
@@ -167,7 +167,7 @@ export const VotingDrawer = (props: Props) => {
             {/* Button group */}
             <div className='flex flex-col gap-[25px]'>
               {loading ? (
-                <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[14px]">
+                <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[17px]">
                   <TailSpin
                     visible={true}
                     height="20"

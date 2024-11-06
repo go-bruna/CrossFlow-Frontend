@@ -85,7 +85,7 @@ export const useXverseWallet = () => {
 
 				setWallet(newWallet);
 			},
-			onCancel: () => messageApi.Alert(FAILED_WALLET_CONNECTION),
+			onCancel: () => messageApi.Alert(FAILED_WALLET_CONNECTION(`Xverse`)),
 		};
 
 		try {

@@ -6,11 +6,12 @@ import { Icon } from "@/components/icon";
 import { 
 	CancelImg, 
 	KelprWallet, 
+	MetamastWallet, 
 	// MetamastWallet, 
 	UnisatWallet 
 } from "@/assets/icons/png";
 import { Wallet } from "@/components/drawer/base/wallet/wallet";
-// import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { 
 	useConnect as garzUseConnect, 
 	useAccount as garzUseAccount, 
@@ -22,12 +23,14 @@ import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/contexts/auth";
 // import { CHAIN_ID } from "@/constants";
 import { 
+	ERROR_MESSAGE,
 	// ERROR_MESSAGE, 
 	WALLET_INSTALL 
 } from "@/constants/message";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useActiveChains, useSuggestChainAndConnect } from "graz";
 import { cosmoshub } from "@/config/graz";
+import { CHAIN_ID } from "@/constants";
 
 export interface Props extends BaseProps {}
 
@@ -35,10 +38,12 @@ export const ConnectWallet = (props: Props) => {
 	const { visible, onClose } = props;
 	const { isMobile } = useWindowSize();
 	const { messageApi } = useToast();
-	// const { address, connector, isConnected } = useAccount();
-	// const { connectors, connect } = useConnect();
-	// const { disconnect } = useDisconnect();
-	// const { switchChain } = useSwitchChain();
+	// ether metamask
+	const { address, connector, isConnected } = useAccount();
+	const { connectors, connect } = useConnect();
+	const { disconnect } = useDisconnect();
+	const { switchChain } = useSwitchChain();
+	// btc wallets
 	const { 
 		authState, 
 		disconnectWallet,
@@ -56,34 +61,34 @@ export const ConnectWallet = (props: Props) => {
 	const isKeplrSupported = checkWallet(WalletType.KEPLR);
 	// Kelpr wallet connection and disconnection
 
-	// const _is_connected_metamask =
-	// 	(address && isConnected && connector === connectors[0]) ?? false;
+	const _is_connected_metamask =
+		(address && isConnected && connector === connectors[0]) ?? false;
 
 	// const _is_connected_wallet =
 	// 	(address && isConnected && connector === connectors[1]) ?? false;
 
-	// const handleMetamask = () => {
-	// 	if (_is_connected_metamask) {
-	// 		disconnect();
-	// 		onClose();
-	// 	} else {
-	// 		connect(
-	// 			{ connector: connectors[0] },
-	// 			{
-	// 				onSuccess() {
-	// 					switchChain({ chainId: CHAIN_ID });
-	// 					onClose();
-	// 				},
-	// 				onError(error) {
-	// 					const err_msg = error.message.includes("Provider not found.")
-	// 						? "Please install Metamask wallet!"
-	// 						: error.message.toString();
-	// 					messageApi.Alert(ERROR_MESSAGE(err_msg));
-	// 				},
-	// 			},
-	// 		);
-	// 	}
-	// };
+	const handleMetamask = () => {
+		if (_is_connected_metamask) {
+			disconnect();
+			onClose();
+		} else {
+			connect(
+				{ connector: connectors[0] },
+				{
+					onSuccess() {
+						switchChain({ chainId: CHAIN_ID });
+						onClose();
+					},
+					onError(error) {
+						const err_msg = error.message.includes("Provider not found.")
+							? "Please install Metamask wallet!"
+							: error.message.toString();
+						messageApi.Alert(ERROR_MESSAGE(err_msg));
+					},
+				},
+			);
+		}
+	};
 
 	// const handleWalletConnect = () => {
 	// 	if (_is_connected_wallet) {
@@ -165,6 +170,15 @@ export const ConnectWallet = (props: Props) => {
 							status={garzAccount.isConnected}
 							onConnect={connectWallet}
 						/>
+						<Wallet
+							type="metamask"
+							img={MetamastWallet}
+							address={
+								_is_connected_metamask ? (address as string) : "Metamask Wallet"
+							}
+							status={_is_connected_metamask}
+							onConnect={handleMetamask}
+						/> 
 						{/* <div 
 							className="flex gap-4 items-center pl-1 py-3 lg:p-3 cursor-pointer rounded-md hover:bg-stone-950"
 							onClick={connectWallet}

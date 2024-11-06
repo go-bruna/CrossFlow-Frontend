@@ -4,31 +4,46 @@ import Paragraph from "@/components/paragraph";
 import { Avatar } from "@/components/avatar";
 import { LogoIcon } from "@/assets/icons/logo";
 import { Typography } from "@/components/typography";
-import Button from "@/components/button";
-import { useDrawer } from "@/contexts/interface";
+// import Button from "@/components/button";
+// import { useDrawer } from "@/contexts/interface";
 import { useStakeSummary } from "@/hooks/queries/useStakeSummary";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { queryClient } from "@/wagmi";
-import { GET_STAKE_SUMMARY } from "@/constants/query";
-import { numberFormat } from "@/utils";
+import { GET_STAKE_ALL_VALIDATORS, GET_STAKE_SUMMARY } from "@/constants/query";
+import { handleAnimation, numberFormat } from "@/utils";
 import { useAccount } from "graz";
 import StakingSkeleton from "./skeleton";
+import Table from "@/components/table";
+import Tab from "@/components/tab";
+import { ITag } from "@/types/interfaces";
+import { twMerge } from "tailwind-merge";
 
-// const arr1 = [1,2,3,4]
-// const arr2 = [1,2,3,4,5,6,7,8]
+const tabs = [
+  { title: 'Validators'},
+  { title: 'Generated' },
+]
 
 export const StakePage = () => {
-	const { setDrawer } = useDrawer()
+	// const { setDrawer } = useDrawer()
+	const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
+	const [ opacityAnimation, setOpacityAnimation ] = useState<boolean>(false)
+	
 	const { data: account } = useAccount()
 	const { data: stakeSummary, isLoading } = useStakeSummary(account?.bech32Address)
 	
+	const handleContainer = async(tag: ITag) => {
+    await handleAnimation(() => setOpacityAnimation(true))
+    setOpacityAnimation(false)
+    setCurrentTab(tag)
+  } 
+
 	// invalidate queries
 	const invalidateQuery = async () => {
 		Promise.all([
 			queryClient.invalidateQueries({ queryKey: [GET_STAKE_SUMMARY] }),
-			// queryClient.invalidateQueries({
-			//   queryKey: [GET_ACCOUNT_BORROWED],
-			// }),
+			queryClient.invalidateQueries({
+			  queryKey: [GET_STAKE_ALL_VALIDATORS],
+			}),
 		])
 	}
 
@@ -107,7 +122,7 @@ export const StakePage = () => {
 				</div>
 
 				{/* button */}
-				<div className="flex items-center gap-[22px] mt-10">
+				{/* <div className="flex items-center gap-[22px] mt-10">
 					<Button.Basic
 						label="Stake"
 						className="w-[307px] h-[52px] p-5 bg-[#0aab8b] rounded-[5px] border border-[#36f5cf]/10"
@@ -118,7 +133,27 @@ export const StakePage = () => {
 						className="w-[307px] h-[52px] p-5 bg-[#203933] rounded-[5px] border border-[#203933]/10"
 						onClick={() => setDrawer({id: 'WITHDRAW'})}
 					/>
-				</div>
+				</div> */}
+			</div>
+
+			{/* tabs */}
+			<Tab.List
+				tabs={tabs}
+				selected={currentTab}
+				onSelect={handleContainer}
+				classOverride={{
+					container: 'lg:gap-2 mt-12',
+					tabButton: 'w-auto rounded-full px-5 text-[13px]'
+				}}
+			/>
+
+			{/* Table */}
+			<div className={twMerge('w-full animate-fade-in-up', opacityAnimation && 'animate-fade-out')}>
+				{currentTab.title === tabs[0].title ? (
+					<Table.StakeValidator />
+				) : (
+					<Table.StakeGeneration />
+				)}
 			</div>
 		</div>
 	);

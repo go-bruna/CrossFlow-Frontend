@@ -1,6 +1,6 @@
 import { DropdownIcon } from "@/assets/icons/dropdown"
 import { Typography } from "@/components/typography"
-import { IBaseBalance } from "@/types/api/other";
+import { IBaseLoan } from "@/types/api/pool";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -19,13 +19,13 @@ const useOutsideAlerter = (ref: any, onClickOutside: () => void) => {
 };
 
 interface Props {
-  value: IBaseBalance | undefined
-  list: IBaseBalance[]
-  onChange: (x: IBaseBalance) => void
+  value: IBaseLoan | undefined
+  list: IBaseLoan[]
+  onChange: (x: IBaseLoan) => void
   className?: string
 }
 
-export const DropdownBalances = (props: Props) => {
+export const DropdownLoans = (props: Props) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, () => {
@@ -48,7 +48,7 @@ export const DropdownBalances = (props: Props) => {
         }}
 >
         <Typography variant="label-extrasmall" className="font-bold">
-          {props.value?.balance ?? 'Choose Locked Asset'}
+          {props.value?.collateral_symbol ?? 'Choose Locked Asset'}
         </Typography>
         <DropdownIcon />
       </div>
@@ -60,7 +60,7 @@ export const DropdownBalances = (props: Props) => {
           props?.className
         )}
       >
-        {props.list.map((item: IBaseBalance, i: number) => (
+        {props.list.map((item: IBaseLoan, i: number) => (
           <div
             className={twMerge(
               'px-3 py-2 flex justify-start flex-col gap-1 transition-all duration-300 translate-y-[-1rem] opacity-0 hover:bg-[#1b1b1b]',
@@ -73,13 +73,13 @@ export const DropdownBalances = (props: Props) => {
             }}
           >
             <Typography variant="label-small" className={'semibold'}>
-              {`Asset ID: ${item.asset_id}`}
+              {`Collateral Symbol: ${item.collateral_symbol}`}
             </Typography>
             <Typography variant="label-extrasmall" className={'semibold'}>
-              {`Balance: ${Number(item.balance) / 1e8} BTC`}
+              {`Loan TransactionID: ${item.loan_tx_id}`}
             </Typography>
             <Typography variant="label-extrasmall" className={'semibold'}>
-              {`Interest Rate: ${Number(item.interest_rate) * 100} %`}
+              {`Health: ${item.health}`}
             </Typography>
           </div>
         ))}

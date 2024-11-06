@@ -107,6 +107,19 @@ export interface MsgObservationVoteResponse {
   msg: string;
 }
 
+export interface MsgRequestRepay {
+  creator: string;
+  loanId: number;
+  /** [0-1] range */
+  repayPercent: string;
+  reserved: string;
+}
+
+export interface MsgRequestRepayResponse {
+  code: number;
+  msg: string;
+}
+
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return { authority: "", params: undefined };
 }
@@ -1171,6 +1184,184 @@ export const MsgObservationVoteResponse: MessageFns<MsgObservationVoteResponse> 
   },
 };
 
+function createBaseMsgRequestRepay(): MsgRequestRepay {
+  return { creator: "", loanId: 0, repayPercent: "", reserved: "" };
+}
+
+export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
+  encode(message: MsgRequestRepay, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.loanId !== 0) {
+      writer.uint32(16).uint64(message.loanId);
+    }
+    if (message.repayPercent !== "") {
+      writer.uint32(26).string(message.repayPercent);
+    }
+    if (message.reserved !== "") {
+      writer.uint32(34).string(message.reserved);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestRepay {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestRepay();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.loanId = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.repayPercent = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.reserved = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestRepay {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      loanId: isSet(object.loanId) ? globalThis.Number(object.loanId) : 0,
+      repayPercent: isSet(object.repayPercent) ? globalThis.String(object.repayPercent) : "",
+      reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestRepay): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.loanId !== 0) {
+      obj.loanId = Math.round(message.loanId);
+    }
+    if (message.repayPercent !== "") {
+      obj.repayPercent = message.repayPercent;
+    }
+    if (message.reserved !== "") {
+      obj.reserved = message.reserved;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestRepay>, I>>(base?: I): MsgRequestRepay {
+    return MsgRequestRepay.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestRepay>, I>>(object: I): MsgRequestRepay {
+    const message = createBaseMsgRequestRepay();
+    message.creator = object.creator ?? "";
+    message.loanId = object.loanId ?? 0;
+    message.repayPercent = object.repayPercent ?? "";
+    message.reserved = object.reserved ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgRequestRepayResponse(): MsgRequestRepayResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgRequestRepayResponse: MessageFns<MsgRequestRepayResponse> = {
+  encode(message: MsgRequestRepayResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestRepayResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestRepayResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestRepayResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestRepayResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestRepayResponse>, I>>(base?: I): MsgRequestRepayResponse {
+    return MsgRequestRepayResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestRepayResponse>, I>>(object: I): MsgRequestRepayResponse {
+    const message = createBaseMsgRequestRepayResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /**
@@ -1186,6 +1377,8 @@ export interface Msg {
   VoteLoanTransaction(request: MsgVoteLoanTransaction): Promise<MsgVoteLoanTransactionResponse>;
   /** ObservationVote defines an operation for vote on loan transactions */
   ObservationVote(request: MsgObservationVote): Promise<MsgObservationVoteResponse>;
+  /** RequestRepay defines an operation for repay on loan transactions */
+  RequestRepay(request: MsgRequestRepay): Promise<MsgRequestRepayResponse>;
 }
 
 export const MsgServiceName = "cfprotocol.loan.Msg";
@@ -1200,6 +1393,7 @@ export class MsgClientImpl implements Msg {
     this.SetTxProcess = this.SetTxProcess.bind(this);
     this.VoteLoanTransaction = this.VoteLoanTransaction.bind(this);
     this.ObservationVote = this.ObservationVote.bind(this);
+    this.RequestRepay = this.RequestRepay.bind(this);
   }
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
@@ -1230,6 +1424,12 @@ export class MsgClientImpl implements Msg {
     const promise = this.rpc.request(this.service, "ObservationVote", data);
     return promise.then((data) => MsgObservationVoteResponse.decode(new BinaryReader(data)));
   }
+
+  RequestRepay(request: MsgRequestRepay): Promise<MsgRequestRepayResponse> {
+    const data = MsgRequestRepay.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RequestRepay", data);
+    return promise.then((data) => MsgRequestRepayResponse.decode(new BinaryReader(data)));
+  }
 }
 
 interface Rpc {
@@ -1251,7 +1451,7 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 function longToNumber(int64: { toString(): string }): number {
   const num = globalThis.Number(int64.toString());
   if (num > globalThis.Number.MAX_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is greater than Number.MAX_SAFE_INTEGER");
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   if (num < globalThis.Number.MIN_SAFE_INTEGER) {
     throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");

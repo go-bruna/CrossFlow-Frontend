@@ -6,7 +6,7 @@ import Tab from '@/components/tab'
 import { useState } from 'react'
 import { SupplyContainer } from '../base/pool/supply.base'
 import { BorrowContainer } from '../base/pool/borrow.base'
-import { WithdrawContainer } from '../base/pool/withdraw.base'
+// import { WithdrawContainer } from '../base/pool/withdraw.base'
 import { RepayContainer } from '../base/pool/repay.base'
 import { handleAnimation } from '@/utils'
 import { ITag } from '@/types/interfaces'
@@ -17,7 +17,7 @@ const tabs = [
   { title: 'Lock'},
   { title: 'Supply' },
   { title: 'Borrow' },
-  { title: 'Withdraw' },
+  // { title: 'Withdraw' },
   { title: 'Repay' },
 ]
 export interface Props extends BaseProps {
@@ -33,7 +33,7 @@ export const PoolDrawer = (props: Props) => {
     'Lock': <LockContainer />,
     'Supply': <SupplyContainer />,
     'Borrow': <BorrowContainer />,
-    'Withdraw': <WithdrawContainer />,
+    // 'Withdraw': <WithdrawContainer />,
     'Repay': <RepayContainer />
   }[current.title] as JSX.Element
 

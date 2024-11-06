@@ -1,144 +1,297 @@
-import { ChangeEvent, useState } from "react"
+import { 
+  useEffect,
+  ChangeEvent, 
+  useMemo, 
+  useState 
+} from "react"
+import Button from "@/components/button"
 import Paragraph from "@/components/paragraph"
+// import Table from "@/components/table"
+import Tab from "@/components/tab"
 import { Input } from "@/components/input"
-import { CustomProgress } from "@/components/progress"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
-import Button from "@/components/button"
 import { twMerge } from "tailwind-merge"
-import { Avatar } from "@/components/avatar"
-import { ArrowRightIcon } from "@/assets/icons/arrow"
-import Tab from "@/components/tab"
+import { 
+  useAccount,
+  useOfflineSigners, 
+} from 'graz'
+import { IBaseLoan, ILoanEntity } from "@/types/api/pool"
+import { pureNumberFormat } from "@/utils"
+import Dropdown from "@/components/dropdown"
+import { GET_LOAN_ENTITY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
+import { queryClient } from "@/wagmi"
+import { useToast } from "@/hooks/useToast"
+import { FAILED_WALLET_CONNECTION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
+import { TxClient } from "@/cf-client/client"
+import { TailSpin } from "react-loader-spinner"
+import { useLoanEntity } from "@/hooks/queries/useLoanEntity"
+import { CustomProgress } from "@/components/progress"
+import { useEstimatedRepayAmount } from "@/hooks/queries/useEstimatedRepayAmount"
+import { MsgRequestRepay } from "@/cf-client/cfprotocol.loan/tx"
 import { ITag } from "@/types/interfaces"
+import {
+   useConnect,
+   useAccount as wagmiUseAccount
+} from "wagmi"
+import { useWeb3Context } from "@/contexts/web3"
+
 
 const tabs = [
-  { title: '25%' },
-  { title: '50%' },
-  { title: '75%' },
-  { title: '100%' },
+  { title: '25%', value: 25 },
+  { title: '50%', value: 50 },
+  { title: '75%', value: 75 },
+  { title: '100%', value: 100 },
 ]
+// export interface ISupplyContainer {
+//   data: IPool
+// }
 
 export const RepayContainer = () => {
-  const [ amount, setAmount ] = useState<number | undefined>(undefined)
-  const [ current, setCurrent ] = useState<ITag>(tabs[0])
-  
+  const { messageApi } = useToast()
+  const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
+  const [ repay, setRepay ] = useState<number | undefined>(0)
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ activeLoan, setActiveLoan ] = useState<ILoanEntity | undefined>(undefined)
+  const [ currentTab, setCurrentTab ] = useState<ITag | undefined>(undefined)
+
+  const { data: account } = useAccount()
+  const { data: offlineSigners } = useOfflineSigners()
+  const { data: assetLoanEntity } = useLoanEntity()
+  const { data: estimatedRepayAmount } = useEstimatedRepayAmount(
+    account?.bech32Address, 
+    selected?.loan_tx_id,
+    ((Number(repay ?? 0) / 100).toString())
+  )
+
+  // ether metamask
+	const { address, connector, isConnected } = wagmiUseAccount();
+	const { connectors } = useConnect();
+  const { approveUSDT } = useWeb3Context()
+
+  const _is_connected_metamask =
+		(address && isConnected && connector === connectors[0]) ?? false;
+
+  // filter user's loan entity by creator, and get loans for owner.
+  const filterUserLoans = useMemo(() => {
+    if (
+      !account?.bech32Address || 
+      !assetLoanEntity || 
+      !assetLoanEntity || 
+      assetLoanEntity.length < 1
+    )
+      return []
+    const _filteredData = assetLoanEntity.find((e: ILoanEntity) => e.creator === account.bech32Address)
+    setActiveLoan(_filteredData)
+    if (!_filteredData)
+      return []
+    const _loans = _filteredData.loans
+    return _loans
+  }, [assetLoanEntity, account?.bech32Address])
+
+  /**
+   * Handle supply
+   */
+  const handleRepay = async () => {
+
+    if (!window.keplr) {
+      return messageApi.Alert(WALLET_INSTALL("Kelpr"));
+    }
+
+    if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
+      return messageApi.Alert(FAILED_WALLET_CONNECTION(`Kelpr`));
+    }
+
+    if (!_is_connected_metamask)
+      return messageApi.Alert(FAILED_WALLET_CONNECTION('Metamask'));
+
+    if (!activeLoan || !selected)
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select an item to repay.'})
+
+    if (!repay || repay <= 0)
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be greater than 0%'})
+    else if (repay && Number(repay) > 100)
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be less than 100%'})
+
+    if (!estimatedRepayAmount?.amount_repay)
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'calcuating estimated USDT amount'})
+    try {
+      setLoading(true)
+      
+      const _repayData: MsgRequestRepay = {
+        creator: activeLoan.creator,
+        loanId: Number(selected.loan_tx_id),
+        repayPercent: (Number(repay ?? 0) / 100).toString(),
+        reserved: ""
+      }
+
+      const approve = await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
+
+      if (!approve) {
+        setLoading(false)
+        return
+      }
+      const client = await TxClient(offlineSigners?.offlineSigner);
+      let msg = await client.msgRequestRepay(_repayData);
+      const result = await client.signAndBroadcast([msg]);
+
+      setLoading(false)
+      await invalidateQuery()
+      
+      messageApi.Alert(
+        {
+          type: 'Success',
+          title: 'Successfully repayed.',
+          link: `https://explorer.ordibank.org/ordibank/tx/${result.transactionHash}`,
+        },
+        6,
+      )
+
+    } catch (error) {
+      setLoading(false)
+      console.log("Supply Error is ===>", error)
+    }
+  }
+
+  // invalidate queries
+  const invalidateQuery = async () => {
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: [GET_LOAN_ENTITY] }),
+      queryClient.invalidateQueries({ queryKey: [GET_REPAY_ESTIMATED_AMOUNT] }),
+    ])
+  }
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: [GET_REPAY_ESTIMATED_AMOUNT] })
+  }, [repay, selected, account?.bech32Address])
+
+  useEffect(() => {
+    invalidateQuery()
+  }, [])
+
   return (
     <div className="w-full mt-[30px]">
       {/* Search */}
       <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
 
+      <div className="flex flex-col gap-[10px] mt-8">
+        <Typography variant="label-small" className="f-light">
+          Select Locked Amount
+        </Typography>
+        <Dropdown.Loans
+          list={filterUserLoans}
+          value={selected}
+          onChange={setSelected}
+          className="rounded-lg"
+        />
+      </div>
+
       <Input 
-        type="number"
-        value={amount ?? ''}
-        placeholder="0.00"
+        label="Repay ( % )"
+        value={repay ?? ''}
+        placeholder="0"
         icon={<AmountIcon />}
         innerButtonLabel="Max"
-        onMax={() => {}}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setAmount(Number(parseInt(e.target.value)))
+        errorMsg={
+          repay && Number(repay) > 100
+            ? `Repay should be less than 100%`
+            : null
+        }
+        onMax={() => setRepay(100)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => 
+          setRepay(Number(e.target.value || 0))
         }
         classOverride={{
-          container: 'mt-[14px]',
-          inputContainer: 'bg-black',
+          container: 'mt-6',
+          inputContainer: 'bg-black mt-3',
           input: 'bg-black ml-1',
           value: 'text-[13px] text-[#5e7e8e]',
           icon: 'w-8'
         }}
       />
 
+      <CustomProgress 
+        headerLabels={['Current:', 'Max:']}
+        headerValues={[`${repay ?? 0} %`, '100%']}
+        current={(repay ?? 0).toString()}
+        // limit="100"
+        classOverride={{
+          container: 'mt-4 mb-3',
+          text: 'text-[13px]'
+        }}
+      />
+
       {/* tabs */}
       <Tab.List 
         tabs={tabs}
-        selected={current}
-        onSelect={setCurrent}
+        selected={currentTab}
+        onSelect={(_t: ITag) => {
+          setCurrentTab(_t)
+          setRepay(_t.value)
+        }}
         classOverride={{
           container: 'lg:gap-2 justify-start my-4',
           tabButton: 'w-auto rounded-full px-6 text-[13px]'
         }}
       />
 
-      <Paragraph.List 
-        label="Repayable amount" 
-        value={'14.15 POLY'}
+      <Paragraph.List
+        label="Estimated Repay Amount" 
+        value={`${pureNumberFormat(estimatedRepayAmount?.amount_repay)} USDT`}
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
-        }}
-      />
-      <Paragraph.List 
-        label="Total APY" 
-        value={'4.21%'}
-        classOverride={{
-          container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
-        }}
-      />
-      <CustomProgress 
-        headerLabels={['Current:', 'Max:']}
-        headerValues={['$0', '$0']}
-        current="65"
-        limit="80"
-        classOverride={{
-          container: 'mt-4 mb-3',
-          text: 'text-[13px]'
-        }}
-      />
-      <Paragraph.List 
-        label="Supply balance (USDT)" 
-        value={(
-          <div className="flex items-center gap-1">
-            {!amount || amount <= 0 ? (
-              <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">$0</Typography>
-            ) : (
-              <>
-                <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">$0</Typography>
-                <Avatar icon={<ArrowRightIcon stroke="#f13d20"/>} className="w-5"/>
-                <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">{`$${amount}`}</Typography>
-              </>
-            )}
-          </div>
-        )}
-        classOverride={{
-          container: 'flex-1 py-[10px]',
-        }}
-      />
-      <Paragraph.List 
-        label="Borrow limit" 
-        value={'$0'}
-        classOverride={{
-          container: 'flex-1 py-[10px]',
-        }}
-      />
-      <Paragraph.List 
-        label="Daily earnings" 
-        value={(
-          <div className="flex items-center gap-1">
-            {!amount || amount <= 0 ? (
-              <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">$0</Typography>
-            ) : (
-              <>
-                <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">$0</Typography>
-                <Avatar icon={<ArrowRightIcon stroke="#f13d20" />} className="w-5"/>
-                <Typography variant="label-medium" className="text-[13px] leading-[1.6rem] font-medium">{`$${amount}`}</Typography>
-              </>
-            )}
-          </div>
-        )}
-        classOverride={{
-          container: 'flex-1 py-[10px]',
         }}
       />
 
-      {/* Borrow Button */}
-      <div className="flex flex-col gap-2.5 mt-8 ">
+      <Paragraph.List
+        label="Estimated Repay Return" 
+        value={`${pureNumberFormat(Number(estimatedRepayAmount?.amount_return) / 1e8, 4)} BTC`}
+        classOverride={{
+          container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
+        }}
+      />
+
+      {/* Button group */}
+      <div className="flex flex-col gap-6">
+        {loading ? (
+          <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[17px]">
+            <TailSpin
+              visible={true}
+              height="20"
+              width="20"
+              color="#fff"
+              ariaLabel="tail-spin-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
+        ) : !selected || Number(repay) <= 0 ? (
+        <>
+          <div className="flex flex-col gap-2.5 mt-8 ">
+            <Button.Basic 
+              label="Enter valid amount"
+              className={twMerge(
+                "w-full bg-[#36f5cf]/10",
+                // 'hover:bg-[#0aab8b]'
+              )}
+              onClick={() => {}}
+            />
+          </div>
+        </>
+      ) : (
         <Button.Basic 
           label="Repay"
           className={twMerge(
             "w-full bg-[#36f5cf]/10",
-            !amount || amount <= 0 ? 'bg-[#36f5cf]/10' : 'bg-[#0aab8b]',
-            // 'hover:bg-[#0aab8b]'
+            // inscribed && 'bg-[#0aab8b]',
           )}
-          onClick={() => {}}
+          onClick={handleRepay}
         />
+      )}
       </div>
+
+      {/* Repay Table */}
+      
     </div>
   )
 }

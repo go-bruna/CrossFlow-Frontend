@@ -177,10 +177,13 @@ export const SUCCESS_WALLET_CONNECTION = {
   content: 'Wallet is connected.',
 }
 
-export const FAILED_WALLET_CONNECTION = {
-  ...INITIAL_ERROR_NOTIFICATION,
-  title: 'Failed!',
-  content: 'Failed to connect wallet.',
+export const FAILED_WALLET_CONNECTION = (walletType: string) => {
+  const msg = {
+    ...INITIAL_ERROR_NOTIFICATION,
+    title: 'Failed!',
+    content: `Failed to connect ${walletType} wallet.`,
+  }
+  return msg
 }
 
 export const SUCCESS_TRANSACTION_SUBMIT = {

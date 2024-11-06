@@ -31,29 +31,5 @@ export interface IRedeemInfo {
 }
 
 export interface IWeb3Context {
-  loading: boolean,
-  pending: boolean,
-  completed: boolean,
-  txType: TX_TYPE,
-  balance: IBalance,
-  allowance: number,
-  tvl: number,
-  averageAPR: BigInt,
-  userStakes: IStake[],
-  redeemInfo: IRedeemInfo,
-  redeemStakes: number[],
-  periodStaked: number,
-  totalBurnt: number,
-  totalRewards: number,
-
-  updateUserInfo: Function,
-  setRedeemStakes: Function,
-  writeApproveStake: Function,
-  writeStake: Function,
-  writeRedeemByIndex: Function,
-  writeFinalRedeem: Function,
-  getPeriodStakingAmount: Function,
-  writeClaim: Function,
-  getAPRAndRewards: Function,
-  getTotalStakedInPeriod: Function,
+  approveUSDT: Function,
 }

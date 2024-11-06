@@ -14,6 +14,7 @@ import { queryClient } from "@/wagmi";
 import { numberFormat } from "@/utils";
 import { usePoolList } from "@/hooks/queries/usePoolList";
 import { IPool } from "@/types/api/pool";
+import MainPoolSkeleton from "./skeleton";
 
 const tabs = [{
   title: 'All',
@@ -23,8 +24,8 @@ const tabs = [{
 }]
 
 export const MainPoolPage = () => {
-  const { data: poolSummary } = usePoolSummary()
-  const { data: poolList } = usePoolList()
+  const { data: poolSummary, isLoading: loadingSummary } = usePoolSummary()
+  const { data: poolList, isLoading: loadingPoolList } = usePoolList()
   const [currentTag, setCurrentTag] = useState<ITag>(tabs[0]);
   const [ search, setSearch] = useState<string | undefined>(undefined)
 
@@ -32,9 +33,6 @@ export const MainPoolPage = () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_POOL_SUMMARY] }),
       queryClient.invalidateQueries({ queryKey: [GET_POOL_LIST] }),
-      // queryClient.invalidateQueries({
-      //   queryKey: [GET_ACCOUNT_BORROWED],
-      // }),
     ])
   }
   
@@ -60,6 +58,9 @@ export const MainPoolPage = () => {
   useEffect(() => {
     invalidateQuery()
   }, [])
+
+  if (loadingSummary || loadingPoolList)
+    return <MainPoolSkeleton />
 
   return (
     <div className="w-full animate-fade-in-up">

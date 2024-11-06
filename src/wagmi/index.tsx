@@ -18,7 +18,7 @@ if (!import.meta.env.VITE_WALLETCONNECT_PROJECT_ID)
 	);
 
 const config = getDefaultConfig({
-	appName: "Ordibank",
+	appName: "Crossflow",
 	projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
 	chains,
 	wallets: [

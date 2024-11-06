@@ -100,7 +100,7 @@ export const useUnisatWallet = () => {
 			setWallet(newWallet);
 		} catch (error) {
 			console.error("Error on connecting Unisat wallet", error);
-			messageApi.Alert(FAILED_WALLET_CONNECTION);
+			messageApi.Alert(FAILED_WALLET_CONNECTION(`Unisat`));
 		}
 	};
 

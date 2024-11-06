@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './style.css'
 import dayjs from "dayjs"
 import Paragraph from "@/components/paragraph"
+import Table from "@/components/table";
 import { Input } from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
@@ -16,7 +17,7 @@ import { GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/const
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
 import { dayDiffWithSecond, getFixedNumber, pureNumberFormat, validateEthereumAddress } from "@/utils"
-import { FAILED_WALLET_CONNECTION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
+import { WALLET_INSTALL, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
 import { MsgRequestLoan } from "@/cf-client/cfprotocol.loan/tx"
 import { TxClient } from "@/cf-client/client"
 import { EthereumIcon } from "@/assets/icons/coins"
@@ -122,7 +123,7 @@ export const BorrowContainer = () => {
       return messageApi.Alert(WALLET_INSTALL("Kelpr"));
     }
     if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
-      return messageApi.Alert(FAILED_WALLET_CONNECTION);
+      return messageApi.Alert(WALLET_NOT_CONNECTED);
     }
     
     // check whether there is active borrowable asset or not
@@ -343,7 +344,7 @@ export const BorrowContainer = () => {
       {/* Borrow Button */}
       <div className="flex flex-col gap-2.5 mt-8 ">
         {loading ? (
-          <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[14px]">
+          <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[17px]">
             <TailSpin
               visible={true}
               height="20"
@@ -366,6 +367,10 @@ export const BorrowContainer = () => {
           />
         )}
       </div>
+
+      {/* Loan Table */}
+      <Table.LoanTransaction />
     </div>
+    
   )
 }

@@ -15,6 +15,7 @@ export interface IButtonBasicProps {
   trailIcon?: JSX.Element
   disabled?: boolean
   isBadge?: boolean
+  badgeCount?: number
 }
 export const ButtonBasic = (props: IButtonBasicProps) => {
   const onButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
@@ -34,7 +35,7 @@ export const ButtonBasic = (props: IButtonBasicProps) => {
     >
       {props?.isBadge && (
         <Badge 
-          label={1}
+          label={props?.badgeCount ?? 0}
           classOverride={{
             container: 'absolute left-4 top-1'
           }}

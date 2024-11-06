@@ -18,7 +18,6 @@ import { calcBTCBalance } from "@/utils/btc_utils"
 import { useToast } from "@/hooks/useToast"
 import { WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
 import { BTC_FEE_RATE } from "@/constants"
-// import useLocalStorage from "@/hooks/useStorage"
 import { TailSpin } from "react-loader-spinner"
 import Table from "@/components/table"
 
@@ -31,7 +30,6 @@ export const LockContainer = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [ amount, setAmount ] = useState<number | undefined>(undefined)
   const [selected, setSelected] = useState<string>(dropdownArr[0])
-  // const [lockTxId, setLockTxId] = useLocalStorage<string>('lockTxId', '')
 
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
@@ -101,7 +99,6 @@ export const LockContainer = () => {
       if (!res) {
         return
       }
-      // setLockTxId(res.transactionHash)
   
       messageApi.Alert(
         {
@@ -136,8 +133,6 @@ export const LockContainer = () => {
 
   return (
     <div className="w-full mt-[30px]">
-
-      {/* <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography> */}
       <Input 
         label={'From address'}
         value={authState?.paymentAccount?.address || ''}
@@ -188,7 +183,7 @@ export const LockContainer = () => {
       {/* Lock Button */}
       <div className="flex mt-8 ">
         {loading ? (
-          <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[14px]">
+          <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[17px]">
             <TailSpin
               visible={true}
               height="20"
@@ -222,7 +217,7 @@ export const LockContainer = () => {
       </div>
 
       {/* Locked Table */}
-      <Table.LockAssets />
+      <Table.LockTransaction />
     </div>
   )
 }

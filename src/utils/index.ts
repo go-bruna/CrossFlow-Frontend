@@ -65,7 +65,7 @@ export const pureNumberFormat = (param?: string | number, decimal=2) => {
   if (typeof param === 'number') {
     return Number(param.toFixed(decimal)).toLocaleString()
   } else {
-    return (Number(Number(param).toFixed(decimal)).toLocaleString())  
+    return Number(Number(param).toFixed(decimal)).toLocaleString() 
   }
 }
 
@@ -121,7 +121,7 @@ export const getFixedNumber = (param: number | string | undefined, decimal = 2) 
   if (typeof param === 'number') {
     return Number(param.toFixed(decimal))
   } else {
-    return (Number(Number(param).toFixed(decimal)))  
+    return Number(Number(param).toFixed(decimal))
   }
 }
 
