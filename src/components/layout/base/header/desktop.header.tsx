@@ -51,7 +51,7 @@ export const Header = ({
 			count: 0
 		}
 
-		const isBadge = isConnected || authState.connected_wallet || _is_connected_metamask
+		const isBadge = calcWalletCount > 0 ? true: false
 		const count = calcWalletCount
 
 		return {
@@ -84,10 +84,10 @@ export const Header = ({
 				/>
 
 				<Button.Basic
-					label={account && isConnected ? 'Connected' : 'Connect Wallet'}
+					label={calcWalletCount > 0 ? 'Connected' : 'Connect Wallet'}
 					isBadge={badgeObj.isBadge ? true : false}
 					badgeCount={badgeObj.count}
-					icon={account && isConnected ? <WalletIcon /> : undefined}
+					icon={calcWalletCount > 0 ? <WalletIcon /> : undefined}
 					className="gap-2 w-[150px] h-[36px] border border-[#36f5cf]/10 rounded-full"
 					textStyle="text-white text-sm"
 					onClick={() => setModal({ id: 'CONNECT_WALLET' })}
