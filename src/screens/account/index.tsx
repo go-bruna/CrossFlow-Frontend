@@ -53,7 +53,7 @@ export const AccountPage = () => {
         '$' + Number(accountSummary.daily_earnings).toLocaleString(),
         '$' + Number(accountSummary.total_supply).toLocaleString(),
         '$' + Number(accountSummary.total_borrow).toLocaleString(),
-        '$' + Number(accountSummary.total_staked).toLocaleString(),
+        `${(Number(accountSummary.total_staked) / 1e6).toLocaleString()} CFN` ,
       ]
   }, [accountSummary])
 
