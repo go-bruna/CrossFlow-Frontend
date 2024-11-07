@@ -23,7 +23,7 @@ export const MAIN_POOLS_ITEM_DATA = [
 	'Total supply',
 	'Total Borrow',
 	'Available Liquidity',
-	'Daily ORBK Rewards',
+	'Daily CFN Rewards',
 	'Assets',
 ]
 

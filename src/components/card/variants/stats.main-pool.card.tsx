@@ -125,7 +125,7 @@ export const MainPoolStatsbar = (props: Props) => {
               className="bg-zinc-300 bg-opacity-60 self-stretch h-auto"
             />
             <BaseItem 
-              title="Daily ORBK Rewards"
+              title="Daily CFN Rewards"
               description={`$2.12M`}
               classOverride={{
                 container: 'flex-1 ml-3',
