@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/constants/endpoint"
+import { ErrorResponse } from "@/types/api/base"
 import { IStakeDelegation, IStakeSummary, IValidator } from "@/types/api/stake"
 
 import axios from "axios"
@@ -10,7 +11,7 @@ export const getStakeSummary = async (
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/chain/get_stake_summary/${address}`)
     return data?.stake_summary
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getStakeSummary error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -26,7 +27,7 @@ export const getAllValidators = async (): Promise<IValidator[] | undefined> => {
       return undefined
     return data.validators
   } catch (error: any) {
-    console.log("=== fetch validators error ====", error)
+    console.log("===getAllValidators error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -43,6 +44,6 @@ export const getAllDelegations = async (
       return undefined
     return data.delegation_responses
   } catch (error: any) {
-    console.log("=== fetch delegations error ====", error)
+    console.log("===getAllDelegations error====", (error as unknown as ErrorResponse).message)
   }
 }

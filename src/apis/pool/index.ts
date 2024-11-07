@@ -1,4 +1,5 @@
 import { BASE_MEMPOOL_URL, BASE_URL } from "@/constants/endpoint"
+import { ErrorResponse } from "@/types/api/base"
 import { 
   IChainStatsRes, 
   ILoanRate, 
@@ -27,7 +28,7 @@ export const getPoolSummary = async (): Promise<IPoolSummary | undefined> => {
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/get_pool_summary`)
     return data?.pool_summary
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getPoolSummary error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -40,7 +41,7 @@ export const getPoolList = async (): Promise<IPool[] | undefined> => {
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/get_pool_list`)
     return data?.asset_pool
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getPoolList error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -55,7 +56,7 @@ export const getTssPublicKey = async (): Promise<ITssPublicKeyRes | undefined> =
       return undefined
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getTssPublicKey error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -70,7 +71,7 @@ export const getAssetLockTransaction = async (): Promise<IAssetLockTransaction |
       return undefined
     return data as IAssetLockTransaction
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAssetLockTransaction error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -85,7 +86,7 @@ export const getAssetSupplyTransaction = async (): Promise<IAssetSuppliedTransac
       return undefined
     return data.SupplyTransaction
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAssetSupplyTransaction error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -100,7 +101,7 @@ export const getAssetBorrowTransaction = async (): Promise<IAssetBorrowedTransac
       return undefined
     return data.loan_transaction
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAssetBorrowTransaction error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -115,7 +116,7 @@ export const getLoanEntity = async (): Promise<ILoanEntity[] | undefined> => {
       return undefined
     return data.loan_entity
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getLoanEntity error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -134,7 +135,7 @@ export const getEstimatedRepayAmount = async (
       return undefined
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getEstimatedRepayAmount error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -150,7 +151,7 @@ export const getLockBalance = async (): Promise<ILockBalance | undefined> => {
       return undefined
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getLockBalance error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -165,7 +166,7 @@ export const getMaxInterestRate = async (): Promise<IMaxInterestRate | undefined
       return undefined
     return data.params
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getMaxInterestRate error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -180,7 +181,7 @@ export const getLoanRate = async (): Promise<ILoanRate | undefined> => {
       return undefined
     return data.params
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getLoanRate error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -195,7 +196,7 @@ export const getAssetProfiles = async (): Promise<IAssetProfile[] | undefined> =
       return undefined
     return data.asset_profile
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAssetProfiles error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -210,7 +211,7 @@ export const getChainStats = async (address: string): Promise<IChainStatsRes | u
       return undefined
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getChainStats error====", (error as unknown as ErrorResponse).message)
   }
 }
 

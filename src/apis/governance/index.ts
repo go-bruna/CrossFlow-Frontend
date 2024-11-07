@@ -1,13 +1,14 @@
 import { BASE_URL } from "@/constants/endpoint"
 import axios from "axios"
 import { IBaseProposal, IGovernanceProposal, IGovernanceSummary } from "@/types/api/governance"
+import { ErrorResponse } from "@/types/api/base"
 
 export const getGovernanceSummary = async (): Promise<IGovernanceSummary | undefined> => {
   try {
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/chain/get_gov_summary`)
     return data?.gov_summary
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getGovernanceSummary error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -20,7 +21,7 @@ export const getGovernanceProposals = async (): Promise<IBaseProposal[] | undefi
     const { data } = await axios.get(`${BASE_URL}/cosmos/gov/v1/proposals`)
     return (data as IGovernanceProposal)?.proposals
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getGovernanceProposals error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -35,7 +36,7 @@ export const getGovernanceProposalDetail = async (
     const { data } = await axios.get(`${BASE_URL}/cosmos/gov/v1/proposals/${proposal_id}`)
     return data?.proposal
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getGovernanceProposalDetail error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -48,10 +49,9 @@ export const getGovernanceProposalVotes = async (
 ): Promise<any | undefined> => {
   try {
     const { data } = await axios.get(`${BASE_URL}/cosmos/gov/v1/proposals/${proposal_id}/votes`)
-    console.log("===Votes ===", data)
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getGovernanceProposalVotes error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -65,9 +65,8 @@ export const getGovernanceProposalVoteDetail = async (
 ): Promise<any | undefined> => {
   try {
     const { data } = await axios.get(`${BASE_URL}/cosmos/gov/v1/proposals/${proposal_id}/votes/${vote_id}`)
-    console.log("===Vote detail ===", data)
     return data
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getGovernanceProposalVoteDetail error====", (error as unknown as ErrorResponse).message)
   }
 }

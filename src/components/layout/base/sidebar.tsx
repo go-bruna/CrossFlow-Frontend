@@ -12,26 +12,18 @@ import { twMerge } from "tailwind-merge";
 
 const SIDEBAR_DATA = [{
   title: 'Account',
-  // icon: <SidebarMainPoolsIcon />
 }, {
   title: 'Main Pools',
-  // icon: <SidebarAccountIcon />
 }, {
   title: 'Staking',
-  // icon: <SidebarStakingIcon />
 }, {
   title: 'Governance',
-  // icon: <SidebarGovernanceIcon />
 }] as ISidebar[]
 
 export const Sidebar = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const [ selectedItem, setSelectedItem ] = useState<ISidebar>(SIDEBAR_DATA[0])
-
-  const gotoMain = () => {
-		
-	};
 
   const navigatePage = {
     'main': ROUTES.MAIN,
@@ -56,17 +48,11 @@ export const Sidebar = () => {
     <div className="h-full flex flex-col justify-between min-w-[246px] bg-[#101010]">
       <div>
         {/* logo */}
-        <div
-          className="flex items-center gap-2 cursor-pointer px-5 pt-5 pb-7 w-full"
-          onClick={gotoMain}
-        >
+        <div className="flex items-center gap-2 cursor-pointer px-5 pt-5 pb-7 w-full">
           <Avatar 
             icon={<MainLogoIcon />}
             className="w-auto" 
           />
-          {/* <Typography variant="h5" className="font-bold text-white">
-            OrdiBank
-          </Typography> */}
         </div>
 
         {/* Sidebar options */}
@@ -84,7 +70,6 @@ export const Sidebar = () => {
             {item.icon}
             <Typography 
               variant="label-small" 
-              // className="text-white text-sm crossflow-semibold"
               className="text-white text-sm"
             >
               {item.title}

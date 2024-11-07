@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/constants/endpoint"
 import { IAccountAssetsBorrowed, IAccountAssetsSupplies, IAccountSummary } from "@/types/api/account"
+import { ErrorResponse } from "@/types/api/base"
 import axios from "axios"
 
 
@@ -11,7 +12,7 @@ export const getAccountSummary = async (
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/get_account_summary/${address}`)
     return data?.account_summary
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===get account Summmary error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -22,7 +23,7 @@ export const getAccountSuppliesAssets = async (
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/get_account_supplied_assets/${address}`)
     return data.asset_supplied
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAccountSuppliesAssets error====", (error as unknown as ErrorResponse).message)
   }
 }
 
@@ -33,6 +34,6 @@ export const getAccountBorrowedAssets = async (
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/get_account_borrowed_assets/${address}`)
     return data.asset_borrowed
   } catch (error: any) {
-    console.log("===error====", error)
+    console.log("===getAccountBorrowedAssets error====", (error as unknown as ErrorResponse).message)
   }
 }

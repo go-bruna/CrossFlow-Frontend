@@ -5,8 +5,12 @@ export type BaseResponse<T> = {
   data: T | null
 }
 
+export type ErrorDetail = {
+  '@type': string
+}
 export type ErrorResponse = {
-  error: boolean
+  code: number
+  details: ErrorDetail
   message: string
 }
 

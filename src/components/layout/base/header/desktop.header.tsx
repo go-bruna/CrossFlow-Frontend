@@ -1,4 +1,4 @@
-import { LogoIcon } from "@/assets/icons/logo";
+// import { LogoIcon } from "@/assets/icons/logo";
 import { Typography } from "@/components/typography";
 import Button from "@/components/button";
 import { WalletIcon } from "@/assets/icons/wallet";
@@ -18,13 +18,14 @@ export interface Props {
 export const Header = ({
 	title,
 }: Props) => {
+
 	const { setModal } = useModal()
 	const { data: account, isConnected } = useAccount()
 	const { authState } = useAuth()
+
 	// ether metamask
 	const { address, connector, isConnected: wagmiIsConnected } = wagmiUseAccount();
 	const { connectors } = useConnect();
-
 	const _is_connected_metamask =
 		(address && wagmiIsConnected && connector === connectors[0]) ?? false;
 
@@ -76,12 +77,12 @@ export const Header = ({
 			{/* buttonrs group */}
 			<div className="flex items-center gap-5 h-12">
 				
-				<Button.Basic 
+				{/* <Button.Basic 
 					label={'Claim CFN'}
 					icon={<LogoIcon />}
 					className="gap-1 w-[130px] h-[36px] p-0 rounded-full"
 					textStyle="text-sm"
-				/>
+				/> */}
 
 				<Button.Basic
 					label={calcWalletCount > 0 ? 'Connected' : 'Connect Wallet'}

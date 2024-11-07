@@ -165,7 +165,7 @@ export const ConnectWallet = (props: Props) => {
 						<Wallet
 							img={KelprWallet}
 							address={
-								garzAccount.data && garzAccount.isConnected ? 'Connected' : 'Connect Wallet'
+								garzAccount.data?.bech32Address && garzAccount.isConnected ? garzAccount.data?.bech32Address : 'Connect Wallet'
 							}
 							status={garzAccount.isConnected}
 							onConnect={connectWallet}

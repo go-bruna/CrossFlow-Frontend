@@ -58,7 +58,6 @@ export const AccountPage = () => {
   }, [accountSummary])
 
   useEffect(() => {
-    console.log("==load page===")
     invalidateQuery()
   }, [isConnected])
 
