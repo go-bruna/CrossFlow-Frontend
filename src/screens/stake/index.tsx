@@ -10,7 +10,7 @@ import { useStakeSummary } from "@/hooks/queries/useStakeSummary";
 import { useEffect, useState } from "react";
 import { queryClient } from "@/wagmi";
 import { GET_STAKE_ALL_VALIDATORS, GET_STAKE_SUMMARY } from "@/constants/query";
-import { handleAnimation, numberFormat } from "@/utils";
+import { handleAnimation, numberFormat, pureNumberFormat } from "@/utils";
 import { useAccount } from "graz";
 import StakingSkeleton from "./skeleton";
 import Table from "@/components/table";
@@ -68,7 +68,7 @@ export const StakePage = () => {
             <div className="flex items-center gap-1">
               <Avatar icon={<LogoIcon />} className="justify-start"/>
               <Typography variant="label-medium" className="text-[19px] crossflow-semibold">
-								{numberFormat(stakeSummary?.user_staked ?? 0)}
+								{pureNumberFormat(stakeSummary?.user_staked, 4)}
 							</Typography>
             </div>
           )}
