@@ -3,12 +3,12 @@ import { GET_ASSET_BORROW_TRANSACTION } from '@/constants/query.ts'
 import { getAssetBorrowTransaction } from '@/apis/pool'
 
 export const useAssetBorrowTransaction= () => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [GET_ASSET_BORROW_TRANSACTION],
     queryFn: async () => {
       return await getAssetBorrowTransaction()
     },
   })
 
-  return { data }  
+  return { data, isLoading }  
 }

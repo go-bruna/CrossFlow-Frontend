@@ -3,14 +3,9 @@ import { LogoIcon } from "@/assets/icons/logo"
 import { Avatar } from "@/components/avatar"
 import Paragraph from "@/components/paragraph"
 import { Typography } from "@/components/typography"
-// import { useSearchParams } from "react-router-dom"
-// import { useGovernanceProposalDetail } from "@/hooks/queries/useGovernanceProposalDetail"
 
 export const CommentContainer = () => {
-  // const [searchParams] = useSearchParams()
-  // const proposal_id = searchParams.get('proposal_id') || undefined
-  // const { data: proposalDetail } = useGovernanceProposalDetail(proposal_id)
-
+  
   return (
     <div className="flex flex-col gap-6 px-2.5 py-4 bg-[#101010] rounded-[10px]">
       <div className="flex items-center gap-2">

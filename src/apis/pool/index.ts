@@ -10,12 +10,14 @@ import {
 import { 
   IAssetBorrowedTransaction,
   IAssetLockTransaction, 
+  IAssetPrice, 
   IAssetProfile, 
   IAssetSuppliedTransaction, 
   IEstimatedRepayAmount, 
   ILoanEntity, 
   IPool, 
-  IPoolSummary 
+  IPoolSummary, 
+  IUSDTSuppliedTransaction
 } from "@/types/api/pool"
 import axios from "axios"
 
@@ -34,7 +36,7 @@ export const getPoolSummary = async (): Promise<IPoolSummary | undefined> => {
 
 /**
  * Fetch all pool list
- * @returns array of pool
+ * @returns IPool[]
  */
 export const getPoolList = async (): Promise<IPool[] | undefined> => {
   try {
@@ -62,7 +64,7 @@ export const getTssPublicKey = async (): Promise<ITssPublicKeyRes | undefined> =
 
 /**
  * Fetch all locked transaction to display its status in lock page
- * @returns TssPublicKey res.
+ * @returns IAssetLockTransaction
  */
 export const getAssetLockTransaction = async (): Promise<IAssetLockTransaction | undefined> => {
   try {
@@ -77,9 +79,9 @@ export const getAssetLockTransaction = async (): Promise<IAssetLockTransaction |
 
 /**
  * Fetch all supplied transaction to display its status in supply drawer page
- * @returns TssPublicKey res.
+ * @returns SupplyTransaction Array.
  */
-export const getAssetSupplyTransaction = async (): Promise<IAssetSuppliedTransaction | undefined> => {
+export const getAssetSupplyTransaction = async (): Promise<IAssetSuppliedTransaction[] | undefined> => {
   try {
     const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/lock/supply_transaction`)
     if (!data.SupplyTransaction || !Array.isArray(data.SupplyTransaction) || data.SupplyTransaction.length < 1)
@@ -91,8 +93,23 @@ export const getAssetSupplyTransaction = async (): Promise<IAssetSuppliedTransac
 }
 
 /**
+ * Fetch all supplied USDT transaction to display its status in supply drawer page
+ * @returns SupplyUsdtTransaction[].
+ */
+export const getUSDTSupplyTransaction = async (): Promise<IUSDTSuppliedTransaction[] | undefined> => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/lock/supply_usdt_transaction`)
+    if (!data.SupplyUsdtTransaction || !Array.isArray(data.SupplyUsdtTransaction) || data.SupplyUsdtTransaction.length < 1)
+      return undefined
+    return data.SupplyUsdtTransaction
+  } catch (error: any) {
+    console.log("===getAssetSupplyTransaction error====", (error as unknown as ErrorResponse).message)
+  }
+}
+
+/**
  * Fetch all borrowed transaction to display its status in borrow page
- * @returns IAssetBorrowedTransaction
+ * @returns IAssetBorrowedTransaction[]
  */
 export const getAssetBorrowTransaction = async (): Promise<IAssetBorrowedTransaction[] | undefined> => {
   try {
@@ -187,7 +204,7 @@ export const getLoanRate = async (): Promise<ILoanRate | undefined> => {
 
 /**
  * Fetch asset profile to make sure all assets
- * @returns ILoanRate.
+ * @returns IAssetProfile[].
  */
 export const getAssetProfiles = async (): Promise<IAssetProfile[] | undefined> => {
   try {
@@ -201,8 +218,25 @@ export const getAssetProfiles = async (): Promise<IAssetProfile[] | undefined> =
 }
 
 /**
+ * Fetch token price by ticker.
+ * @returns IAssetPrice.
+ */
+export const getAssetPrice = async (
+  ticker: string
+): Promise<IAssetPrice | undefined> => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/oracle/price/${ticker}`)
+    if (!data)
+      return undefined
+    return data
+  } catch (error: any) {
+    console.log("===getAssetProfiles error====", (error as unknown as ErrorResponse).message)
+  }
+}
+
+/**
  * Fetch my bitcoin amount ( in connected wallet.)
- * @returns ILoanRate.
+ * @returns IChainStatsRes.
  */
 export const getChainStats = async (address: string): Promise<IChainStatsRes | undefined> => {
   try {

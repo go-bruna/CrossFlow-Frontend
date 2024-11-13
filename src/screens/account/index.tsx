@@ -19,6 +19,7 @@ import { useAccountSupplies } from "@/hooks/queries/useAccountSupplies"
 import { useAccountBorrowed } from "@/hooks/queries/useAccountBorrowed"
 import { useAccount } from "graz"
 import AccountSkeleton from "./skeleton"
+import { IAccountAssetsSupplies } from "@/types/api/account"
 
 const tabs = [
   { title: 'All' },
@@ -35,6 +36,9 @@ export const AccountPage = () => {
   const { data: accountAssetSupplies, isLoading: loadingSupplies } = useAccountSupplies(account?.bech32Address)
   const { data: accountassetBorrowed, isLoading: loadingBorrowed } = useAccountBorrowed(account?.bech32Address)
 
+  /**
+   * Invalidate queries
+   */
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_ACCOUNT_SUMMARY] }),
@@ -45,6 +49,9 @@ export const AccountPage = () => {
     ])
   }
 
+  /**
+   * Get values for account summary.
+   */
   const _summary = useMemo(() => {
     return !accountSummary
       ? ['0%', '$0', '$0', '$0', '$0']
@@ -56,6 +63,38 @@ export const AccountPage = () => {
         `${(Number(accountSummary.total_staked) / 1e6).toLocaleString()} CFN` ,
       ]
   }, [accountSummary])
+
+  /**
+   * Filter account_asset_supplies by search key
+   */
+  const filterAccountAssetSupplies = useMemo(() => {
+    if (!accountAssetSupplies)
+      return undefined
+    if (!!search) {
+      return accountAssetSupplies.filter((e: IAccountAssetsSupplies) => 
+        e.asset_symbol.toLowerCase().includes(search.toLowerCase()) ||
+        e.apy.toLowerCase().includes(search.toLowerCase()) ||
+        e.balance.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+    return accountAssetSupplies
+  }, [accountAssetSupplies, search])
+
+  /**
+   * Filter account_asset_borrowed by search key
+   */
+  const filterAccountAssetBorrowed = useMemo(() => {
+    if (!accountassetBorrowed)
+      return undefined
+    if (!!search) {
+      return accountassetBorrowed.filter((e: IAccountAssetsSupplies) => 
+        e.asset_symbol.toLowerCase().includes(search.toLowerCase()) ||
+        e.apy.toLowerCase().includes(search.toLowerCase()) ||
+        e.balance.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+    return accountassetBorrowed
+  }, [accountassetBorrowed, search])
 
   useEffect(() => {
     invalidateQuery()
@@ -122,7 +161,7 @@ export const AccountPage = () => {
         {/* Supplied Assets Table */}
         {currentTag.title === tabs[1].title ? (
           <>
-            {accountAssetSupplies && (
+            {filterAccountAssetSupplies && filterAccountAssetSupplies.length > 0 && (
               <>
                 <BaseItem
                   title="Supplied assets"
@@ -132,13 +171,13 @@ export const AccountPage = () => {
                     textGap: "flex-row items-center",
                   }}
                 />
-                <Table.SuppliedAssets data={accountAssetSupplies}/>
+                <Table.SuppliedAssets data={filterAccountAssetSupplies}/>
               </>
             )}
           </>
         ) : currentTag.title === tabs[2].title  ? (
           <>
-            {accountassetBorrowed && (
+            {filterAccountAssetBorrowed && filterAccountAssetBorrowed.length > 0 && (
               <>
               {/* Borrowed Assets Table */}
                 <BaseItem
@@ -149,13 +188,13 @@ export const AccountPage = () => {
                     textGap: "flex-row items-center",
                   }}
                 />
-                <Table.BorrowedAssets data={accountassetBorrowed}/>
+                <Table.BorrowedAssets data={filterAccountAssetBorrowed}/>
               </>
             )}
           </>
         ) : (
           <>
-            {accountAssetSupplies && (
+            {filterAccountAssetSupplies && filterAccountAssetSupplies.length > 0 && (
               <>
                 <BaseItem
                   title="Supplied assets"
@@ -165,10 +204,10 @@ export const AccountPage = () => {
                     textGap: "flex-row items-center",
                   }}
                 />
-                <Table.SuppliedAssets data={accountAssetSupplies}/>
+                <Table.SuppliedAssets data={filterAccountAssetSupplies}/>
               </>
             )}
-            {accountassetBorrowed && (
+            {filterAccountAssetBorrowed && filterAccountAssetBorrowed.length > 0 && (
               <>
                 // Borrowed Assets Table */
                 <BaseItem
@@ -179,7 +218,7 @@ export const AccountPage = () => {
                     textGap: "flex-row items-center",
                   }}
                 />
-                <Table.BorrowedAssets data={accountassetBorrowed}/>
+                <Table.BorrowedAssets data={filterAccountAssetBorrowed}/>
               </>
             )}
           </>

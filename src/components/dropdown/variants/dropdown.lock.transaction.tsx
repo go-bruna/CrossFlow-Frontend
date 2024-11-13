@@ -48,7 +48,6 @@ export const DropdownLockedTransaction = (props: Props) => {
         }}
 >
         <Typography variant="label-extrasmall" className="semibold">
-          {/* {props.value?.amount ?? 'Choose Locked Asset'} */}
           {!props.value?.amount ? 'Choose Locked Asset' : `${Number(props.value.amount) / 1e8} BTC`}
         </Typography>
         <DropdownIcon />

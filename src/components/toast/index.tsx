@@ -64,7 +64,7 @@ export const MessageContent = ({
         </div>
         {link ? (
           <a
-            className="underline"
+            className="underline text-white"
             href={link}
             target="_blank"
             rel="noreferrer"

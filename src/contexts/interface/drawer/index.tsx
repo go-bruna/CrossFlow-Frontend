@@ -58,14 +58,6 @@ export const DrawerContent = (props: Props) => {
   // Otherwise we'll figure out which to display
   // depending on the id of the props
   switch (_selectedDrawer.id) {
-    case 'CONNECT_WALLET':
-      return (
-        <Drawer.ConnectWallet
-          {..._selectedDrawer}
-          visible={_visible}
-          onClose={onClose}
-        />
-      )
     case 'POOL':
       return (
         <Drawer.Pool

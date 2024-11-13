@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import Button from "@/components/button"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import './style.css'
+import '../style.css'
 import dayjs from "dayjs"
 import Paragraph from "@/components/paragraph"
 import Table from "@/components/table";
@@ -13,22 +13,23 @@ import { useToast } from "@/hooks/useToast"
 import { useAccount, useOfflineSigners } from "graz"
 import { useLockBalance } from "@/hooks/queries/useLockBalance"
 import { queryClient } from "@/wagmi"
-import { GET_ASSET_PRICE, GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
+import { GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
-import { dayDiffWithSecond, getFixedNumber, pureNumberFormat, validateEthereumAddress } from "@/utils"
+import { dayDiffWithSecond, fromWei, getFixedNumber, pureNumberFormat, toWei } from "@/utils"
+import { validate } from 'bitcoin-address-validation'
 import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_INSTALL, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
 import { MsgRequestLoan } from "@/cf-client/cfprotocol.loan/tx"
 import { TxClient } from "@/cf-client/client"
-import { EthereumIcon } from "@/assets/icons/coins"
+import { BitcoinIcon } from "@/assets/icons/coins"
 import { twMerge } from "tailwind-merge";
 import { TailSpin } from "react-loader-spinner";
+import { IPool } from "@/types/api/pool";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
-import { IAssetProfile, IPool } from "@/types/api/pool";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
 
 const returnValue = {
-  assetId: 1,
+  assetId: 5,
   balance: 0,
   interestRate: 0
 }
@@ -37,8 +38,7 @@ export interface Props {
   data: IPool
 }
 
-export const BorrowContainer = (props: Props) => {
-
+export const BorrowUSDTContainer = (props: Props) => {
   const { messageApi } = useToast()
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
@@ -64,15 +64,8 @@ export const BorrowContainer = (props: Props) => {
       !account?.bech32Address || 
       !lockData || 
       !lockData.lock_balance || 
-      lockData.lock_balance.length < 1 ||
-      !assetProfiles ||
-      Array.isArray(assetProfiles) && assetProfiles.length < 1
+      lockData.lock_balance.length < 1
     )
-      return returnValue
-
-    // find if there's BTC in asset profiles
-    const _filterBTC = assetProfiles?.find((e: IAssetProfile) => e.symbol === 'BTC')
-    if (!_filterBTC)
       return returnValue
 
     // find if there's my balances in lock_balance
@@ -85,7 +78,7 @@ export const BorrowContainer = (props: Props) => {
       return returnValue
 
     // find if there's btc in my lock_balance
-    const balanceObj = _filteredData.balances.find(e => e.asset_id === _filterBTC.id)
+    const balanceObj = _filteredData.balances.find(e => e.asset_id === props.data.asset_id)
     if (!balanceObj)
       return returnValue
 
@@ -94,23 +87,23 @@ export const BorrowContainer = (props: Props) => {
       balance: Number(balanceObj.balance),
       interestRate: Number(balanceObj.interest_rate)
     }
-  }, [lockData, account?.bech32Address, assetProfiles])
+  }, [lockData, account?.bech32Address])
 
   /**
-   * calculate loanRate
+   * Calculate loanRate
    */
   const calculateEstimatedLoanAmount = useMemo(() => {
     if (!collateralAmount || !loanRate)
       return undefined
-    return collateralAmount * (loanRate ?? 0) * Number(btcPrice?.price) / 100
+    return collateralAmount * ((loanRate ?? 0) / 100) / Number(btcPrice?.price)
   }, [collateralAmount, loanRate])
 
   /**
    * Calculate max collateral amount based on lock-balance
    */
   const calcuateMaxCollateralAmount = useMemo(() => {
-    return getFixedNumber(getLockedBalanceObj.balance / 1e8)
-  }, [lockData, assetProfiles])
+    return fromWei(BigInt(getLockedBalanceObj.balance))
+  }, [lockData])
 
   /**
    * Calcuate different between start to end date
@@ -155,7 +148,7 @@ export const BorrowContainer = (props: Props) => {
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Set interest rate'})
 
     // check whether loan_Address is undefined or ethereum address
-    if (!loanAddress || !validateEthereumAddress(loanAddress))
+    if (!loanAddress || !validate(loanAddress))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Loan address should be valid ethereum address.'})
     
     // check whether loan duration is selected correctly or not
@@ -165,8 +158,8 @@ export const BorrowContainer = (props: Props) => {
     if (calculateDateDiff > Number(loanRateData?.max_duration))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: `Duration should be less than max_duration`})  
     
-    if (!loanRate || loanRate > Number(loanRateData?.max_loan_rate))
-      return messageApi.Alert({ ...WARNING_MESSAGE, content: `Loan rate should be less thatn ${loanRateData?.max_loan_rate}`})  
+    if (!loanRate || loanRate > Number(loanRateData?.max_loan_rate) * 100)
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: `Loan rate should be less thatn ${Number(loanRateData?.max_loan_rate) * 100}`})  
 
     try {
       setLoading(true)
@@ -174,25 +167,26 @@ export const BorrowContainer = (props: Props) => {
       const _loanData: MsgRequestLoan = {
         creator: activeLock.creator,
         assetId: Number(getLockedBalanceObj.assetId),
-        amount: (collateralAmount * 1e8).toString(),
-        interestRate: interestRate.toString(),
-        loanRate: loanRate.toString(),
+        amount: toWei(BigInt(collateralAmount)),
+        interestRate: (interestRate / 100).toString(),
+        loanRate: (loanRate / 100).toString(),
         duration: calculateDateDiff,
         loanAddress,
         reserved: "",
         originChain: props.data.chain_symbol,
-        targetChain: 'USDT',
-        targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'USDT')?.id ?? 5),
+        targetChain: 'BTC',
+        targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'BTC')?.id ?? 1),
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       let msg = await client.msgRequestLoan(_loanData);
       await client.signAndBroadcast([msg]);
-
-      setLoading(false)
       await invalidateQuery()
 
+      setLoading(false)
+
       messageApi.Alert(SUCCESS_OPERATION('Successfully borrowed.'))
+
     } catch (error) {
       setLoading(false)
       messageApi.Alert(ERROR_MESSAGE(error as string))
@@ -200,8 +194,8 @@ export const BorrowContainer = (props: Props) => {
   }
 
   /**
-   * Invalidate queries 
-   */
+  * Invalidate queries
+  */
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_POOL_LOCK_BALANCE] }),
@@ -213,27 +207,13 @@ export const BorrowContainer = (props: Props) => {
   useEffect(() => {
     invalidateQuery()
   }, [])
-
-  /**
-   * Update BTC price per 1 min
-   */
-  useEffect(() => {
-    const timer = window.setInterval(async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [GET_ASSET_PRICE],
-      })
-    }, 60 * 1000)
-    return () => {
-      window.clearInterval(timer)
-    }
-  }, [])
   
   return (
     <div className="w-full mt-[30px]">
 
       {/* Collateral Amount */}
       <Input 
-        label="Collateral Amount ( BTC )"
+        label="Collateral Amount ( USDT )"
         value={collateralAmount ?? ''}
         placeholder="0.00"
         icon={<AmountIcon />}
@@ -300,8 +280,8 @@ export const BorrowContainer = (props: Props) => {
       <Input 
         label="Loan address"
         value={loanAddress ?? '' }
-        placeholder="0xC3D31F37D2B045361c125b686B1BA225e14c23DA"
-        icon={<EthereumIcon />}
+        placeholder="tb1qg0xyhu4dwcje2l5vdxrg9pkj74jh8l76uqhsfa"
+        icon={<BitcoinIcon />}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setLoanAddress(e.target.value)
         }
@@ -334,14 +314,14 @@ export const BorrowContainer = (props: Props) => {
 
       <Paragraph.List 
         label="Borrowable limit" 
-        value={`${pureNumberFormat(calcuateMaxCollateralAmount * Number(btcPrice?.price) * Number(loanRateData?.max_loan_rate))} USDT`}
+        value={`${pureNumberFormat(calcuateMaxCollateralAmount * Number(loanRateData?.max_loan_rate) / Number(btcPrice?.price), 8)} BTC`}
         classOverride={{
           container: 'flex-1 pt-5 pb-5 border-b border-[#36f5cf]/10',
         }}
       />
       <Paragraph.List 
         label="Borrowable amount" 
-        value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * (collateralAmount ?? 0) * Number(btcPrice?.price))} USDT`}
+        value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * (collateralAmount ?? 0) / Number(btcPrice?.price), 8)} BTC`}
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}
@@ -356,7 +336,7 @@ export const BorrowContainer = (props: Props) => {
       />
       <Paragraph.List 
         label="Estimated loan amount" 
-        value={`${pureNumberFormat(calculateEstimatedLoanAmount)} USDT`
+        value={`${pureNumberFormat(calculateEstimatedLoanAmount, 8)} BTC`
         }
         classOverride={{
           container: 'flex-1 py-[10px]',

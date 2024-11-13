@@ -16,7 +16,7 @@ import { GET_ASSET_LOCK_TRANSACTION, GET_POOL_TSS_PUBLIC_KEY } from "@/constants
 import { useGetChainStats } from "@/hooks/queries/useGetChainStats"
 import { calcBTCBalance } from "@/utils/btc_utils"
 import { useToast } from "@/hooks/useToast"
-import { WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
+import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
 import { BTC_FEE_RATE } from "@/constants"
 import { TailSpin } from "react-loader-spinner"
 import Table from "@/components/table"
@@ -38,6 +38,9 @@ export const LockContainer = () => {
   const chainStats = useGetChainStats(authState.paymentAccount?.address ?? '')
   const btcAddress = authState?.paymentAccount?.address
   
+  /**
+   * Handle lock
+   */ 
   const handleLock = async () => {
     if (!authState.paymentAccount?.publicKey) {
       return messageApi.Alert(WALLET_NOT_CONNECTED)
@@ -99,28 +102,22 @@ export const LockContainer = () => {
       if (!res) {
         return
       }
-  
-      messageApi.Alert(
-        {
-          type: 'Success',
-          title: 'Successfully locked collateral.',
-          link: `https://explorer.ordibank.org/ordibank/tx/${res.transactionHash}`,
-        },
-        6,
-      )
-  
+      
+      messageApi.Alert(SUCCESS_OPERATION('Successfully locked collateral.'))
+
       // invalid asset_lock_transaction whenever lock succeeds.
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_LOCK_TRANSACTION],
       })
-
     } catch (error) {
       setLoading(false)
-      console.log("lock error ---->", error)
+      messageApi.Alert(ERROR_MESSAGE(error as string))
     }
   }
 
-  // invalidate queries
+  /**
+   * Invalidate queries
+   */ 
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_POOL_TSS_PUBLIC_KEY] }),

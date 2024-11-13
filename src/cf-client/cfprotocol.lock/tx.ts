@@ -146,6 +146,53 @@ export interface MsgVoteSupplyHashObserveResponse {
   msg: string;
 }
 
+export interface MsgRequestSupplyUsdt {
+  creator: string;
+  assetId: number;
+  chainSymbol: string;
+  amount: string;
+  interestRate: string;
+  senderAddress: string;
+}
+
+export interface MsgRequestSupplyUsdtResponse {
+  code: number;
+  msg: string;
+}
+
+export interface MsgSupplyUsdtTssVote {
+  creator: string;
+  txId: number;
+  tssPullHash: string;
+  tssSucceed: boolean;
+  failReason: string;
+  reserved: string;
+}
+
+export interface MsgSupplyUsdtTssVoteResponse {
+  code: number;
+  msg: string;
+}
+
+export interface MsgVoteSupplyUsdtHashObserve {
+  creator: string;
+  txHash: string;
+  chainSymbol: string;
+  from: string;
+  to: string;
+  amount: string;
+  payType: string;
+  cfTxId: number;
+  succeed: boolean;
+  failReason: string;
+  reserved: string;
+}
+
+export interface MsgVoteSupplyUsdtHashObserveResponse {
+  code: number;
+  msg: string;
+}
+
 function createBaseMsgUpdateParams(): MsgUpdateParams {
   return { authority: "", params: undefined };
 }
@@ -1590,6 +1637,721 @@ export const MsgVoteSupplyHashObserveResponse: MessageFns<MsgVoteSupplyHashObser
   },
 };
 
+function createBaseMsgRequestSupplyUsdt(): MsgRequestSupplyUsdt {
+  return { creator: "", assetId: 0, chainSymbol: "", amount: "", interestRate: "", senderAddress: "" };
+}
+
+export const MsgRequestSupplyUsdt: MessageFns<MsgRequestSupplyUsdt> = {
+  encode(message: MsgRequestSupplyUsdt, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.assetId !== 0) {
+      writer.uint32(16).uint64(message.assetId);
+    }
+    if (message.chainSymbol !== "") {
+      writer.uint32(26).string(message.chainSymbol);
+    }
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
+    }
+    if (message.interestRate !== "") {
+      writer.uint32(42).string(message.interestRate);
+    }
+    if (message.senderAddress !== "") {
+      writer.uint32(50).string(message.senderAddress);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestSupplyUsdt {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestSupplyUsdt();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.assetId = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.chainSymbol = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.amount = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.interestRate = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.senderAddress = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestSupplyUsdt {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      assetId: isSet(object.assetId) ? globalThis.Number(object.assetId) : 0,
+      chainSymbol: isSet(object.chainSymbol) ? globalThis.String(object.chainSymbol) : "",
+      amount: isSet(object.amount) ? globalThis.String(object.amount) : "",
+      interestRate: isSet(object.interestRate) ? globalThis.String(object.interestRate) : "",
+      senderAddress: isSet(object.senderAddress) ? globalThis.String(object.senderAddress) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestSupplyUsdt): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.assetId !== 0) {
+      obj.assetId = Math.round(message.assetId);
+    }
+    if (message.chainSymbol !== "") {
+      obj.chainSymbol = message.chainSymbol;
+    }
+    if (message.amount !== "") {
+      obj.amount = message.amount;
+    }
+    if (message.interestRate !== "") {
+      obj.interestRate = message.interestRate;
+    }
+    if (message.senderAddress !== "") {
+      obj.senderAddress = message.senderAddress;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestSupplyUsdt>, I>>(base?: I): MsgRequestSupplyUsdt {
+    return MsgRequestSupplyUsdt.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestSupplyUsdt>, I>>(object: I): MsgRequestSupplyUsdt {
+    const message = createBaseMsgRequestSupplyUsdt();
+    message.creator = object.creator ?? "";
+    message.assetId = object.assetId ?? 0;
+    message.chainSymbol = object.chainSymbol ?? "";
+    message.amount = object.amount ?? "";
+    message.interestRate = object.interestRate ?? "";
+    message.senderAddress = object.senderAddress ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgRequestSupplyUsdtResponse(): MsgRequestSupplyUsdtResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgRequestSupplyUsdtResponse: MessageFns<MsgRequestSupplyUsdtResponse> = {
+  encode(message: MsgRequestSupplyUsdtResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestSupplyUsdtResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestSupplyUsdtResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestSupplyUsdtResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestSupplyUsdtResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestSupplyUsdtResponse>, I>>(base?: I): MsgRequestSupplyUsdtResponse {
+    return MsgRequestSupplyUsdtResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestSupplyUsdtResponse>, I>>(object: I): MsgRequestSupplyUsdtResponse {
+    const message = createBaseMsgRequestSupplyUsdtResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgSupplyUsdtTssVote(): MsgSupplyUsdtTssVote {
+  return { creator: "", txId: 0, tssPullHash: "", tssSucceed: false, failReason: "", reserved: "" };
+}
+
+export const MsgSupplyUsdtTssVote: MessageFns<MsgSupplyUsdtTssVote> = {
+  encode(message: MsgSupplyUsdtTssVote, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txId !== 0) {
+      writer.uint32(16).uint64(message.txId);
+    }
+    if (message.tssPullHash !== "") {
+      writer.uint32(26).string(message.tssPullHash);
+    }
+    if (message.tssSucceed !== false) {
+      writer.uint32(32).bool(message.tssSucceed);
+    }
+    if (message.failReason !== "") {
+      writer.uint32(42).string(message.failReason);
+    }
+    if (message.reserved !== "") {
+      writer.uint32(50).string(message.reserved);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSupplyUsdtTssVote {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSupplyUsdtTssVote();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.txId = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.tssPullHash = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.tssSucceed = reader.bool();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.failReason = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.reserved = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSupplyUsdtTssVote {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      txId: isSet(object.txId) ? globalThis.Number(object.txId) : 0,
+      tssPullHash: isSet(object.tssPullHash) ? globalThis.String(object.tssPullHash) : "",
+      tssSucceed: isSet(object.tssSucceed) ? globalThis.Boolean(object.tssSucceed) : false,
+      failReason: isSet(object.failReason) ? globalThis.String(object.failReason) : "",
+      reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
+    };
+  },
+
+  toJSON(message: MsgSupplyUsdtTssVote): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.txId !== 0) {
+      obj.txId = Math.round(message.txId);
+    }
+    if (message.tssPullHash !== "") {
+      obj.tssPullHash = message.tssPullHash;
+    }
+    if (message.tssSucceed !== false) {
+      obj.tssSucceed = message.tssSucceed;
+    }
+    if (message.failReason !== "") {
+      obj.failReason = message.failReason;
+    }
+    if (message.reserved !== "") {
+      obj.reserved = message.reserved;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgSupplyUsdtTssVote>, I>>(base?: I): MsgSupplyUsdtTssVote {
+    return MsgSupplyUsdtTssVote.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgSupplyUsdtTssVote>, I>>(object: I): MsgSupplyUsdtTssVote {
+    const message = createBaseMsgSupplyUsdtTssVote();
+    message.creator = object.creator ?? "";
+    message.txId = object.txId ?? 0;
+    message.tssPullHash = object.tssPullHash ?? "";
+    message.tssSucceed = object.tssSucceed ?? false;
+    message.failReason = object.failReason ?? "";
+    message.reserved = object.reserved ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgSupplyUsdtTssVoteResponse(): MsgSupplyUsdtTssVoteResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgSupplyUsdtTssVoteResponse: MessageFns<MsgSupplyUsdtTssVoteResponse> = {
+  encode(message: MsgSupplyUsdtTssVoteResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSupplyUsdtTssVoteResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgSupplyUsdtTssVoteResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSupplyUsdtTssVoteResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgSupplyUsdtTssVoteResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgSupplyUsdtTssVoteResponse>, I>>(base?: I): MsgSupplyUsdtTssVoteResponse {
+    return MsgSupplyUsdtTssVoteResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgSupplyUsdtTssVoteResponse>, I>>(object: I): MsgSupplyUsdtTssVoteResponse {
+    const message = createBaseMsgSupplyUsdtTssVoteResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgVoteSupplyUsdtHashObserve(): MsgVoteSupplyUsdtHashObserve {
+  return {
+    creator: "",
+    txHash: "",
+    chainSymbol: "",
+    from: "",
+    to: "",
+    amount: "",
+    payType: "",
+    cfTxId: 0,
+    succeed: false,
+    failReason: "",
+    reserved: "",
+  };
+}
+
+export const MsgVoteSupplyUsdtHashObserve: MessageFns<MsgVoteSupplyUsdtHashObserve> = {
+  encode(message: MsgVoteSupplyUsdtHashObserve, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(18).string(message.txHash);
+    }
+    if (message.chainSymbol !== "") {
+      writer.uint32(26).string(message.chainSymbol);
+    }
+    if (message.from !== "") {
+      writer.uint32(34).string(message.from);
+    }
+    if (message.to !== "") {
+      writer.uint32(42).string(message.to);
+    }
+    if (message.amount !== "") {
+      writer.uint32(50).string(message.amount);
+    }
+    if (message.payType !== "") {
+      writer.uint32(58).string(message.payType);
+    }
+    if (message.cfTxId !== 0) {
+      writer.uint32(64).uint64(message.cfTxId);
+    }
+    if (message.succeed !== false) {
+      writer.uint32(72).bool(message.succeed);
+    }
+    if (message.failReason !== "") {
+      writer.uint32(82).string(message.failReason);
+    }
+    if (message.reserved !== "") {
+      writer.uint32(90).string(message.reserved);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgVoteSupplyUsdtHashObserve {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgVoteSupplyUsdtHashObserve();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.chainSymbol = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.from = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.to = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.amount = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.payType = reader.string();
+          continue;
+        case 8:
+          if (tag !== 64) {
+            break;
+          }
+
+          message.cfTxId = longToNumber(reader.uint64());
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.succeed = reader.bool();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.failReason = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.reserved = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgVoteSupplyUsdtHashObserve {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+      chainSymbol: isSet(object.chainSymbol) ? globalThis.String(object.chainSymbol) : "",
+      from: isSet(object.from) ? globalThis.String(object.from) : "",
+      to: isSet(object.to) ? globalThis.String(object.to) : "",
+      amount: isSet(object.amount) ? globalThis.String(object.amount) : "",
+      payType: isSet(object.payType) ? globalThis.String(object.payType) : "",
+      cfTxId: isSet(object.cfTxId) ? globalThis.Number(object.cfTxId) : 0,
+      succeed: isSet(object.succeed) ? globalThis.Boolean(object.succeed) : false,
+      failReason: isSet(object.failReason) ? globalThis.String(object.failReason) : "",
+      reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
+    };
+  },
+
+  toJSON(message: MsgVoteSupplyUsdtHashObserve): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
+    if (message.chainSymbol !== "") {
+      obj.chainSymbol = message.chainSymbol;
+    }
+    if (message.from !== "") {
+      obj.from = message.from;
+    }
+    if (message.to !== "") {
+      obj.to = message.to;
+    }
+    if (message.amount !== "") {
+      obj.amount = message.amount;
+    }
+    if (message.payType !== "") {
+      obj.payType = message.payType;
+    }
+    if (message.cfTxId !== 0) {
+      obj.cfTxId = Math.round(message.cfTxId);
+    }
+    if (message.succeed !== false) {
+      obj.succeed = message.succeed;
+    }
+    if (message.failReason !== "") {
+      obj.failReason = message.failReason;
+    }
+    if (message.reserved !== "") {
+      obj.reserved = message.reserved;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgVoteSupplyUsdtHashObserve>, I>>(base?: I): MsgVoteSupplyUsdtHashObserve {
+    return MsgVoteSupplyUsdtHashObserve.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgVoteSupplyUsdtHashObserve>, I>>(object: I): MsgVoteSupplyUsdtHashObserve {
+    const message = createBaseMsgVoteSupplyUsdtHashObserve();
+    message.creator = object.creator ?? "";
+    message.txHash = object.txHash ?? "";
+    message.chainSymbol = object.chainSymbol ?? "";
+    message.from = object.from ?? "";
+    message.to = object.to ?? "";
+    message.amount = object.amount ?? "";
+    message.payType = object.payType ?? "";
+    message.cfTxId = object.cfTxId ?? 0;
+    message.succeed = object.succeed ?? false;
+    message.failReason = object.failReason ?? "";
+    message.reserved = object.reserved ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgVoteSupplyUsdtHashObserveResponse(): MsgVoteSupplyUsdtHashObserveResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgVoteSupplyUsdtHashObserveResponse: MessageFns<MsgVoteSupplyUsdtHashObserveResponse> = {
+  encode(message: MsgVoteSupplyUsdtHashObserveResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgVoteSupplyUsdtHashObserveResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgVoteSupplyUsdtHashObserveResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgVoteSupplyUsdtHashObserveResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgVoteSupplyUsdtHashObserveResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgVoteSupplyUsdtHashObserveResponse>, I>>(
+    base?: I,
+  ): MsgVoteSupplyUsdtHashObserveResponse {
+    return MsgVoteSupplyUsdtHashObserveResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgVoteSupplyUsdtHashObserveResponse>, I>>(
+    object: I,
+  ): MsgVoteSupplyUsdtHashObserveResponse {
+    const message = createBaseMsgVoteSupplyUsdtHashObserveResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /**
@@ -1609,6 +2371,12 @@ export interface Msg {
   VoteSupplyTransaction(request: MsgVoteSupplyTransaction): Promise<MsgVoteSupplyTransactionResponse>;
   /** VoteSupplyTransaction defines a operation for vote on the supply transaction hash observation vote. */
   VoteSupplyHashObserve(request: MsgVoteSupplyHashObserve): Promise<MsgVoteSupplyHashObserveResponse>;
+  /** RequestSupplyUsdt defines a operation for requesting on the usd supply transaction */
+  RequestSupplyUsdt(request: MsgRequestSupplyUsdt): Promise<MsgRequestSupplyUsdtResponse>;
+  /** TssVoteSupplyUsdtTranasaction defines a operation for vote on the usdt supply transaction from tss */
+  TssVoteSupplyUsdtTransaction(request: MsgSupplyUsdtTssVote): Promise<MsgSupplyUsdtTssVoteResponse>;
+  /** VoteSupplyUsdtHashObserve defines a operation for vote on the usdt supply transaction from hash observation */
+  VoteSupplyUsdtHashObserve(request: MsgVoteSupplyUsdtHashObserve): Promise<MsgVoteSupplyUsdtHashObserveResponse>;
 }
 
 export const MsgServiceName = "cfprotocol.lock.Msg";
@@ -1625,6 +2393,9 @@ export class MsgClientImpl implements Msg {
     this.RequestSupply = this.RequestSupply.bind(this);
     this.VoteSupplyTransaction = this.VoteSupplyTransaction.bind(this);
     this.VoteSupplyHashObserve = this.VoteSupplyHashObserve.bind(this);
+    this.RequestSupplyUsdt = this.RequestSupplyUsdt.bind(this);
+    this.TssVoteSupplyUsdtTransaction = this.TssVoteSupplyUsdtTransaction.bind(this);
+    this.VoteSupplyUsdtHashObserve = this.VoteSupplyUsdtHashObserve.bind(this);
   }
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
@@ -1666,6 +2437,24 @@ export class MsgClientImpl implements Msg {
     const data = MsgVoteSupplyHashObserve.encode(request).finish();
     const promise = this.rpc.request(this.service, "VoteSupplyHashObserve", data);
     return promise.then((data) => MsgVoteSupplyHashObserveResponse.decode(new BinaryReader(data)));
+  }
+
+  RequestSupplyUsdt(request: MsgRequestSupplyUsdt): Promise<MsgRequestSupplyUsdtResponse> {
+    const data = MsgRequestSupplyUsdt.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RequestSupplyUsdt", data);
+    return promise.then((data) => MsgRequestSupplyUsdtResponse.decode(new BinaryReader(data)));
+  }
+
+  TssVoteSupplyUsdtTransaction(request: MsgSupplyUsdtTssVote): Promise<MsgSupplyUsdtTssVoteResponse> {
+    const data = MsgSupplyUsdtTssVote.encode(request).finish();
+    const promise = this.rpc.request(this.service, "TssVoteSupplyUsdtTransaction", data);
+    return promise.then((data) => MsgSupplyUsdtTssVoteResponse.decode(new BinaryReader(data)));
+  }
+
+  VoteSupplyUsdtHashObserve(request: MsgVoteSupplyUsdtHashObserve): Promise<MsgVoteSupplyUsdtHashObserveResponse> {
+    const data = MsgVoteSupplyUsdtHashObserve.encode(request).finish();
+    const promise = this.rpc.request(this.service, "VoteSupplyUsdtHashObserve", data);
+    return promise.then((data) => MsgVoteSupplyUsdtHashObserveResponse.decode(new BinaryReader(data)));
   }
 }
 
@@ -1713,7 +2502,7 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 function longToNumber(int64: { toString(): string }): number {
   const num = globalThis.Number(int64.toString());
   if (num > globalThis.Number.MAX_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is greater than Number.MAX_SAFE_INTEGER");
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   if (num < globalThis.Number.MIN_SAFE_INTEGER) {
     throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");

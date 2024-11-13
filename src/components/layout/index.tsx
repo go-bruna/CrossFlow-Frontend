@@ -1,7 +1,4 @@
-// import { useWindowSize } from '@/hooks/useWindowSize'
-// import Header from './base'
 import { ToastContainer } from 'react-toastify'
-// import { Footer } from './base/footer'
 import { useRef } from 'react'
 import { Sidebar } from './base/sidebar'
 
@@ -9,7 +6,6 @@ interface ILayoutProps {
   children: JSX.Element
 }
 export const PageLayout: React.FC<ILayoutProps> = ({ children }) => {
-  // const { isDesktop } = useWindowSize()
   const topRef = useRef(null);
   
   return (
@@ -24,9 +20,6 @@ export const PageLayout: React.FC<ILayoutProps> = ({ children }) => {
           <main className="min-h-[calc(100dvh-7.6rem)] min-w-[960px] pb-[2.5rem] lg:pb-[5rem] flex justify-center">
             <div className={'w-full min-h-full'}>{children}</div>
           </main>
-
-          {/* footer */}
-          {/* <Footer reference={topRef}/> */}
         </div>
 
         <ToastContainer

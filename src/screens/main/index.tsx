@@ -18,17 +18,22 @@ import MainPoolSkeleton from "./skeleton";
 
 const tabs = [{
   title: 'All',
+  value: 'All'
 }, {
   title: 'Ethereum',
-  icon: <EthereumIcon />
+  icon: <EthereumIcon />,
+  value: 'ETH'
 }]
 
 export const MainPoolPage = () => {
   const { data: poolSummary, isLoading: loadingSummary } = usePoolSummary()
   const { data: poolList, isLoading: loadingPoolList } = usePoolList()
-  const [currentTag, setCurrentTag] = useState<ITag>(tabs[0]);
-  const [ search, setSearch] = useState<string | undefined>(undefined)
+  const [ currentTag, setCurrentTag ] = useState<ITag>(tabs[0]);
+  const [ search, setSearch ] = useState<string | undefined>(undefined)
 
+  /**
+   * Invalidate queries
+   */
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_POOL_SUMMARY] }),
@@ -36,6 +41,9 @@ export const MainPoolPage = () => {
     ])
   }
   
+  /**
+   * Get values for main pool summary.
+   */
   const _summary = useMemo(() => {
     return !poolSummary
       ? ['0%', '$0', '$0', '$0', '$0']
@@ -48,12 +56,36 @@ export const MainPoolPage = () => {
       ]
   }, [poolSummary])
 
+  /**
+   * Filter pools by tag and search key
+   */
   const filterPools = useMemo(() => {
-    if (!poolList) return undefined
-    if (currentTag.title === 'All') return poolList
-    return poolList
-      .filter((pool: IPool) => pool.chain_symbol.toLowerCase() === currentTag.title.toLowerCase())
-  }, [poolList, currentTag])
+    if (!poolList) 
+      return undefined
+
+    // get pool list by selected tag
+    const _pools_by_selected_tag = currentTag.title === 'All' 
+      ? poolList
+      : poolList
+      .filter((pool: IPool) => pool.chain_symbol.toLowerCase() === (currentTag.value as string).toLowerCase())
+
+    if (_pools_by_selected_tag.length < 1)
+      return undefined
+
+    // filter pool list by search key
+    if (!!search) {
+      return _pools_by_selected_tag.filter((e: IPool) =>
+        e.asset_symbol.toLowerCase().includes(search.toLowerCase()) ||
+        e.total_supply.toLowerCase().includes(search.toLowerCase()) ||
+        e.apy.toLowerCase().includes(search.toLowerCase()) ||
+        e.apy2.toLowerCase().includes(search.toLowerCase()) ||
+        e.total_borrow.toLowerCase().includes(search.toLowerCase()) ||
+        e.liquidity.toLowerCase().includes(search.toLowerCase()) ||
+        e.price.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+    return _pools_by_selected_tag
+  }, [poolList, currentTag, search])
 
   useEffect(() => {
     invalidateQuery()

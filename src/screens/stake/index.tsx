@@ -31,13 +31,18 @@ export const StakePage = () => {
 	const { data: account } = useAccount()
 	const { data: stakeSummary, isLoading } = useStakeSummary(account?.bech32Address)
 	
+	/**
+   * Handle container for animation
+   */
 	const handleContainer = async(tag: ITag) => {
     await handleAnimation(() => setOpacityAnimation(true))
     setOpacityAnimation(false)
     setCurrentTab(tag)
   } 
 
-	// invalidate queries
+	/**
+   * Invalidate queries
+   */
 	const invalidateQuery = async () => {
 		Promise.all([
 			queryClient.invalidateQueries({ queryKey: [GET_STAKE_SUMMARY] }),

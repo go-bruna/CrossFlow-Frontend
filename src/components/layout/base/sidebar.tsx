@@ -6,18 +6,22 @@ import { Avatar } from "@/components/avatar";
 import { Typography } from "@/components/typography";
 import { ROUTES } from "@/constants/routes";
 import { ISidebar } from "@/types/interfaces";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 const SIDEBAR_DATA = [{
   title: 'Account',
+  path: ROUTES.ACCOUNT,
 }, {
   title: 'Main Pools',
+  path: ROUTES.MAIN,
 }, {
   title: 'Staking',
+  path: ROUTES.STAKE,
 }, {
   title: 'Governance',
+  path: ROUTES.GOVERNANCE,
 }] as ISidebar[]
 
 export const Sidebar = () => {
@@ -25,17 +29,9 @@ export const Sidebar = () => {
   const { pathname } = useLocation()
   const [ selectedItem, setSelectedItem ] = useState<ISidebar>(SIDEBAR_DATA[0])
 
-  const navigatePage = {
-    'main': ROUTES.MAIN,
-    'account': ROUTES.ACCOUNT,
-    'staking': ROUTES.STAKE,
-    'governance': ROUTES.GOVERNANCE
-  }[(selectedItem.title as string).split(' ')[0].toLowerCase() || 'main'] as string
-  
-  useMemo(() => {
-    navigate(navigatePage)
-  }, [selectedItem])
-
+  /**
+   * Navigate to the current page by path when the page is refreshed.
+   */
   useEffect(() => {
     const filter_url = SIDEBAR_DATA.filter((e: ISidebar) => pathname.includes(e.title.toLowerCase().split(' ')[0]))
     if (filter_url && filter_url.length > 0) {
@@ -65,6 +61,7 @@ export const Sidebar = () => {
             key={index}
             onClick={() => {
               setSelectedItem(item)
+              navigate(item.path)
             }}
           >
             {item.icon}

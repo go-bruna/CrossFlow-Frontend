@@ -2,7 +2,7 @@ import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { MsgVote } from "./cosmos.gov/tx";
 import { cosmoshub } from "@/config/graz";
-import { MsgRequestLock, MsgRequestSupply } from "./cfprotocol.lock/tx";
+import { MsgRequestLock, MsgRequestSupply, MsgRequestSupplyUsdt } from "./cfprotocol.lock/tx";
 import { MsgRequestLoan, MsgRequestRepay } from "./cfprotocol.loan/tx";
 import { MsgWithdrawDelegatorReward } from "./cosmos.circuit.v1/tx";
 import { MsgDelegate } from "./cosmos.circuit.v1.staking/tx";
@@ -21,6 +21,7 @@ const types = [
   ["/cosmos.gov.v1.MsgVote", MsgVote],
   ["/cfprotocol.lock.MsgRequestLock", MsgRequestLock],
   ["/cfprotocol.lock.MsgRequestSupply", MsgRequestSupply],
+  ["/cfprotocol.lock.MsgRequestSupplyUsdt", MsgRequestSupplyUsdt],
   ["/cfprotocol.loan.MsgRequestLoan", MsgRequestLoan],
   ["/cfprotocol.loan.MsgRequestRepay", MsgRequestRepay],
   ["/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward", MsgWithdrawDelegatorReward],
@@ -55,6 +56,10 @@ export const TxClient = async (offlineSinger: OfflineSigner) => {
     msgRequestSupply: (data: MsgRequestSupply): EncodeObject => ({
       typeUrl: "/cfprotocol.lock.MsgRequestSupply",
       value: MsgRequestSupply.fromPartial(data),
+    }),
+    msgRequestSupplyUSDT: (data: MsgRequestSupplyUsdt): EncodeObject => ({
+      typeUrl: "/cfprotocol.lock.MsgRequestSupplyUsdt",
+      value: MsgRequestSupplyUsdt.fromPartial(data),
     }),
     msgRequestLoan: (data: MsgRequestLoan): EncodeObject => ({
       typeUrl: "/cfprotocol.loan.MsgRequestLoan",

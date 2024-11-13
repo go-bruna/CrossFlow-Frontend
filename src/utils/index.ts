@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 import dayjs from "dayjs"
 import { WalletType } from "@/types/interfaces"
 import { BigNumberish, ethers } from "ethers"
+import { IAssetProfile } from '@/types/api/pool'
 
 // Manage Ether wei
 export function fromWei(amount: BigNumberish, decimal = 18): number {
@@ -128,3 +129,24 @@ export const getFixedNumber = (param: number | string | undefined, decimal = 2) 
 export const validateEthereumAddress = (addr: string) => {
 	return ethers.isAddress(addr);
 };
+
+/**
+ * Get decimals for the selected asset's amount
+ */
+export const getAssetDecimalObj = (assetProfiles: IAssetProfile[] | undefined , asset_id: string) => {
+
+  // find an asset matched to target_asset_id in assetProfile array. 
+  const _selectedAsset = assetProfiles?.find(e => e.id === asset_id)
+  if (!_selectedAsset)
+    return {
+      decimals: 0,
+      symbol: ``
+    }
+
+  const _decimals = Number(_selectedAsset.decimals)
+
+  return {
+    decimals: 10 ** _decimals,
+    symbol: _selectedAsset.symbol,
+  }
+}

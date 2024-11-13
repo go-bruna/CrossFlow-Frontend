@@ -23,13 +23,15 @@ export const Header = ({
 	const { data: account, isConnected } = useAccount()
 	const { authState } = useAuth()
 
-	// ether metamask
+	// Ethereum metamask
 	const { address, connector, isConnected: wagmiIsConnected } = wagmiUseAccount();
 	const { connectors } = useConnect();
 	const _is_connected_metamask =
 		(address && wagmiIsConnected && connector === connectors[0]) ?? false;
 
-	// get connected wallet count
+	/**
+   * Get connected wallet count
+   */
 	const calcWalletCount = useMemo(() => {
 		if (isConnected && authState.paymentAccount?.address && _is_connected_metamask)
 			return 3
@@ -45,7 +47,9 @@ export const Header = ({
 			return 1
 	}, [account, isConnected, authState, connectors, wagmiIsConnected, address])
 
-	// get badge object to display badge with connected wallet count
+	/**
+   * Get badge object to display badge with connected wallet count
+   */
 	const badgeObj = useMemo(() => {
 		const _initial_data = {
 			isBadge: false,
@@ -71,19 +75,10 @@ export const Header = ({
 						{title}
 					</Typography>
 				</div>
-				{/* <Navbar /> */}
 			</div>
 
 			{/* buttonrs group */}
 			<div className="flex items-center gap-5 h-12">
-				
-				{/* <Button.Basic 
-					label={'Claim CFN'}
-					icon={<LogoIcon />}
-					className="gap-1 w-[130px] h-[36px] p-0 rounded-full"
-					textStyle="text-sm"
-				/> */}
-
 				<Button.Basic
 					label={calcWalletCount > 0 ? 'Connected' : 'Connect Wallet'}
 					isBadge={badgeObj.isBadge ? true : false}

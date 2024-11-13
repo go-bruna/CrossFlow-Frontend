@@ -1,7 +1,7 @@
 import Button from "@/components/button";
 import { useDrawer } from "@/contexts/interface";
 import { IValidator } from "@/types/api/stake";
-import { getFixedNumber, numberFormat, pureNumberFormat, truncateAddress } from "@/utils";
+import { getFixedNumber, pureNumberFormat, truncateAddress } from "@/utils";
 import dayjs from "dayjs";
 
 interface Props {
@@ -15,7 +15,7 @@ interface IRowProps {
 
 const Row = ({ data, index }: IRowProps) => {
   const { setDrawer } = useDrawer()
-
+  
   // Stake operation
   const handleDelegate = () => {
     setDrawer({ 
@@ -28,7 +28,9 @@ const Row = ({ data, index }: IRowProps) => {
     <tr className="h-[48px] text-[13px] hover:bg-[#1b1b1b] text-white">
       <td className="pl-5">{index}</td>
       <td>{truncateAddress(data.operator_address, 6)}</td>
-      <td>{numberFormat(data.tokens)}</td>
+      <td>
+        {pureNumberFormat(Number(data.tokens) / 1e6)}
+      </td>
       <td>{data.status}</td>
       <td>{pureNumberFormat(data.unbonding_height)}</td>
       <td>{dayjs(data.unbonding_time).format("DD MMM YYYY, HH:mm:ss")}</td>

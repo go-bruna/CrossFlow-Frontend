@@ -14,15 +14,9 @@ const providers = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
 		<CustomWagmiProvider initialState={initialState}>
 			<AuthStateProvider>
 				<TxModalProvider>
-					{/* <MempoolProvider> */}
-					{/* <WagmiProvider 
-								config={wagmiConfig}
-							> */}
 					<Web3Provider>
 						<InterfaceProvider>{children}</InterfaceProvider>
 					</Web3Provider>
-					{/* </WagmiProvider> */}
-					{/* </MempoolProvider> */}
 				</TxModalProvider>
 			</AuthStateProvider>
 		</CustomWagmiProvider>

@@ -2,32 +2,13 @@ import { Typography } from "@/components/typography"
 import { StakeValidatorTableBody } from "./table.body"
 import { StakeValidatorTableHeader } from "./table.header"
 import { Avatar } from "@/components/avatar"
-// import { useAssetLockTransaction } from "@/hooks/queries/useAssetLockTransaction"
-// import { useEffect, useMemo } from "react"
-// import { useAccount } from "graz"
-// import { IBaseLockTransaction } from "@/types/api/pool"
-// import { queryClient } from "@/wagmi"
-// import { GET_ASSET_LOCK_TRANSACTION } from "@/constants/query"
 import { LogoIcon } from "@/assets/icons/logo"
 import { useStakeValidators } from "@/hooks/queries/useStakeValidators"
 import StakingSkeleton from "@/screens/stake/skeleton"
 // const orderArr = ['Ascending', 'Decending']
 
 export const StakeValidatorTable = () => {
-  // const { data: account } = useAccount()
   const { data: validators, isLoading } = useStakeValidators()
-
-  // update asset_lock_transaction every 1 mins to display updated status.
-  // useEffect(() => {
-  //   const timer = window.setInterval(async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: [GET_ASSET_LOCK_TRANSACTION],
-  //     })
-  //   }, 60 * 1000)
-  //   return () => {
-  //     window.clearInterval(timer)
-  //   }
-  // }, [])
   
   if (isLoading) {
 		return <StakingSkeleton />

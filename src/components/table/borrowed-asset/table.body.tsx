@@ -3,13 +3,15 @@ import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
 import { CustomProgress } from "@/components/progress";
 import { IAccountAssetsBorrowed } from "@/types/api/account";
-import { numberFormat } from "@/utils";
+import { getAssetDecimalObj, numberFormat, pureNumberFormat } from "@/utils";
+import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 
 export const BorrowedAssetsTableBody = ({
   data
 }: {
   data: IAccountAssetsBorrowed[]
 }) => {
+  const { data: assetProfiles } = useAssetProfile()
 
   const Row = ({ row }: { row: IAccountAssetsBorrowed }) => {
     return (
@@ -30,8 +32,12 @@ export const BorrowedAssetsTableBody = ({
         </td>
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
-            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
-            <Typography variant="label-medium" className="text-[13px]">{numberFormat(row.balance)}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">
+              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.asset_id).decimals, 4)} 
+            </Typography>
+            <Typography variant="label-medium" className="text-[13px]">
+              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.asset_id).decimals, 4)}
+            </Typography>
           </div>
         </td>
         <td>

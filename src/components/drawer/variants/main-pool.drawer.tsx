@@ -12,29 +12,47 @@ import { handleAnimation } from '@/utils'
 import { ITag } from '@/types/interfaces'
 import { IPool } from '@/types/api/pool'
 import { LockContainer } from '../base/pool/lock.base'
+import { SupplyUSDTContainer } from '../base/pool/usdt/supply.usdt'
+import { BorrowUSDTContainer } from '../base/pool/usdt/borrow.usdt'
+import { RepayUSDTContainer } from '../base/pool/usdt/repay.usdt'
 
 const tabs = [
   { title: 'Lock'},
   { title: 'Supply' },
   { title: 'Borrow' },
-  // { title: 'Withdraw' },
   { title: 'Repay' },
 ]
+
+const usdt_tabs = [
+  { title: 'Supply' },
+  { title: 'Borrow' },
+  { title: 'Repay' },
+]
+
 export interface Props extends BaseProps {
   data: IPool
 }
 
 export const PoolDrawer = (props: Props) => {
   const { isDesktop } = useWindowSize()
-  const [ current, setCurrent ] = useState<ITag>(tabs[0])
+  const [ current, setCurrent ] = useState<ITag>(
+    props.data.asset_symbol.toLowerCase() === 'btc' ? tabs[0] : usdt_tabs[0]
+  )
   const [ opacityAnimation, setOpacityAnimation ] = useState<boolean>(false)
   
+  const isUSDT = props.data.asset_symbol.toLowerCase() === 'usdt'
+
   const displayContainer = {
     'Lock': <LockContainer />,
     'Supply': <SupplyContainer />,
-    'Borrow': <BorrowContainer />,
-    // 'Withdraw': <WithdrawContainer />,
-    'Repay': <RepayContainer />
+    'Borrow': <BorrowContainer data={props.data} />,
+    'Repay': <RepayContainer data={props.data} />
+  }[current.title] as JSX.Element
+
+  const displayUSDTContainer = {
+    'Supply': <SupplyUSDTContainer data={props.data} />,
+    'Borrow': <BorrowUSDTContainer data={props.data} />,
+    'Repay': <RepayUSDTContainer data={props.data} />
   }[current.title] as JSX.Element
 
   const handleContainer = async(tag: ITag) => {
@@ -59,7 +77,8 @@ export const PoolDrawer = (props: Props) => {
         >
           {/* tabs */}
           <Tab.List
-            tabs={tabs}
+            // tabs={tabs}
+            tabs={props.data.asset_symbol.toLowerCase() === 'btc' ? tabs : usdt_tabs}
             selected={current}
             onSelect={handleContainer}
             classOverride={{
@@ -69,7 +88,7 @@ export const PoolDrawer = (props: Props) => {
           />
 
           <div className={twMerge('w-full animate-fade-in-up', opacityAnimation && 'animate-fade-out')}>
-            {displayContainer}
+            {isUSDT ? displayUSDTContainer : displayContainer}
           </div>
         </div>
     </Drawer>

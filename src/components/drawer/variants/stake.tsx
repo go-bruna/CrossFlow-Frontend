@@ -19,7 +19,7 @@ import {
 import { cosmoshub } from '@/config/graz'
 import { getFixedNumber, pureNumberFormat } from '@/utils'
 import { useToast } from '@/hooks/useToast'
-import { WALLET_NOT_CONNECTED, WARNING_MESSAGE } from '@/constants/message'
+import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from '@/constants/message'
 import { IValidator } from '@/types/api/stake'
 import { MsgDelegate } from '@/cf-client/cosmos.circuit.v1.staking/tx'
 import { Coin } from '@cosmjs/proto-signing'
@@ -71,22 +71,15 @@ export const StakeDrawer = (props: Props) => {
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       let msg = await client.msgDelegate(_stakeData);
-      const result = await client.signAndBroadcast([msg]);
+      await client.signAndBroadcast([msg]);
 
       setLoading(false)
       await invalidateQuery()
 
-      messageApi.Alert(
-        {
-          type: 'Success',
-          title: 'Successfully Staked.',
-          link: `https://explorer.ordibank.org/ordibank/tx/${result.transactionHash}`,
-        },
-        6,
-      )
+      messageApi.Alert(SUCCESS_OPERATION('Successfully Staked'))
     } catch (error: any) {
       setLoading(false)
-      console.log('error ===>', error)
+      messageApi.Alert(ERROR_MESSAGE(error as string))
     }
   }
 

@@ -17,7 +17,7 @@ import {
   useOfflineSigners, 
 } from 'graz'
 import { IBaseLoan, ILoanEntity, IPool } from "@/types/api/pool"
-import { getAssetDecimalObj, pureNumberFormat } from "@/utils"
+import { pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
 import { GET_LOAN_ENTITY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
 import { queryClient } from "@/wagmi"
@@ -48,7 +48,7 @@ export interface ISupplyContainer {
   data: IPool
 }
 
-export const RepayContainer = (props: ISupplyContainer) => {
+export const RepayUSDTContainer = (props: ISupplyContainer) => {
   const { messageApi } = useToast()
   const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
   const [ repay, setRepay ] = useState<number | undefined>(0)
@@ -66,7 +66,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
     ((Number(repay ?? 0) / 100).toString())
   )
 
-  // ether metamask
+  // metamask
 	const { address, connector, isConnected } = wagmiUseAccount();
 	const { connectors } = useConnect();
   const { approveUSDT } = useWeb3Context()
@@ -75,7 +75,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
 		(address && isConnected && connector === connectors[0]) ?? false;
 
   /**
-   * Filter loan entity by creator, get owner's loans
+   * Filter user's loan entity by creator, and get loans for owner.
    */
   const filterUserLoans = useMemo(() => {
     if (
@@ -108,7 +108,20 @@ export const RepayContainer = (props: ISupplyContainer) => {
         symbol: ``
       }
 
-    return getAssetDecimalObj(assetProfiles, asset_id)
+    // find an asset matched to target_asset_id in assetProfile array. 
+    const _selectedAsset = assetProfiles?.find(e => e.id === asset_id)
+    if (!_selectedAsset)
+      return {
+        decimals: 0,
+        symbol: ``
+      }
+
+    const _decimals = Number(_selectedAsset.decimals)
+
+    return {
+      decimals: 10 ** _decimals,
+      symbol: _selectedAsset.symbol
+    }
   }
 
   /**
@@ -147,6 +160,8 @@ export const RepayContainer = (props: ISupplyContainer) => {
         reserved: ""
       }
 
+      console.log(_repayData)
+
       const approve = await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
 
       if (!approve) {
@@ -156,10 +171,10 @@ export const RepayContainer = (props: ISupplyContainer) => {
       const client = await TxClient(offlineSigners?.offlineSigner);
       let msg = await client.msgRequestRepay(_repayData);
       await client.signAndBroadcast([msg]);
+      await invalidateQuery()
 
       setLoading(false)
-      await invalidateQuery()
-      
+
       messageApi.Alert(SUCCESS_OPERATION('Successfully repayed.'))
 
     } catch (error) {
@@ -169,7 +184,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
   }
 
   /**
-   * Invalidate quries
+   * Invalidate queries
    */
   const invalidateQuery = async () => {
     Promise.all([
@@ -258,7 +273,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       <Paragraph.List
         label="Estimated Repay Amount" 
         value={`
-          ${pureNumberFormat(Number(estimatedRepayAmount?.amount_repay) / getDecimalObj(filterUserLoans[0]?.target_asset_id).decimals, 2)}
+          ${pureNumberFormat(Number(estimatedRepayAmount?.amount_repay) / getDecimalObj(filterUserLoans[0]?.target_asset_id).decimals, 5)}
           ${getDecimalObj(filterUserLoans[0]?.target_asset_id).symbol}
         `}
         classOverride={{
@@ -269,7 +284,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       <Paragraph.List
         label="Estimated Repay Return" 
         value={`
-          ${pureNumberFormat(Number(estimatedRepayAmount?.amount_return) / getDecimalObj(props.data.asset_id).decimals, 5)} 
+          ${pureNumberFormat(Number(estimatedRepayAmount?.amount_return) / getDecimalObj(props.data.asset_id).decimals, 2)} 
           ${getDecimalObj(props.data.asset_id).symbol}
         `}
         classOverride={{

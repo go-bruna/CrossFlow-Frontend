@@ -8,7 +8,7 @@ import {
   O_USDT_TOKEN,
 } from "@/constants";
 import { useToast } from "./useToast";
-import { toWei } from "@/utils";
+import { fromWei, toWei } from "@/utils";
 import { useTxModalState } from "@/contexts/tx-modal";
 import { WARNING_MESSAGE } from "@/constants/message";
 import { MODAL_STATE } from "@/types/interfaces";
@@ -21,6 +21,20 @@ export const useSigningWeb3Client = () => {
   const { messageApi } = useToast();
   const { setIsTxModal, updateModalState } = useTxModalState();
   const errorDecoder = ErrorDecoder.create();
+
+  const getTokenBalance = useCallback(async () => {
+    try {
+      const contract = new ethers.Contract(
+        O_USDT_TOKEN.address,
+        O_USDT_TOKEN.abi,
+        provider
+      );
+      const result = await contract.balanceOf(address);
+      return fromWei(result)
+    } catch (err) {
+      console.log(err);
+    }
+  }, [provider, address]);
 
   const approveUSDT = useCallback(async(amount: number) => {
     try {
@@ -37,6 +51,7 @@ export const useSigningWeb3Client = () => {
       const tokenAmount = amount.toString();
       const params: string[] = [O_USDT_TOKEN.address, toWei(tokenAmount)];
 
+      console.log("transaction of approve ==>", contract)
       let transaction = {
         from: address,
         to: O_USDT_TOKEN.address,
@@ -68,6 +83,7 @@ export const useSigningWeb3Client = () => {
   }, [provider, address]);
 
   return {
-    approveUSDT
+    approveUSDT,
+    getTokenBalance
   }
 };

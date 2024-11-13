@@ -52,20 +52,21 @@ export const ConnectWallet = (props: Props) => {
 	const _is_btcWallet_connected =
 		authState.connected_wallet && authState.paymentAccount?.address
 
-	// Kelpr wallet connection and disconnection
+	///////////////////////////////////////////////////////
+	////// Kelpr wallet connection and disconnection //////
+	///////////////////////////////////////////////////////
 	const { suggestAndConnect } = useSuggestChainAndConnect();
 	const activeChains = useActiveChains();
 	const garzConnection = garzUseConnect()
 	const garzAccount = garzUseAccount()
 	const garzDisconnection = garzDisconnect()
 	const isKeplrSupported = checkWallet(WalletType.KEPLR);
-	// Kelpr wallet connection and disconnection
+	///////////////////////////////////////////////////////
+	//// End Kelpr wallet connection and disconnection ////
+	///////////////////////////////////////////////////////
 
 	const _is_connected_metamask =
 		(address && isConnected && connector === connectors[0]) ?? false;
-
-	// const _is_connected_wallet =
-	// 	(address && isConnected && connector === connectors[1]) ?? false;
 
 	const handleMetamask = () => {
 		if (_is_connected_metamask) {
@@ -89,29 +90,6 @@ export const ConnectWallet = (props: Props) => {
 			);
 		}
 	};
-
-	// const handleWalletConnect = () => {
-	// 	if (_is_connected_wallet) {
-	// 		disconnectWallet();
-	// 		onClose();
-	// 	} else {
-	// 		connect(
-	// 			{ connector: connectors[1] },
-	// 			{
-	// 				onSuccess() {
-	// 					onClose();
-	// 					switchChain({ chainId: CHAIN_ID });
-	// 				},
-	// 				onError(error) {
-	// 					const err_msg = error.message.includes("Provider not found.")
-	// 						? "Please install Metamask wallet!"
-	// 						: error.message.toString();
-	// 					messageApi.Alert(ERROR_MESSAGE(err_msg));
-	// 				},
-	// 			},
-	// 		);
-	// 	}
-	// };
 
 	const handleSuggestionAndConnect = () => {
 		suggestAndConnect({
@@ -179,33 +157,6 @@ export const ConnectWallet = (props: Props) => {
 							status={_is_connected_metamask}
 							onConnect={handleMetamask}
 						/> 
-						{/* <div 
-							className="flex gap-4 items-center pl-1 py-3 lg:p-3 cursor-pointer rounded-md hover:bg-stone-950"
-							onClick={connectWallet}
-						>
-							<img src={KelprWallet} width={34} alt="Wallet Image" />
-							<Typography variant="label-medium" className='font-semibold'>
-								{garzAccount.data && garzAccount.isConnected ? 'Connected' : 'Connect Wallet'}
-							</Typography>
-						</div> */}
-
-						{/* <Wallet
-							img={KelprWallet}
-							address={
-								_is_connected_wallet ? (address as string) : "Wallet Connect"
-							}
-							status={_is_connected_wallet}
-							onConnect={handleWalletConnect}
-						/>
-						<Wallet
-							type="metamask"
-							img={MetamastWallet}
-							address={
-								_is_connected_metamask ? (address as string) : "Metamask Wallet"
-							}
-							status={_is_connected_metamask}
-							onConnect={handleMetamask}
-						/> */}
 					</div>
 
 					<Typography variant="label-medium" className="font-bold">

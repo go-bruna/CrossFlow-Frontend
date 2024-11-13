@@ -3,12 +3,12 @@ import { GET_ASSET_SUPPLY_TRANSACTION } from '@/constants/query.ts'
 import { getAssetSupplyTransaction } from '@/apis/pool'
 
 export const useAssetSupplyTransaction= () => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [GET_ASSET_SUPPLY_TRANSACTION],
     queryFn: async () => {
       return await getAssetSupplyTransaction()
     },
   })
 
-  return { data }  
+  return { data, isLoading }  
 }

@@ -1,5 +1,6 @@
+import { Typography } from "@/components/typography";
 import { IAssetBorrowedTransaction } from "@/types/api/pool";
-import { getFixedNumber, truncateAddress } from "@/utils";
+import { fromWei, getFixedNumber, numberFormat, truncateAddress } from "@/utils";
 
 interface Props {
   transactions: IAssetBorrowedTransaction[]
@@ -9,10 +10,24 @@ interface IRowProps {
 }
 
 const Row = ({ data }: IRowProps) => {
+  
+  const refineAmount = (amount: string) => {
+    return data.collateral_symbol === 'USDT' 
+        ? numberFormat(fromWei(amount)) 
+        : data.collateral_symbol === 'BTC'
+          ? Number(amount) / 1e8
+          : amount
+  }
+
   return (
     <tr className="h-[48px] text-[13px] hover:bg-[#1b1b1b] text-white">
       <td className="pl-5">{data.id}</td>
-      <td>{Number(data.collateral_amount) / 1e8}</td>
+      <td>
+        <div className="flex gap-1 items-center">
+          <Typography variant="label-small">{ refineAmount(data.collateral_amount) }</Typography>
+          <Typography variant="label-extrasmall" className="text-[#fff]/50">{ data.collateral_symbol }</Typography>
+        </div>
+      </td>
       <td>{`${getFixedNumber(Number(data.loan_rate) * 100)} %`}</td>
       <td>{truncateAddress(data.loan_address, 5)}</td>
       <td>{data.status}</td>

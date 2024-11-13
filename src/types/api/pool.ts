@@ -107,6 +107,27 @@ export interface IAssetSuppliedTransaction {
   tss_msg_id: string
 }
 
+export interface IUSDTSuppliedTransaction {
+  amount: string
+  asset_id: string
+  asset_symbol: string
+  chain_symbol: string
+  confirmed_block_hash: string
+  fail_reason: string
+  handle_id: string
+  id: string
+  interest_rate: string
+  processing: true
+  pull_fail_count: string
+  reserved: string
+  sender_address: string
+  status: string
+  supplier: string
+  timestamp: string
+  tss_hash: string
+  tss_msg_id: string
+}
+
 export interface IBaseLoan {
   collateral_amount: string
   collateral_id: string
@@ -121,6 +142,9 @@ export interface IBaseLoan {
   oracle_price: string
   reserved: string
   status: string
+  origin_chain: string
+  target_chain: string
+  target_asset_id: string
 }
 export interface ILoanEntity {
   creator: string
@@ -131,4 +155,9 @@ export interface ILoanEntity {
 export interface IEstimatedRepayAmount {
   amount_repay: string
   amount_return: string
+}
+
+export interface IAssetPrice {
+  asset_symbol: string
+  price: string
 }

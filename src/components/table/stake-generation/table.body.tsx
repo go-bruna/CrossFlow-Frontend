@@ -1,6 +1,6 @@
 import { TxClient } from "@/cf-client/client";
 import Button from "@/components/button";
-import { WALLET_NOT_CONNECTED } from "@/constants/message";
+import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED } from "@/constants/message";
 import { GET_STAKE_ALL_DELEGATIONS } from "@/constants/query";
 import { useToast } from "@/hooks/useToast";
 import { IStakeDelegation } from "@/types/api/stake";
@@ -38,24 +38,16 @@ const Row = ({ data, index }: IRowProps) => {
       }
       const client = await TxClient(offlineSigners?.offlineSigner)
       const msg = await client.msgWithdrawDelegatorReward(_withdrawObj)
-      const result = await client.signAndBroadcast([msg])
+      await client.signAndBroadcast([msg])
 
-      console.log("withdraw result ==>", result)
       setLoading(false)
       await queryClient.invalidateQueries({ queryKey: [GET_STAKE_ALL_DELEGATIONS] })
 
-      messageApi.Alert(
-        {
-          type: 'Success',
-          title: 'Successfully Withdrawn.',
-          link: `https://explorer.ordibank.org/ordibank/tx/${result.transactionHash}`,
-        },
-        6,
-      )
+      messageApi.Alert(SUCCESS_OPERATION('Successfully Withdrawn.'))
 
     } catch (error: any) {
       setLoading(false)
-      console.log("withdraw error =-===>", error)
+      messageApi.Alert(ERROR_MESSAGE(error as string))
     }
   }
 

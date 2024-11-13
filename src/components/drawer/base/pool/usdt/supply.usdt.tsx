@@ -1,87 +1,58 @@
 import { 
   useEffect,
   ChangeEvent, 
-  useMemo, 
-  useState 
+  useState, 
+  useMemo,
 } from "react"
 import Button from "@/components/button"
-import Paragraph from "@/components/paragraph"
 import Table from "@/components/table"
 import { Input } from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
-import { 
-  useAccount,
-  useOfflineSigners, 
-} from 'graz'
-import { IBaseLockTransaction } from "@/types/api/pool"
-import { pureNumberFormat } from "@/utils"
-import { useLockBalance } from "@/hooks/queries/useLockBalance"
-import Dropdown from "@/components/dropdown"
-import { IBaseBalance, IBaseLockBalance } from "@/types/api/other"
-import { GET_ASSET_LOCK_TRANSACTION, GET_MAX_INTEREST_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
+import {  GET_MAX_INTEREST_RATE } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
 import { TxClient } from "@/cf-client/client"
-import { MsgRequestSupply } from "@/cf-client/cfprotocol.lock/tx"
+import { MsgRequestSupplyUsdt } from "@/cf-client/cfprotocol.lock/tx"
 import { TailSpin } from "react-loader-spinner"
-import { useAssetLockTransaction } from "@/hooks/queries/useAssetLockTransaction"
 import { useMaxInterestRate } from "@/hooks/queries/useMaxInterestRate"
+import {
+  useConnect as wagmiUseConnect,
+  useAccount as wagmiUseAccount
+} from "wagmi"
+import { useWeb3Context } from "@/contexts/web3"
+import { useAccount, useOfflineSigners } from "graz"
+import { IPool } from "@/types/api/pool"
+import { toWei } from "@/utils"
 
-export const SupplyContainer = () => {
+export interface Props {
+  data: IPool
+}
+
+export const SupplyUSDTContainer = (props: Props) => {
   const { messageApi } = useToast()
+  
+  // ether metamask
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
-  const { data: assetLockTransaction } = useAssetLockTransaction()
-  const { data: lockData } = useLockBalance()
-  const { data: maxRate } = useMaxInterestRate()
+	const { address, connector, isConnected } = wagmiUseAccount();
+	const { connectors } = wagmiUseConnect();
 
-  const [ selected, setSelected ] = useState<IBaseLockTransaction | undefined>(undefined)
-  const [ activeLock, setActiveLock ] = useState<IBaseLockBalance | undefined>(undefined)
+  const { 
+    getTokenBalance,
+    approveUSDT,  
+  } = useWeb3Context()
+
+  const [ balance, setBalance ] = useState<number | undefined>(undefined)
+  const [ amount, setAmount ] = useState<number | undefined>(0)
   const [ rate, setRate ] = useState<number | undefined>(0)
   const [ loading, setLoading ] = useState<boolean>(false)
-
-  /**
-   * Get suppliable amount and interest apy, filter lock-balance data by user account,
-   * and get balances array.
-   */
-  const filterUserLockBalances = useMemo(() => {
-    if (
-      !account?.bech32Address || 
-      !lockData || 
-      !lockData.lock_balance || 
-      lockData.lock_balance.length < 1
-    )
-      return []
-    const _filteredData = lockData.lock_balance.find((e: IBaseLockBalance) => e.creator === account.bech32Address)
-    setActiveLock(_filteredData)
-    if (!_filteredData)
-      return []
-    const _balances = _filteredData.balances
-    return _balances
-  }, [lockData, account?.bech32Address])
-
-  /**
-   * Get dropdown array to supply from asset_lock_transaction array.
-   */
-  const dropdownArr = useMemo(() => {
-    if (
-      !account?.bech32Address || 
-      !assetLockTransaction || 
-      !assetLockTransaction.asset_lock_transaction || 
-      assetLockTransaction.asset_lock_transaction.length < 1
-    )
-      return []
-
-    const _filteredData = assetLockTransaction.asset_lock_transaction
-      .filter((e: IBaseLockTransaction) => 
-        e.creator === account.bech32Address && 
-        e.status === 'Completed'
-      )   
-    return _filteredData
-  }, [assetLockTransaction, account?.bech32Address])
+  const { data: maxRate } = useMaxInterestRate()
+  
+  const _is_connected_metamask =
+		(address && isConnected && connector === connectors[0]) ?? false;
 
   /**
    * Handle supply
@@ -94,29 +65,42 @@ export const SupplyContainer = () => {
     if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
       return messageApi.Alert(FAILED_WALLET_CONNECTION(`Kelpr`));
     }
-    if (!activeLock || !selected)
-      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select a lock item to be supplied.'})
+
+    if (!address || !_is_connected_metamask)
+      return messageApi.Alert(FAILED_WALLET_CONNECTION('Metamask'));
+
+    if (!amount || amount <= 0) {
+      return messageApi.Alert({...WARNING_MESSAGE});
+    }
+
     if (rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
       return
 
     try {
       setLoading(true)
 
-      const _supplyData: MsgRequestSupply = {
-        creator: activeLock.creator,
-        lockId: Number(activeLock.id),
+      const approve = await approveUSDT(amount)
+      if (!approve) {
+        setLoading(false)
+        return
+      }
+      const _supplyData: MsgRequestSupplyUsdt = {
+        creator: account?.bech32Address,
+        assetId: Number(props.data.asset_id),
+        chainSymbol: props.data.chain_symbol,
+        amount: toWei(amount).toString(),
         interestRate: ((rate || 0) / 100).toString(),
-        reserved: "",
+        senderAddress: address
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
-      let msg = await client.msgRequestSupply(_supplyData);
+      let msg = await client.msgRequestSupplyUSDT(_supplyData);
       await client.signAndBroadcast([msg]);
       await invalidateQuery()
 
       setLoading(false)
-      
-      messageApi.Alert(SUCCESS_OPERATION('Successfully supplied.'))
+
+      messageApi.Alert(SUCCESS_OPERATION('Successfully supplied USDT.'))
 
     } catch (error) {
       setLoading(false)
@@ -124,16 +108,21 @@ export const SupplyContainer = () => {
     }
   }
 
+
   /**
    * Invalidate queries
-   */ 
+   */
   const invalidateQuery = async () => {
     Promise.all([
-      queryClient.invalidateQueries({ queryKey: [GET_POOL_LOCK_BALANCE] }),
-      queryClient.invalidateQueries({ queryKey: [GET_ASSET_LOCK_TRANSACTION] }),
       queryClient.invalidateQueries({ queryKey: [GET_MAX_INTEREST_RATE] }),
     ])
   }
+
+  // get balance in holesky network
+  useMemo(async () => {
+    const _balance = await getTokenBalance()
+    setBalance(_balance)
+  }, [address])
 
   useEffect(() => {
     invalidateQuery()
@@ -144,17 +133,30 @@ export const SupplyContainer = () => {
       {/* Search */}
       <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
 
-      <div className="flex flex-col gap-[10px] mt-8">
-        <Typography variant="label-small" className="f-light">
-          Select Locked Amount
-        </Typography>
-        <Dropdown.LockTransaction
-          list={dropdownArr}
-          value={selected}
-          onChange={setSelected}
-          className="rounded-lg"
-        />
-      </div>
+      {/* USDT amount to supply */}
+      <Input 
+        label="Input USDT amount to supply"
+        value={amount ?? ''}
+        placeholder="0"
+        icon={<AmountIcon />}
+        innerButtonLabel="Max"
+        errorMsg={
+          rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100) 
+            ? `Interest rate should be less than ${Number((Number(maxRate?.max_interest_rate ?? 0) * 100).toFixed(0))} %`
+            : null
+        }
+        onMax={() => setAmount(balance ?? 0)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => 
+          setAmount(Number(e.target.value || 0))
+        }
+        classOverride={{
+          container: 'mt-8',
+          inputContainer: 'bg-black mt-3',
+          input: 'bg-black ml-1',
+          value: 'text-[13px] text-[#5e7e8e]',
+          icon: 'w-8'
+        }}
+      />
 
       <Input 
         label="Interest Rate ( % )"
@@ -180,7 +182,7 @@ export const SupplyContainer = () => {
         }}
       />
 
-      <Paragraph.List
+      {/* <Paragraph.List
         label="Suppliable amount" 
         value={pureNumberFormat(filterUserLockBalances.reduce((res: number, curr: IBaseBalance) => res + Number(curr.balance) / 1e8, 0))}
         classOverride={{
@@ -193,10 +195,10 @@ export const SupplyContainer = () => {
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}
-      />
+      /> */}
 
       {/* Button group */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 pt-6">
         {loading ? (
           <div className="flex flex-1 justify-center items-center bg-[#0aab8b] rounded-lg py-[17px]">
             <TailSpin
@@ -209,7 +211,7 @@ export const SupplyContainer = () => {
               wrapperClass=""
             />
           </div>
-        ) : !selected || Number(selected.amount) <= 0 ? (
+        ) : Number(amount) <= 0 ? (
         <>
           <div className="flex flex-col gap-2.5 mt-8 ">
             <Button.Basic 
@@ -235,8 +237,9 @@ export const SupplyContainer = () => {
       </div>
 
       {/* Locked Table */}
-      <Table.SupplyTransaction />
+      <Table.SupplyUSDTTransaction />
       
     </div>
   )
 }
+

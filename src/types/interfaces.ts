@@ -60,11 +60,12 @@ export interface SignatureHeaders {
 export interface ISidebar {
   title: string
   icon: JSX.Element
+  path: string
 }
 
 export interface ITag {
   title: string
-  value?: number
+  value?: number | string
   icon?: JSX.Element
 }
 

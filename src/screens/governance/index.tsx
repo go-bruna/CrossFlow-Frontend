@@ -33,7 +33,9 @@ export const GovernancePage = () => {
   const [currentTag, setCurrentTag] = useState<ITag>(GOVERNANCE_STATUS_TABS[0]);
   const [ search, setSearch] = useState<string | undefined>(undefined)
 
-  // invalidate queries
+  /**
+   * Invalidate queries
+   */
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_SUMMARY] }),

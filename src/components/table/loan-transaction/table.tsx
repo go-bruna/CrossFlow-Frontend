@@ -9,11 +9,15 @@ import { queryClient } from "@/wagmi"
 import { GET_ASSET_BORROW_TRANSACTION } from "@/constants/query"
 import { LogoIcon } from "@/assets/icons/logo"
 import { useAssetBorrowTransaction } from "@/hooks/queries/useAssetBorrowedTransaction"
+import { TailSpin } from "react-loader-spinner"
 // const orderArr = ['Ascending', 'Decending']
 
-export const LoanTransactionTable = () => {
+interface Props {
+  asset_id: string
+}
+export const LoanTransactionTable = (props: Props) => {
   const { data: account } = useAccount()
-  const { data: assetBorrowTransaction } = useAssetBorrowTransaction()
+  const { data: assetBorrowTransaction, isLoading } = useAssetBorrowTransaction()
 
   const filterBorrowTransactions = useMemo(() => {
     if (
@@ -26,7 +30,8 @@ export const LoanTransactionTable = () => {
 
     const _filteredData = assetBorrowTransaction
       .filter((e: IAssetBorrowedTransaction) => 
-        e.creator === account.bech32Address
+        e.creator === account.bech32Address &&
+        e.collateral_id === props.asset_id
       )   
     return _filteredData
   }, [assetBorrowTransaction, account?.bech32Address])
@@ -42,6 +47,22 @@ export const LoanTransactionTable = () => {
       window.clearInterval(timer)
     }
   }, [])
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 justify-center items-center h-[160px]">
+        <TailSpin
+          visible={true}
+          height="20"
+          width="20"
+          color="#fff"
+          ariaLabel="tail-spin-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    )
+  }
   
   return (
     <div className="flex flex-col gap-4 my-10 mb-[70px] lg:mt-[45px] w-full">

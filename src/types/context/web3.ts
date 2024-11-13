@@ -31,5 +31,6 @@ export interface IRedeemInfo {
 }
 
 export interface IWeb3Context {
+  getTokenBalance: Function
   approveUSDT: Function,
 }

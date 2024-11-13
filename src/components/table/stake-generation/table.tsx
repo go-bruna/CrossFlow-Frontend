@@ -10,7 +10,6 @@ import { useEffect, useMemo } from "react"
 import { GET_STAKE_ALL_DELEGATIONS } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { IStakeDelegation } from "@/types/api/stake"
-// const orderArr = ['Ascending', 'Decending']
 
 export const StakeGenerationTable = () => {
   const { data: account } = useAccount()
@@ -25,17 +24,6 @@ export const StakeGenerationTable = () => {
     const _filter = delegationData.filter((e: IStakeDelegation) => e.delegation.delegator_address === account?.bech32Address)
     return _filter
   }, [account?.bech32Address, delegationData])
-  // update asset_lock_transaction every 1 mins to display updated status.
-  // useEffect(() => {
-  //   const timer = window.setInterval(async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: [GET_ASSET_LOCK_TRANSACTION],
-  //     })
-  //   }, 60 * 1000)
-  //   return () => {
-  //     window.clearInterval(timer)
-  //   }
-  // }, [])
 
   const invalidateQuery = async () => {
     await queryClient.invalidateQueries({ queryKey: [GET_STAKE_ALL_DELEGATIONS] })

@@ -30,22 +30,6 @@ export const BorrowedAssetsTable = ({
               <BorrowedAssetsTableHeader />
               <BorrowedAssetsTableBody data={data}/>
             </table>
-            {/* {filteredStakeArr.length < 1 && (
-              <Card.Wrapper
-                isShadow={false}
-                classOverride={{
-                  subContainer: 'bg-gradient-to-b from-slate-50 to-slate-50 p-0 flex flex-col justify-center items-center gap-3 h-[136px]'
-                }}
-              >
-                <>
-                  <Avatar 
-                    className="w-[44px] h-[44px]"
-                    icon={<StakeIcon />}
-                  />
-                  <Typography variant="label-small" className="font-bold">You still have No ORBK Staked</Typography>
-                </>
-              </Card.Wrapper>
-            )} */}
           </div>
         </div>
       </div>

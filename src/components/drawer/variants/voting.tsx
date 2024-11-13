@@ -46,9 +46,10 @@ export const VotingDrawer = (props: Props) => {
   const { data: stakeSummary } = useStakeSummary(account?.bech32Address)
   const [ currentTab, setCurrentTab ] = useState<ITag>(tabs[0])
   const [loading, setLoading] = useState<boolean>(false)
-  // const [ amount, setAmount ] = useState<number | undefined>(undefined)  
 
-  // Handle Vote
+  /**
+   * Handle Vote
+   */ 
   const handleVote = async () => {
     try {
 
@@ -78,7 +79,9 @@ export const VotingDrawer = (props: Props) => {
     }
   }
 
-  // invalidate queries
+  /**
+   * Invalidate queries
+   */
   const invalidateQuery = async () => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_VOTES] }),

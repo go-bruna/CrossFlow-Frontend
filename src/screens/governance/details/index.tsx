@@ -31,12 +31,11 @@ export const GovernanceDetailPage = () => {
   const proposal_id = searchParams.get('proposal_id') || undefined
   const { data: proposalDetail, isLoading } = useGovernanceProposalDetail(proposal_id)
   
-  // invalidate queries
+  /**
+  * Invalidate queries
+  */
   const invalidateQuery = async () => {
-    Promise.all([
-      queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_PROPOSAL_DETAIL] }),
-      // queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_PROPOSALS] }),
-    ])
+    await queryClient.invalidateQueries({ queryKey: [GET_GOVERNANCE_PROPOSAL_DETAIL] })
   }
 
   useEffect(() => {

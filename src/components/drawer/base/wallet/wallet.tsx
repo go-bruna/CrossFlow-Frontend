@@ -16,7 +16,7 @@ interface Props {
   onConnect: () => void
   type?: string
 }
-// Wallet component
+
 export const Wallet = (props: Props) => {
   const { messageApi } = useToast()
   const [isHovered, setIsHovered] = useState<boolean>(false)
