@@ -182,21 +182,6 @@ export const SupplyUSDTContainer = (props: Props) => {
         }}
       />
 
-      {/* <Paragraph.List
-        label="Suppliable amount" 
-        value={pureNumberFormat(filterUserLockBalances.reduce((res: number, curr: IBaseBalance) => res + Number(curr.balance) / 1e8, 0))}
-        classOverride={{
-          container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
-        }}
-      />
-      <Paragraph.List
-        label="Total APY" 
-        value={`${pureNumberFormat(filterUserLockBalances.reduce((res: number, curr: IBaseBalance) => res + Number(curr.interest_rate) * 100, 0))} %`}
-        classOverride={{
-          container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
-        }}
-      /> */}
-
       {/* Button group */}
       <div className="flex flex-col gap-6 pt-6">
         {loading ? (

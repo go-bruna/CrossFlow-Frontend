@@ -20,7 +20,7 @@ import { twMerge } from "tailwind-merge";
 
 const tabs = [
   { title: 'Validators'},
-  { title: 'Generated' },
+  { title: 'Delegations' },
 ]
 
 export const StakePage = () => {

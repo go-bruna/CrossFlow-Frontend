@@ -16,10 +16,8 @@ import {
   useOfflineSigners, 
 } from 'graz'
 import { IBaseLockTransaction } from "@/types/api/pool"
-import { pureNumberFormat } from "@/utils"
-import { useLockBalance } from "@/hooks/queries/useLockBalance"
+import { getAssetDecimalObj, pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
-import { IBaseBalance, IBaseLockBalance } from "@/types/api/other"
 import { GET_ASSET_LOCK_TRANSACTION, GET_MAX_INTEREST_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
@@ -29,40 +27,38 @@ import { MsgRequestSupply } from "@/cf-client/cfprotocol.lock/tx"
 import { TailSpin } from "react-loader-spinner"
 import { useAssetLockTransaction } from "@/hooks/queries/useAssetLockTransaction"
 import { useMaxInterestRate } from "@/hooks/queries/useMaxInterestRate"
+import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
 
 export const SupplyContainer = () => {
   const { messageApi } = useToast()
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
   const { data: assetLockTransaction } = useAssetLockTransaction()
-  const { data: lockData } = useLockBalance()
   const { data: maxRate } = useMaxInterestRate()
+  const { data: assetProfiles } = useAssetProfile()
 
   const [ selected, setSelected ] = useState<IBaseLockTransaction | undefined>(undefined)
-  const [ activeLock, setActiveLock ] = useState<IBaseLockBalance | undefined>(undefined)
   const [ rate, setRate ] = useState<number | undefined>(0)
   const [ loading, setLoading ] = useState<boolean>(false)
 
   /**
-   * Get suppliable amount and interest apy, filter lock-balance data by user account,
-   * and get balances array.
+   * Get decimals for the selected asset's amount
    */
-  const filterUserLockBalances = useMemo(() => {
+  const getDecimalObj = (asset_id?: string) => {
     if (
-      !account?.bech32Address || 
-      !lockData || 
-      !lockData.lock_balance || 
-      lockData.lock_balance.length < 1
+      !asset_id ||
+      !assetLockTransaction || 
+      !assetLockTransaction.asset_lock_transaction || 
+      assetLockTransaction.asset_lock_transaction.length < 1
     )
-      return []
-    const _filteredData = lockData.lock_balance.find((e: IBaseLockBalance) => e.creator === account.bech32Address)
-    setActiveLock(_filteredData)
-    if (!_filteredData)
-      return []
-    const _balances = _filteredData.balances
-    return _balances
-  }, [lockData, account?.bech32Address])
+      return {
+        decimals: 0,
+        symbol: ``
+      }
 
+    return getAssetDecimalObj(assetProfiles, asset_id)
+  }
+  
   /**
    * Get dropdown array to supply from asset_lock_transaction array.
    */
@@ -94,7 +90,7 @@ export const SupplyContainer = () => {
     if (!account?.bech32Address || !offlineSigners?.offlineSigner) {
       return messageApi.Alert(FAILED_WALLET_CONNECTION(`Kelpr`));
     }
-    if (!activeLock || !selected)
+    if (!selected)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select a lock item to be supplied.'})
     if (rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
       return
@@ -103,8 +99,8 @@ export const SupplyContainer = () => {
       setLoading(true)
 
       const _supplyData: MsgRequestSupply = {
-        creator: activeLock.creator,
-        lockId: Number(activeLock.id),
+        creator: account.bech32Address,
+        lockId: Number(selected.asset_id),
         interestRate: ((rate || 0) / 100).toString(),
         reserved: "",
       }
@@ -181,15 +177,11 @@ export const SupplyContainer = () => {
       />
 
       <Paragraph.List
-        label="Suppliable amount" 
-        value={pureNumberFormat(filterUserLockBalances.reduce((res: number, curr: IBaseBalance) => res + Number(curr.balance) / 1e8, 0))}
-        classOverride={{
-          container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
-        }}
-      />
-      <Paragraph.List
-        label="Total APY" 
-        value={`${pureNumberFormat(filterUserLockBalances.reduce((res: number, curr: IBaseBalance) => res + Number(curr.interest_rate) * 100, 0))} %`}
+        label="Suppliable amount"
+        value={`
+          ${pureNumberFormat(Number(selected?.amount) / getDecimalObj(selected?.asset_id).decimals, 2)} 
+          ${getDecimalObj(selected?.asset_id).symbol}
+        `} 
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}
