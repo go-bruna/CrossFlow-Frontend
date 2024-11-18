@@ -27,7 +27,7 @@ export const SupplyTransactionTable = () => {
 
     const _filteredData = assetSupplyTransaction
       .filter((e: IAssetSuppliedTransaction) => 
-        e.creator === account.bech32Address
+        e.supplier === account.bech32Address
       )   
     return _filteredData
   }, [assetSupplyTransaction, account?.bech32Address])
@@ -65,7 +65,7 @@ export const SupplyTransactionTable = () => {
       {/* Sort by */}
       <div className="flex items-center gap-[4] lg:gap-8">
         <div className="flex items-center">
-          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Borrowed Assets</Typography>
+          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Supplied Assets</Typography>
         </div>
       </div>
 
