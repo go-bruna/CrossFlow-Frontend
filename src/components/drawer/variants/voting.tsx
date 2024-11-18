@@ -23,7 +23,7 @@ import { useAccount, useOfflineSigners } from 'graz'
 import { pureNumberFormat } from '@/utils'
 import { refineVoteStatus } from '@/helper/status'
 import { useToast } from '@/hooks/useToast'
-import { FAILED_WALLET_CONNECTION, WALLET_INSTALL } from '@/constants/message'
+import { FAILED_WALLET_CONNECTION, WALLET_INSTALL, WARNING_MESSAGE } from '@/constants/message'
 import { TxClient } from '@/cf-client/client'
 import { MsgVote } from '@/cf-client/cosmos.gov/tx'
 import { TailSpin } from 'react-loader-spinner'
@@ -68,7 +68,14 @@ export const VotingDrawer = (props: Props) => {
       }
 
       setLoading(true)
+      
       const client = await TxClient(offlineSigners?.offlineSigner);
+
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
       let msg = await client.msgVote(voteData);
       const result = await client.signAndBroadcast([msg]);
       console.log("voting result ====>", result);

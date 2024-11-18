@@ -186,6 +186,11 @@ export const BorrowContainer = (props: Props) => {
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
       let msg = await client.msgRequestLoan(_loanData);
       await client.signAndBroadcast([msg]);
 

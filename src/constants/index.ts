@@ -52,5 +52,5 @@ export const PROPOSAL_NAV = ['Description', 'Comments']
 
 export const BTC_FEE_RATE = 150 * 1000
 
-export const POOL_AVAILABLE = 'pool_available'
-export const POOL_IN_PROGRESS = 'pool_in_progress'
+export const POOL_AVAILABLE = 'pull_available'
+export const POOL_IN_PROGRESS = 'pull_in_progress'

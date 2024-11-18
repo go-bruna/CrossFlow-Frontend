@@ -1,6 +1,6 @@
 import { TxClient } from "@/cf-client/client";
 import Button from "@/components/button";
-import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED } from "@/constants/message";
+import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message";
 import { GET_STAKE_ALL_DELEGATIONS } from "@/constants/query";
 import { useToast } from "@/hooks/useToast";
 import { IStakeDelegation } from "@/types/api/stake";
@@ -36,7 +36,15 @@ const Row = ({ data, index }: IRowProps) => {
         delegatorAddress: data.delegation.delegator_address,
         validatorAddress: data.delegation.validator_address
       }
+
       const client = await TxClient(offlineSigners?.offlineSigner)
+
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
+      
       const msg = await client.msgWithdrawDelegatorReward(_withdrawObj)
       await client.signAndBroadcast([msg])
 

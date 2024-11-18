@@ -75,7 +75,7 @@ export const SupplyContainer = () => {
     const _filteredData = assetLockTransaction.asset_lock_transaction
       .filter((e: IBaseLockTransaction) => 
         e.creator === account.bech32Address && 
-        e.status === 'Completed' &&
+        e.status.toLowerCase() === 'completed' &&
         e.pull_status === POOL_AVAILABLE
       )   
     return _filteredData
@@ -111,6 +111,11 @@ export const SupplyContainer = () => {
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
       let msg = await client.msgRequestSupply(_supplyData);
       await client.signAndBroadcast([msg]);
       await invalidateQuery()

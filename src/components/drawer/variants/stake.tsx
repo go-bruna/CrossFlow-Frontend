@@ -70,6 +70,11 @@ export const StakeDrawer = (props: Props) => {
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
       let msg = await client.msgDelegate(_stakeData);
       await client.signAndBroadcast([msg]);
 

@@ -154,6 +154,11 @@ export const RepayContainer = (props: ISupplyContainer) => {
         return
       }
       const client = await TxClient(offlineSigners?.offlineSigner);
+      if (!client) {
+        messageApi.Alert({...WARNING_MESSAGE, content: ''})
+        setLoading(false)
+        return;
+      }
       let msg = await client.msgRequestRepay(_repayData);
       await client.signAndBroadcast([msg]);
 
