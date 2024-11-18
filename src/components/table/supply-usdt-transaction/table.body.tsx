@@ -1,6 +1,6 @@
 import { Typography } from "@/components/typography";
 import { IUSDTSuppliedTransaction } from "@/types/api/pool";
-import { getFixedNumber, numberFormat } from "@/utils";
+import { getFixedNumber, numberFormat, pureNumberFormat } from "@/utils";
 
 interface Props {
   transactions: IUSDTSuppliedTransaction[]
@@ -15,7 +15,7 @@ const Row = ({ data }: IRowProps) => {
       <td className="pl-5">{data.id}</td>
       <td>
         <div className="flex gap-1 items-center">
-          <Typography variant="label-small">{ numberFormat(data.amount) }</Typography>
+          <Typography variant="label-small">{ pureNumberFormat(Number(data.amount) / 10**18) }</Typography>
           <Typography variant="label-extrasmall" className="text-[#fff]/50">{ data.asset_symbol }</Typography>
         </div>
       </td>

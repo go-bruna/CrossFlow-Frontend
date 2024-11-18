@@ -5,6 +5,7 @@ import { createHTLCScript, htlcP2WSHAddress } from '@/utils/htlc'
 import { AuthStateProps } from '@/types/context/auth'
 import BigNumber from 'bignumber.js'
 import {
+  ERROR_MESSAGE,
   INPUT_AMOUNT,
   NO_ADDRESS,
   WALLET_NOT_CONNECTED,
@@ -195,9 +196,14 @@ export const SendBitcoinToHTLC = async (
     creationVout: 0,
   }
 
-  const client = await TxClient(offlineSigner);
-  let msg = await client.msgRequestLock(value);
-  const result = await client.signAndBroadcast([msg]);
-  console.log("send lock result ====>", result);
-  return result
+  try {
+    const client = await TxClient(offlineSigner);
+    let msg = await client.msgRequestLock(value);
+    const result = await client.signAndBroadcast([msg]);
+    console.log("send lock result ====>", result);
+    return result
+  } catch (error: any) {
+    console.log('lock error ==>', error)
+    messageApi.Alert(ERROR_MESSAGE(error as string))
+  }
 }

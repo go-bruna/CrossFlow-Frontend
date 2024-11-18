@@ -90,7 +90,7 @@ export interface IAssetBorrowedTransaction {
 }
 
 export interface IAssetSuppliedTransaction {
-  supplier: string
+  creator: string
   amount: string
   confirmed_block_hash: string
   fail_reason: string
