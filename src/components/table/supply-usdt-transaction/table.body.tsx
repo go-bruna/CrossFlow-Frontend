@@ -1,6 +1,6 @@
 import { Typography } from "@/components/typography";
 import { IUSDTSuppliedTransaction } from "@/types/api/pool";
-import { getFixedNumber, numberFormat, pureNumberFormat } from "@/utils";
+import { getFixedNumber, pureNumberFormat } from "@/utils";
 
 interface Props {
   transactions: IUSDTSuppliedTransaction[]
