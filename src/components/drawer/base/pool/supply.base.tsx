@@ -94,6 +94,9 @@ export const SupplyContainer = () => {
     }
     if (!selected)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select a lock item to be supplied.'})
+    if (account?.bech32Address !== selected?.creator) {
+      return messageApi.Alert({...WARNING_MESSAGE, content: `the locked asset selected has not been created by current user.`});
+    }
     if (rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
       return
 
