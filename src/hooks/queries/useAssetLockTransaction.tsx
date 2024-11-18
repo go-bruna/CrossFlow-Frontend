@@ -10,5 +10,10 @@ export const useAssetLockTransaction= () => {
     },
   })
 
+  if (!data)
+		return {
+			data: null,
+		}
+
   return { data }  
 }

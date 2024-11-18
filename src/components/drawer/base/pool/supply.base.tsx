@@ -28,6 +28,7 @@ import { TailSpin } from "react-loader-spinner"
 import { useAssetLockTransaction } from "@/hooks/queries/useAssetLockTransaction"
 import { useMaxInterestRate } from "@/hooks/queries/useMaxInterestRate"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import { POOL_AVAILABLE } from "@/constants"
 
 export const SupplyContainer = () => {
   const { messageApi } = useToast()
@@ -74,7 +75,8 @@ export const SupplyContainer = () => {
     const _filteredData = assetLockTransaction.asset_lock_transaction
       .filter((e: IBaseLockTransaction) => 
         e.creator === account.bech32Address && 
-        e.status === 'Completed'
+        e.status === 'Completed' &&
+        e.pull_status === POOL_AVAILABLE
       )   
     return _filteredData
   }, [assetLockTransaction, account?.bech32Address])

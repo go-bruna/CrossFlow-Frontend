@@ -10,5 +10,11 @@ export const useAssetPrice = (ticker?: string) => {
 		},
 	});
 
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

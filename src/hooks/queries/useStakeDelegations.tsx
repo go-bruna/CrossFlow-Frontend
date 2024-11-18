@@ -10,5 +10,12 @@ export const useStakeDelegations = (address?: string) => {
 		},
     enabled: !!address
 	});
+
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

@@ -10,5 +10,11 @@ export const useAssetSupplyTransaction= () => {
     },
   })
 
+  if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+    
   return { data, isLoading }  
 }

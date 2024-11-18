@@ -11,5 +11,10 @@ export const useEstimatedRepayAmount= (creator?: string, loan_id?:string, repay_
     enabled: !!creator && !!loan_id && !!repay_percent && Number(repay_percent) > 0 
   })
 
+  if (!data)
+		return {
+			data: null,
+		}
+
   return { data }  
 }

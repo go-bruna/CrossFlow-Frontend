@@ -9,5 +9,12 @@ export const useStakeValidators = () => {
 			return await getAllValidators();
 		},
 	});
+
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

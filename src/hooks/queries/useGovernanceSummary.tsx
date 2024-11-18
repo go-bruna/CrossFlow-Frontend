@@ -9,5 +9,12 @@ export const useGovernanceSummary = () => {
 			return await getGovernanceSummary();
 		},
 	});
+
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

@@ -10,5 +10,11 @@ export const useLoanRate = () => {
 		},
 	});
 
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

@@ -10,5 +10,11 @@ export const usePoolList = () => {
 		},
 	});
 
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

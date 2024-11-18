@@ -9,5 +9,12 @@ export const useGovernanceProposalDetail = (id?: string) => {
 			return await getGovernanceProposalDetail(id);
 		},
 	});
+
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

@@ -133,7 +133,7 @@ export const validateEthereumAddress = (addr: string) => {
 /**
  * Get decimals for the selected asset's amount
  */
-export const getAssetDecimalObj = (assetProfiles: IAssetProfile[] | undefined , asset_id: string) => {
+export const getAssetDecimalObj = (assetProfiles: IAssetProfile[] | null , asset_id: string) => {
 
   // find an asset matched to target_asset_id in assetProfile array. 
   const _selectedAsset = assetProfiles?.find(e => e.id === asset_id)

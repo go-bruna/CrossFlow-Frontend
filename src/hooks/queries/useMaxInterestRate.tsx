@@ -10,5 +10,11 @@ export const useMaxInterestRate = () => {
 		},
 	});
 
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };

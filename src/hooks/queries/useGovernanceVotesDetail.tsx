@@ -10,5 +10,12 @@ export const useGovernanceVoteDetail = (proposal_id?: string, vote_id?: string) 
 		},
     enabled: !!proposal_id && !!vote_id
 	});
+
+	if (!data)
+		return {
+			data: null,
+			isLoading
+		}
+		
 	return { data, isLoading };
 };
