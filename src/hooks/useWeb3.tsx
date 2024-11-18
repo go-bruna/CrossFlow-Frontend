@@ -34,7 +34,7 @@ export const useSigningWeb3Client = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [provider, address]);
+  }, [provider, signer, address]);
 
   const approveUSDT = useCallback(async(amount: number) => {
     try {
@@ -51,7 +51,11 @@ export const useSigningWeb3Client = () => {
       const tokenAmount = amount.toString();
       const params: string[] = [O_USDT_TOKEN.address, toWei(tokenAmount)];
 
-      console.log("transaction of approve ==>", contract)
+      if (!contract) {
+        messageApi.Alert({ ...WARNING_MESSAGE, content: `Contract doesn't work for now, please try again.`})
+        return false
+      }
+
       let transaction = {
         from: address,
         to: O_USDT_TOKEN.address,
@@ -80,7 +84,7 @@ export const useSigningWeb3Client = () => {
       messageApi.Alert({...WARNING_MESSAGE, content: error?.reason ?? undefined});
       return false
     }
-  }, [provider, address]);
+  }, [provider, signer, address]);
 
   return {
     approveUSDT,
