@@ -72,7 +72,7 @@ export const MainPoolsTableBody = ({
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
             <Typography variant="label-medium" className="text-[13px]">
-              {`${numberFormat(Number(row_data.liquidity) / getAssetDecimalObj(assetProfiles, row_data.asset_id).decimals)} ${row_data.asset_symbol}`}
+              {`${pureNumberFormat(Number(row_data.liquidity) / getAssetDecimalObj(assetProfiles, row_data.asset_id).decimals, 4)} ${row_data.asset_symbol}`}
             </Typography>
             <Typography variant="label-medium" className="text-[13px]">
               {`$${numberFormat(row_data.liquidity_in_dollar)}`}
