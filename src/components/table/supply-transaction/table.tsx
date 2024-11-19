@@ -27,7 +27,7 @@ export const SupplyTransactionTable = () => {
 
     const _filteredData = assetSupplyTransaction
       .filter((e: IAssetSuppliedTransaction) => 
-        e.creator === account.bech32Address
+        e.supplier === account.bech32Address
       )   
     return _filteredData
   }, [assetSupplyTransaction, account?.bech32Address])
