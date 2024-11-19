@@ -111,11 +111,6 @@ export const SupplyContainer = () => {
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
-      if (!client) {
-        messageApi.Alert({...WARNING_MESSAGE, content: ''})
-        setLoading(false)
-        return;
-      }
       let msg = await client.msgRequestSupply(_supplyData);
       await client.signAndBroadcast([msg]);
       await invalidateQuery()

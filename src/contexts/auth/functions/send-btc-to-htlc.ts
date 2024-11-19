@@ -198,18 +198,15 @@ export const SendBitcoinToHTLC = async (
 
   try {
     const client = await TxClient(offlineSigner);
-
-    if (!client) {
-      messageApi.Alert({...WARNING_MESSAGE, content: ''})
-      return;
-    }
-
     let msg = await client.msgRequestLock(value);
     const result = await client.signAndBroadcast([msg]);
-    console.log("send lock result ====>", result);
+    
+    if (!result)
+      return undefined
     return result
   } catch (error: any) {
     console.log('lock error ==>', error)
     messageApi.Alert(ERROR_MESSAGE(error as string))
+    return undefined
   }
 }
