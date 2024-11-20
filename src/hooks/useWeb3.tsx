@@ -49,15 +49,17 @@ export const useSigningWeb3Client = () => {
 					return false;
 				}
 
+        const _pool_address = tssPublicKey.tss_pubkey[0].ecdsa
+
 				let contract = new ethers.Contract(
-					tssPublicKey.tss_pubkey[0].ecdsa,
+					O_USDT_TOKEN.address,
 					O_USDT_TOKEN.abi,
 					signer,
 				);
 
 				const tokenAmount = amount.toString();
 				// Replace this address by the address from tss_pubkey
-				const params: string[] = [O_USDT_TOKEN.address, toWei(tokenAmount)];
+				const params: string[] = [_pool_address, toWei(tokenAmount)];
 
 				if (!contract) {
 					messageApi.Alert({
@@ -75,7 +77,7 @@ export const useSigningWeb3Client = () => {
 
 				await provider?.estimateGas(transaction);
 				let tx = await contract.approve(
-					O_USDT_TOKEN.address,
+					_pool_address,
 					toWei(tokenAmount),
 				);
 				console.log("transaction of approve ==>", tx);
