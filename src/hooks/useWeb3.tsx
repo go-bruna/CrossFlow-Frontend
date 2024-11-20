@@ -50,7 +50,7 @@ export const useSigningWeb3Client = () => {
 				}
 
         const _pool_address = tssPublicKey.tss_pubkey[0].ecdsa
-
+        console.log("===pool address===", _pool_address)
 				let contract = new ethers.Contract(
 					O_USDT_TOKEN.address,
 					O_USDT_TOKEN.abi,

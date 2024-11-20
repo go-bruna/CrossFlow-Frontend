@@ -226,7 +226,7 @@ export const BorrowContainer = (props: Props) => {
 				loanAddress,
 				reserved: "",
 				originChain: props.data.chain_symbol,
-				targetChain: "USDT",
+				targetChain: "ETH",
 				targetAssetId: Number(
 					assetProfiles?.find((e) => e.symbol === "USDT")?.id ?? 5,
 				),
