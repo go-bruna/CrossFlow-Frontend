@@ -227,10 +227,10 @@ export const BorrowContainer = (props: Props) => {
 				reserved: "",
 				originChain: props.data.chain_symbol,
 				targetChain: "ETH",
-				// targetAssetId: Number(
-				// 	assetProfiles?.find((e) => e.symbol === "USDT")?.id ?? 5,
-				// ),
-        targetAssetId: Number(props.data.asset_id)
+				targetAssetId: Number(
+					assetProfiles?.find((e) => e.symbol === "USDT")?.id ?? 5,
+				),
+        // targetAssetId: Number(props.data.asset_id)
 			};
 
 			const client = await TxClient(offlineSigners?.offlineSigner);

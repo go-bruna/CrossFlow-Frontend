@@ -25,7 +25,7 @@ import { BitcoinIcon } from "@/assets/icons/coins"
 import { twMerge } from "tailwind-merge";
 import { TailSpin } from "react-loader-spinner";
 import { IPool } from "@/types/api/pool";
-// import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
+import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
 
 const returnValue = {
@@ -44,7 +44,7 @@ export const BorrowUSDTContainer = (props: Props) => {
   const { data: offlineSigners } = useOfflineSigners()
   const { data: lockData } = useLockBalance()
   const { data: loanRateData } = useLoanRate()
-  // const { data: assetProfiles } = useAssetProfile()
+  const { data: assetProfiles } = useAssetProfile()
   const { data: btcPrice } = useAssetPrice('BTC')
   
   const [ loading, setLoading ] = useState<boolean>(false)
@@ -175,8 +175,8 @@ export const BorrowUSDTContainer = (props: Props) => {
         reserved: "",
         originChain: props.data.chain_symbol,
         targetChain: 'BTC',
-        // targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'BTC')?.id ?? 1),
-        targetAssetId: Number(props.data.asset_id)
+        targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'BTC')?.id ?? 1),
+        // targetAssetId: Number(props.data.asset_id)
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
