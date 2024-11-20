@@ -19,7 +19,7 @@ import {
 import { IBaseLoan, ILoanEntity, IPool } from "@/types/api/pool"
 import { getAssetDecimalObj, pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
-import { GET_LOAN_ENTITY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
+import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
@@ -36,6 +36,7 @@ import {
 } from "wagmi"
 import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import { useTssPublicKey } from "@/hooks/queries/useTssPublicKey"
 
 
 const tabs = [
@@ -60,6 +61,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
   const { data: offlineSigners } = useOfflineSigners()
   const { data: assetLoanEntity } = useLoanEntity()
   const { data: assetProfiles } = useAssetProfile()
+  const { data: tssData } = useTssPublicKey()
   const { data: estimatedRepayAmount } = useEstimatedRepayAmount(
     account?.bech32Address, 
     selected?.loan_tx_id,
@@ -147,7 +149,10 @@ export const RepayContainer = (props: ISupplyContainer) => {
         reserved: ""
       }
 
-      const approve = await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
+      const approve = await approveUSDT(
+        estimatedRepayAmount?.amount_repay ?? 0,
+        tssData?.tss_pubkey[0].ecdsa
+      )
 
       if (!approve) {
         setLoading(false)
@@ -175,6 +180,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_LOAN_ENTITY] }),
       queryClient.invalidateQueries({ queryKey: [GET_REPAY_ESTIMATED_AMOUNT] }),
+      queryClient.invalidateQueries({ queryKey: [GET_POOL_TSS_PUBLIC_KEY]}),
     ])
   }
 

@@ -36,7 +36,7 @@ export const useSigningWeb3Client = () => {
     }
   }, [provider, signer, address]);
 
-  const approveUSDT = useCallback(async(amount: number) => {
+  const approveUSDT = useCallback(async(amount: number, address?: string) => {
     try {
 
       updateModalState(MODAL_STATE.APPROVE, "Approving", " ", "", 2);
@@ -58,13 +58,13 @@ export const useSigningWeb3Client = () => {
 
       let transaction = {
         from: address,
-        to: O_USDT_TOKEN.address,
+        to: address || O_USDT_TOKEN.address,
         data: contract.interface.encodeFunctionData("approve", params),
       };
 
       await provider?.estimateGas(transaction);
       let tx = await contract.approve(
-        O_USDT_TOKEN.address,
+        address || O_USDT_TOKEN.address,
         toWei(tokenAmount)
       );
       console.log("transaction of approve ==>", tx)

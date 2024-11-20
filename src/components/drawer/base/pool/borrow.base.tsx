@@ -165,7 +165,7 @@ export const BorrowContainer = (props: Props) => {
     if (calculateDateDiff > Number(loanRateData?.max_duration))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: `Duration should be less than max_duration`})  
     
-    if (!loanRate || loanRate > Number(loanRateData?.max_loan_rate))
+    if (!loanRate || loanRate > Number(loanRateData?.max_loan_rate) * 100)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: `Loan rate should be less thatn ${Number(loanRateData?.max_loan_rate) * 100}`})  
 
     try {
