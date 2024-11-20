@@ -10,7 +10,7 @@ import { Input } from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
-import {  GET_MAX_INTEREST_RATE } from "@/constants/query"
+import { GET_MAX_INTEREST_RATE, GET_USDT_SUPPLY_TRANSACTION } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
@@ -102,6 +102,9 @@ export const SupplyUSDTContainer = (props: Props) => {
 
       messageApi.Alert(SUCCESS_OPERATION('Successfully supplied USDT.'))
 
+      await queryClient.invalidateQueries({
+        queryKey: [GET_USDT_SUPPLY_TRANSACTION],
+      })
     } catch (error) {
       setLoading(false)
       messageApi.Alert(ERROR_MESSAGE(error as string))
@@ -141,8 +144,8 @@ export const SupplyUSDTContainer = (props: Props) => {
         icon={<AmountIcon />}
         innerButtonLabel="Max"
         errorMsg={
-          rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100) 
-            ? `Interest rate should be less than ${Number((Number(maxRate?.max_interest_rate ?? 0) * 100).toFixed(0))} %`
+          amount && amount > (balance || 0)
+            ? `Amount should be less than ${balance}`
             : null
         }
         onMax={() => setAmount(balance ?? 0)}

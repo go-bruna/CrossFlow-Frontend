@@ -8,6 +8,11 @@ export const CHAIN_SCAN = TEST_MODE
 	? 'https://holesky.etherscan.io'
 	: "https://etherscan.io";
 
+// Mempool transaction hash url
+export const MEMPOOL_BASE_TRANSACTION_URL = "https://mempool.space/testnet/tx"
+
+// Holesky testnet transaction hash url
+export const HOLESKY_BASE_TRANSACTION_URL = " https://holesky.etherscan.io/tx"
 
 export const O_USDT_TOKEN: IToken = {
 	name: "USDT-O",

@@ -1,6 +1,7 @@
 import { Typography } from "@/components/typography";
+import { HOLESKY_BASE_TRANSACTION_URL } from "@/constants";
 import { IUSDTSuppliedTransaction } from "@/types/api/pool";
-import { getFixedNumber, pureNumberFormat } from "@/utils";
+import { getFixedNumber, pureNumberFormat, truncateAddress } from "@/utils";
 
 interface Props {
   transactions: IUSDTSuppliedTransaction[]
@@ -18,6 +19,18 @@ const Row = ({ data }: IRowProps) => {
           <Typography variant="label-small">{ pureNumberFormat(Number(data.amount) / 10**18) }</Typography>
           <Typography variant="label-extrasmall" className="text-[#fff]/50">{ data.asset_symbol }</Typography>
         </div>
+      </td>
+      <td>
+        {!!data.tss_hash && (
+          <a
+            className="underline text-white"
+            href={`${HOLESKY_BASE_TRANSACTION_URL}/${data.tss_hash}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {truncateAddress(data.tss_hash, 6)}
+          </a>
+        )}
       </td>
       <td>{`${getFixedNumber(Number(data.interest_rate) * 100)} %`}</td>
       <td>{data.status}</td>

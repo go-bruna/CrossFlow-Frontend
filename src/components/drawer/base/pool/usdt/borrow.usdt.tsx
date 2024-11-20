@@ -13,9 +13,6 @@ import { useToast } from "@/hooks/useToast"
 import { useAccount, useOfflineSigners } from "graz"
 import { useLockBalance } from "@/hooks/queries/useLockBalance"
 import { queryClient } from "@/wagmi"
-import {
-  useAccount as wagmiUseAccount
-} from "wagmi"
 import { GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
@@ -30,6 +27,7 @@ import { TailSpin } from "react-loader-spinner";
 import { IPool } from "@/types/api/pool";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
+import { useAuth } from "@/contexts/auth";
 
 const returnValue = {
   assetId: 5,
@@ -43,7 +41,7 @@ export interface Props {
 
 export const BorrowUSDTContainer = (props: Props) => {
   const { messageApi } = useToast()
-  const { address } = wagmiUseAccount();
+  const { authState } = useAuth();
 
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
@@ -58,7 +56,7 @@ export const BorrowUSDTContainer = (props: Props) => {
   const [ interestRate, setInterestRate ] = 
     useState<number | undefined>(getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100))
   const [ activeLock, setActiveLock ] = useState<IBaseLockBalance | undefined>(undefined)
-  const [ loanAddress, setLoanAddress ] = useState<string | undefined>(address || undefined)
+  const [ loanAddress, setLoanAddress ] = useState<string | undefined>(authState.paymentAccount?.address || undefined)
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   /**
@@ -140,7 +138,7 @@ export const BorrowUSDTContainer = (props: Props) => {
     
     // check whether there is active borrowable asset or not
     if (!activeLock)
-      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'There is no any suppliable asset'})
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'There is no any borrowable asset'})
 
     // check whether collateral amount is greater than 0 or less than max suppliable amount
     if (!collateralAmount)

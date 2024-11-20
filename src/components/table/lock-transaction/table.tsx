@@ -67,7 +67,7 @@ export const LockTransactionTable = () => {
                 className="w-[44px] h-[44px]"
                 icon={<LogoIcon />}
               />
-              <Typography variant="label-small" className="font-bold">You still have No locked assets</Typography>
+              <Typography variant="label-small" className="font-bold">No locked asset</Typography>
             </div>
           )}
         </div>

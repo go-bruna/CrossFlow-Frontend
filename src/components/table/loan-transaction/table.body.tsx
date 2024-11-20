@@ -1,4 +1,6 @@
 import { Typography } from "@/components/typography";
+import { HOLESKY_BASE_TRANSACTION_URL, MEMPOOL_BASE_TRANSACTION_URL } from "@/constants";
+// import { MEMPOOL_BASE_TRANSACTION_URL } from "@/constants";
 import { IAssetBorrowedTransaction } from "@/types/api/pool";
 import { fromWei, getFixedNumber, numberFormat, truncateAddress } from "@/utils";
 
@@ -27,6 +29,23 @@ const Row = ({ data }: IRowProps) => {
           <Typography variant="label-small">{ refineAmount(data.collateral_amount) }</Typography>
           <Typography variant="label-extrasmall" className="text-[#fff]/50">{ data.collateral_symbol }</Typography>
         </div>
+      </td>
+      <td>
+        {!!data.release_hash && (
+          <a
+            className="underline text-white"
+            href={`
+              ${data.collateral_symbol === 'USDT' 
+                ? MEMPOOL_BASE_TRANSACTION_URL 
+                : HOLESKY_BASE_TRANSACTION_URL
+              }/${data.release_hash}`
+            }
+            target="_blank"
+            rel="noreferrer"
+          >
+            {truncateAddress(data.release_hash, 6)}
+          </a>
+        )}
       </td>
       <td>{`${getFixedNumber(Number(data.loan_rate) * 100)} %`}</td>
       <td>{truncateAddress(data.loan_address, 5)}</td>
