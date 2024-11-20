@@ -34,6 +34,9 @@ import {
 	WALLET_NOT_CONNECTED,
 	WARNING_MESSAGE,
 } from "@/constants/message";
+import {
+  useAccount as wagmiUseAccount
+} from "wagmi"
 import { MsgRequestLoan } from "@/cf-client/cfprotocol.loan/tx";
 import { TxClient } from "@/cf-client/client";
 import { EthereumIcon } from "@/assets/icons/coins";
@@ -55,13 +58,15 @@ export interface Props {
 
 export const BorrowContainer = (props: Props) => {
 	const { messageApi } = useToast();
+  const { address } = wagmiUseAccount();
+
 	const { data: account } = useAccount();
 	const { data: offlineSigners } = useOfflineSigners();
+	const { data: btcPrice } = useAssetPrice("BTC");
 	const { data: lockData } = useLockBalance();
 	const { data: loanRateData } = useLoanRate();
 	const { data: assetProfiles } = useAssetProfile();
-	const { data: btcPrice } = useAssetPrice("BTC");
-
+  
 	const [loading, setLoading] = useState<boolean>(false);
 	const [collateralAmount, setCollateralAmount] = useState<number | undefined>(
 		undefined,
@@ -73,7 +78,7 @@ export const BorrowContainer = (props: Props) => {
 	const [activeLock, setActiveLock] = useState<IBaseLockBalance | undefined>(
 		undefined,
 	);
-	const [loanAddress, setLoanAddress] = useState<string | undefined>(undefined);
+	const [loanAddress, setLoanAddress] = useState<string | undefined>(address || undefined);
 	const [endDate, setEndDate] = useState<Date | null>(new Date());
 
 	/**

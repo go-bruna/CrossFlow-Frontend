@@ -13,6 +13,9 @@ import { useToast } from "@/hooks/useToast"
 import { useAccount, useOfflineSigners } from "graz"
 import { useLockBalance } from "@/hooks/queries/useLockBalance"
 import { queryClient } from "@/wagmi"
+import {
+  useAccount as wagmiUseAccount
+} from "wagmi"
 import { GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
@@ -40,6 +43,8 @@ export interface Props {
 
 export const BorrowUSDTContainer = (props: Props) => {
   const { messageApi } = useToast()
+  const { address } = wagmiUseAccount();
+
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
   const { data: lockData } = useLockBalance()
@@ -53,7 +58,7 @@ export const BorrowUSDTContainer = (props: Props) => {
   const [ interestRate, setInterestRate ] = 
     useState<number | undefined>(getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100))
   const [ activeLock, setActiveLock ] = useState<IBaseLockBalance | undefined>(undefined)
-  const [ loanAddress, setLoanAddress ] = useState<string | undefined>(undefined)
+  const [ loanAddress, setLoanAddress ] = useState<string | undefined>(address || undefined)
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   /**
