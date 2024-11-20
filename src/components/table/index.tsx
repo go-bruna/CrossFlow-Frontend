@@ -3,6 +3,7 @@ import { GovernanceTable } from "./governance/table";
 import { LoanTransactionTable } from "./loan-transaction/table";
 import { LockTransactionTable } from "./lock-transaction/table";
 import { MainPoolsTable } from "./main-pool/table";
+import { RepayTransactionTable } from "./repay-transaction/table";
 import { StakeGenerationTable } from "./stake-generation/table";
 import { StakeValidatorTable } from "./stake-validators/table";
 import { SuppliedAssetsTable } from "./supplied-asset/table";
@@ -20,4 +21,5 @@ export default {
   LoanTransaction: LoanTransactionTable,
   SupplyTransaction: SupplyTransactionTable,
   SupplyUSDTTransaction: SupplyUSDTTransactionTable,
+  RepayTable: RepayTransactionTable,
 }

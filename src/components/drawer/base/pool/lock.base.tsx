@@ -97,18 +97,20 @@ export const LockContainer = () => {
         BigNumber(amount).multipliedBy(1e8),
         authState.paymentAccount?.publicKey,
       )
-      console.log('res = ', res)
-      setLoading(false)
+      
       if (!res) {
+        setLoading(false)
         return
       }
-      
-      messageApi.Alert(SUCCESS_OPERATION('Successfully locked collateral.'))
 
       // invalid asset_lock_transaction whenever lock succeeds.
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_LOCK_TRANSACTION],
       })
+      
+      setLoading(false)
+      messageApi.Alert(SUCCESS_OPERATION('Successfully locked collateral.'))
+
     } catch (error) {
       setLoading(false)
       messageApi.Alert(ERROR_MESSAGE(error as string))

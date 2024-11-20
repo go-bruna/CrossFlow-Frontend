@@ -105,21 +105,21 @@ export const SupplyContainer = () => {
 
       const _supplyData: MsgRequestSupply = {
         creator: account.bech32Address,
-        lockId: Number(selected.asset_id),
+        lockId: Number(selected.id),
         interestRate: ((rate || 0) / 100).toString(),
         reserved: "",
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
-      let msg = await client.msgRequestSupply(_supplyData);
+      const msg = await client.msgRequestSupply(_supplyData);
+      
       await client.signAndBroadcast([msg]);
       await invalidateQuery()
-
-      setLoading(false)
-      
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_SUPPLY_TRANSACTION],
       })
+
+      setLoading(false)
       messageApi.Alert(SUCCESS_OPERATION('Successfully supplied.'))
 
     } catch (error) {
@@ -145,9 +145,6 @@ export const SupplyContainer = () => {
 
   return (
     <div className="w-full mt-[30px]">
-      {/* Search */}
-      <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
-
       <div className="flex flex-col gap-[10px] mt-8">
         <Typography variant="label-small" className="f-light">
           Select Locked Amount

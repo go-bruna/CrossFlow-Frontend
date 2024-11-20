@@ -19,7 +19,7 @@ import {
 import { IBaseLoan, ILoanEntity, IPool } from "@/types/api/pool"
 import { getAssetDecimalObj, pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
-import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
+import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT, GET_REPAY_TRANSACTION } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
@@ -36,6 +36,8 @@ import {
 } from "wagmi"
 import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import Table from "@/components/table"
+import { REPAID_FULLY } from "@/constants/status"
 
 const tabs = [
   { title: '25%', value: 25 },
@@ -90,7 +92,11 @@ export const RepayContainer = (props: ISupplyContainer) => {
       return []
     
     // get loanEntity by selected chain_symbol
-    const _loans = _filteredData.loans.filter(e => e.collateral_symbol === props.data.asset_symbol)
+    const _loans = _filteredData.loans
+      .filter(e => 
+        e.collateral_symbol === props.data.asset_symbol &&
+        e.repay_status !== REPAID_FULLY
+      )
     if (!_loans || _loans.length < 1)
       return []
 
@@ -147,19 +153,23 @@ export const RepayContainer = (props: ISupplyContainer) => {
       }
 
       const approve = 
-        await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
+        await approveUSDT(Number(estimatedRepayAmount?.amount_repay ?? 0) / 1e18)
 
       if (!approve) {
         setLoading(false)
         return
       }
+
       const client = await TxClient(offlineSigners?.offlineSigner);
-      let msg = await client.msgRequestRepay(_repayData);
+      const msg = await client.msgRequestRepay(_repayData);
+
       await client.signAndBroadcast([msg]);
+      await invalidateQuery()
+      await queryClient.invalidateQueries({
+        queryKey: [GET_REPAY_TRANSACTION],
+      })
 
       setLoading(false)
-      await invalidateQuery()
-      
       messageApi.Alert(SUCCESS_OPERATION('Successfully repayed.'))
 
     } catch (error) {
@@ -189,9 +199,6 @@ export const RepayContainer = (props: ISupplyContainer) => {
 
   return (
     <div className="w-full mt-[30px]">
-      {/* Search */}
-      <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
-
       <div className="flex flex-col gap-[10px] mt-8">
         <Typography variant="label-small" className="f-light">
           Select Collateral Symbol
@@ -318,7 +325,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       </div>
 
       {/* Repay Table */}
-      
+      <Table.RepayTable data={props.data} />
     </div>
   )
 }

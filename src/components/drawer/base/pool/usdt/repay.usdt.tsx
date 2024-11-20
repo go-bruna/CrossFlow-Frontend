@@ -19,7 +19,7 @@ import {
 import { IBaseLoan, ILoanEntity, IPool } from "@/types/api/pool"
 import { pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
-import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT } from "@/constants/query"
+import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT, GET_REPAY_TRANSACTION } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
@@ -36,6 +36,7 @@ import {
 } from "wagmi"
 import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import Table from "@/components/table"
 
 const tabs = [
   { title: '25%', value: 25 },
@@ -168,13 +169,17 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
         setLoading(false)
         return
       }
+
       const client = await TxClient(offlineSigners?.offlineSigner);
-      let msg = await client.msgRequestRepay(_repayData);
+      const msg = await client.msgRequestRepay(_repayData);
+
       await client.signAndBroadcast([msg]);
       await invalidateQuery()
+      await queryClient.invalidateQueries({
+        queryKey: [GET_REPAY_TRANSACTION],
+      })
 
       setLoading(false)
-
       messageApi.Alert(SUCCESS_OPERATION('Successfully repayed.'))
 
     } catch (error) {
@@ -204,9 +209,6 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
 
   return (
     <div className="w-full mt-[30px]">
-      {/* Search */}
-      <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
-
       <div className="flex flex-col gap-[10px] mt-8">
         <Typography variant="label-small" className="f-light">
           Select Collateral Symbol
@@ -333,7 +335,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
       </div>
 
       {/* Repay Table */}
-      
+      <Table.RepayTable data={props.data} />
     </div>
   )
 }

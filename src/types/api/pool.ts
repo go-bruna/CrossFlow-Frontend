@@ -146,6 +146,7 @@ export interface IBaseLoan {
   origin_chain: string
   target_chain: string
   target_asset_id: string
+  repay_status: string
 }
 export interface ILoanEntity {
   creator: string
@@ -161,4 +162,28 @@ export interface IEstimatedRepayAmount {
 export interface IAssetPrice {
   asset_symbol: string
   price: string
+}
+
+export interface IRepayTransaction {
+  amount_repay: string
+  amount_return: string
+  creator: string
+  fail_reason: string
+  handle_id: string
+  id: string
+  loan_tx_id: string
+  oracle_price: string
+  origin_fail_cnt: string
+  origin_hash: string
+  processing: true
+  repay_address: string
+  reserved: string
+  return_address: string
+  status: string
+  target_fail_cnt: string
+  target_hash: string
+  timestamp: string
+  tss_msg_id: string
+  repay_origin_chain: string
+  repay_target_chain: string
 }

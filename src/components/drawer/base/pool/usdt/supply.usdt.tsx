@@ -8,7 +8,6 @@ import Button from "@/components/button"
 import Table from "@/components/table"
 import { Input } from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
-import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
 import { GET_MAX_INTEREST_RATE, GET_USDT_SUPPLY_TRANSACTION } from "@/constants/query"
 import { queryClient } from "@/wagmi"
@@ -133,8 +132,6 @@ export const SupplyUSDTContainer = (props: Props) => {
 
   return (
     <div className="w-full mt-[30px]">
-      {/* Search */}
-      <Typography variant="label-medium" className="text-[13px] font-medium">Amount</Typography>
 
       {/* USDT amount to supply */}
       <Input 

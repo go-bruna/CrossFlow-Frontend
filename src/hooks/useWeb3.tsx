@@ -56,8 +56,8 @@ export const useSigningWeb3Client = () => {
 					O_USDT_TOKEN.abi,
 					signer,
 				);
-
 				const tokenAmount = amount.toString();
+				
 				// Replace this address by the address from tss_pubkey
 				const params: string[] = [_pool_address, toWei(tokenAmount)];
 

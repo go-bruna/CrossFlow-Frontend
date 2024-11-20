@@ -17,6 +17,7 @@ import {
   ILoanEntity, 
   IPool, 
   IPoolSummary, 
+  IRepayTransaction, 
   IUSDTSuppliedTransaction
 } from "@/types/api/pool"
 import axios from "axios"
@@ -156,6 +157,20 @@ export const getEstimatedRepayAmount = async (
   }
 }
 
+/**
+ * Fetch Repay transactions
+ * @returns 
+ */
+export const getRepayTransactions = async (): Promise<IRepayTransaction[] | undefined> => {
+  try {
+    const { data } = await axios.get(`${BASE_URL}/Crossflow-Network/CF-Protocol/loan/repay_transaction`)
+    if (!data || !data.RepayTransaction)
+      return undefined
+    return data.RepayTransaction
+  } catch (error: any) {
+    console.log("===Repay Transaction error====", (error as unknown as ErrorResponse).message)
+  }
+}
 
 /**
  * Fetch lock-balance that successfuly suplied.
