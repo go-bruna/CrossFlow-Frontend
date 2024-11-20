@@ -3,7 +3,7 @@ import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { MsgVote } from "./cosmos.gov/tx";
 import { cosmoshub } from "@/config/graz";
 import { MsgRequestLock, MsgRequestSupply, MsgRequestSupplyUsdt } from "./cfprotocol.lock/tx";
-import { MsgRequestLoan, MsgRequestRepay } from "./cfprotocol.loan/tx";
+import { MsgRequestLoan, MsgRequestRepay, MsgRequestRepayLock } from "./cfprotocol.loan/tx";
 import { MsgWithdrawDelegatorReward } from "./cosmos.circuit.v1/tx";
 import { MsgDelegate } from "./cosmos.circuit.v1.staking/tx";
 
@@ -24,6 +24,7 @@ const types = [
   ["/cfprotocol.lock.MsgRequestSupplyUsdt", MsgRequestSupplyUsdt],
   ["/cfprotocol.loan.MsgRequestLoan", MsgRequestLoan],
   ["/cfprotocol.loan.MsgRequestRepay", MsgRequestRepay],
+  ["/cfprotocol.loan.MsgRequestRepayLock", MsgRequestRepayLock],
   ["/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward", MsgWithdrawDelegatorReward],
   ["/cosmos.staking.v1beta1.MsgDelegate", MsgDelegate]
 ];
@@ -75,6 +76,10 @@ export const TxClient = async (offlineSinger: OfflineSigner) => {
       msgRequestRepay: (data: MsgRequestRepay): EncodeObject => ({
         typeUrl: "/cfprotocol.loan.MsgRequestRepay",
         value: MsgRequestRepay.fromPartial(data),
+      }),
+      msgRequestRepayLock: (data: MsgRequestRepayLock): EncodeObject => ({
+        typeUrl: "/cfprotocol.loan.MsgRequestRepayLock",
+        value: MsgRequestRepayLock.fromPartial(data),
       }),
       msgWithdrawDelegatorReward: (data: MsgWithdrawDelegatorReward): EncodeObject => ({
         typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",

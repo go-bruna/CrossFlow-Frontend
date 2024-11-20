@@ -112,9 +112,13 @@ export interface MsgObservationVoteResponse {
 
 export interface MsgRequestRepay {
   creator: string;
-  loanId: number;
+  loanTxId: number;
   /** [0-1] range */
   repayPercent: string;
+  /** on source blockchain address that will send/repay the borrowed asset */
+  repayAddress: string;
+  /** on targeted blockchain address that will receive the collateral. */
+  returnAddress: string;
   reserved: string;
 }
 
@@ -169,6 +173,40 @@ export interface MsgRepayObservationVote {
 }
 
 export interface MsgRepayObservationVoteResponse {
+  code: number;
+  msg: string;
+}
+
+export interface MsgRequestRepayLock {
+  creator: string;
+  repayTxId: number;
+  fromAddress: string;
+  senderPubkey: Uint8Array;
+  assetId: number;
+  amount: string;
+  timeout: string;
+  txHash: string;
+  lockAddress: string;
+  creationVout: number;
+  reserved: string;
+}
+
+export interface MsgRequestRepayLockResponse {
+  code: number;
+  msg: string;
+}
+
+export interface MsgObserveVoteRepayLocking {
+  creator: string;
+  lockTxId: number;
+  btcTxHash: string;
+  status: boolean;
+  failReason: string;
+  amount: string;
+  reserved: string;
+}
+
+export interface MsgObserveVoteRepayLockingResponse {
   code: number;
   msg: string;
 }
@@ -1286,7 +1324,7 @@ export const MsgObservationVoteResponse: MessageFns<MsgObservationVoteResponse> 
 };
 
 function createBaseMsgRequestRepay(): MsgRequestRepay {
-  return { creator: "", loanId: 0, repayPercent: "", reserved: "" };
+  return { creator: "", loanTxId: 0, repayPercent: "", repayAddress: "", returnAddress: "", reserved: "" };
 }
 
 export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
@@ -1294,14 +1332,20 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.loanId !== 0) {
-      writer.uint32(16).uint64(message.loanId);
+    if (message.loanTxId !== 0) {
+      writer.uint32(16).uint64(message.loanTxId);
     }
     if (message.repayPercent !== "") {
       writer.uint32(26).string(message.repayPercent);
     }
+    if (message.repayAddress !== "") {
+      writer.uint32(34).string(message.repayAddress);
+    }
+    if (message.returnAddress !== "") {
+      writer.uint32(42).string(message.returnAddress);
+    }
     if (message.reserved !== "") {
-      writer.uint32(34).string(message.reserved);
+      writer.uint32(50).string(message.reserved);
     }
     return writer;
   },
@@ -1325,7 +1369,7 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
             break;
           }
 
-          message.loanId = longToNumber(reader.uint64());
+          message.loanTxId = longToNumber(reader.uint64());
           continue;
         case 3:
           if (tag !== 26) {
@@ -1336,6 +1380,20 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
           continue;
         case 4:
           if (tag !== 34) {
+            break;
+          }
+
+          message.repayAddress = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.returnAddress = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
             break;
           }
 
@@ -1353,8 +1411,10 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
   fromJSON(object: any): MsgRequestRepay {
     return {
       creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
-      loanId: isSet(object.loanId) ? globalThis.Number(object.loanId) : 0,
+      loanTxId: isSet(object.loanTxId) ? globalThis.Number(object.loanTxId) : 0,
       repayPercent: isSet(object.repayPercent) ? globalThis.String(object.repayPercent) : "",
+      repayAddress: isSet(object.repayAddress) ? globalThis.String(object.repayAddress) : "",
+      returnAddress: isSet(object.returnAddress) ? globalThis.String(object.returnAddress) : "",
       reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
     };
   },
@@ -1364,11 +1424,17 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
     if (message.creator !== "") {
       obj.creator = message.creator;
     }
-    if (message.loanId !== 0) {
-      obj.loanId = Math.round(message.loanId);
+    if (message.loanTxId !== 0) {
+      obj.loanTxId = Math.round(message.loanTxId);
     }
     if (message.repayPercent !== "") {
       obj.repayPercent = message.repayPercent;
+    }
+    if (message.repayAddress !== "") {
+      obj.repayAddress = message.repayAddress;
+    }
+    if (message.returnAddress !== "") {
+      obj.returnAddress = message.returnAddress;
     }
     if (message.reserved !== "") {
       obj.reserved = message.reserved;
@@ -1382,8 +1448,10 @@ export const MsgRequestRepay: MessageFns<MsgRequestRepay> = {
   fromPartial<I extends Exact<DeepPartial<MsgRequestRepay>, I>>(object: I): MsgRequestRepay {
     const message = createBaseMsgRequestRepay();
     message.creator = object.creator ?? "";
-    message.loanId = object.loanId ?? 0;
+    message.loanTxId = object.loanTxId ?? 0;
     message.repayPercent = object.repayPercent ?? "";
+    message.repayAddress = object.repayAddress ?? "";
+    message.returnAddress = object.returnAddress ?? "";
     message.reserved = object.reserved ?? "";
     return message;
   },
@@ -2232,6 +2300,528 @@ export const MsgRepayObservationVoteResponse: MessageFns<MsgRepayObservationVote
   },
 };
 
+function createBaseMsgRequestRepayLock(): MsgRequestRepayLock {
+  return {
+    creator: "",
+    repayTxId: 0,
+    fromAddress: "",
+    senderPubkey: new Uint8Array(0),
+    assetId: 0,
+    amount: "",
+    timeout: "",
+    txHash: "",
+    lockAddress: "",
+    creationVout: 0,
+    reserved: "",
+  };
+}
+
+export const MsgRequestRepayLock: MessageFns<MsgRequestRepayLock> = {
+  encode(message: MsgRequestRepayLock, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.repayTxId !== 0) {
+      writer.uint32(16).uint64(message.repayTxId);
+    }
+    if (message.fromAddress !== "") {
+      writer.uint32(26).string(message.fromAddress);
+    }
+    if (message.senderPubkey.length !== 0) {
+      writer.uint32(34).bytes(message.senderPubkey);
+    }
+    if (message.assetId !== 0) {
+      writer.uint32(40).uint64(message.assetId);
+    }
+    if (message.amount !== "") {
+      writer.uint32(50).string(message.amount);
+    }
+    if (message.timeout !== "") {
+      writer.uint32(58).string(message.timeout);
+    }
+    if (message.txHash !== "") {
+      writer.uint32(66).string(message.txHash);
+    }
+    if (message.lockAddress !== "") {
+      writer.uint32(74).string(message.lockAddress);
+    }
+    if (message.creationVout !== 0) {
+      writer.uint32(80).uint64(message.creationVout);
+    }
+    if (message.reserved !== "") {
+      writer.uint32(90).string(message.reserved);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestRepayLock {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestRepayLock();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.repayTxId = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.fromAddress = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.senderPubkey = reader.bytes();
+          continue;
+        case 5:
+          if (tag !== 40) {
+            break;
+          }
+
+          message.assetId = longToNumber(reader.uint64());
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.amount = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.timeout = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.txHash = reader.string();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.lockAddress = reader.string();
+          continue;
+        case 10:
+          if (tag !== 80) {
+            break;
+          }
+
+          message.creationVout = longToNumber(reader.uint64());
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.reserved = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestRepayLock {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      repayTxId: isSet(object.repayTxId) ? globalThis.Number(object.repayTxId) : 0,
+      fromAddress: isSet(object.fromAddress) ? globalThis.String(object.fromAddress) : "",
+      senderPubkey: isSet(object.senderPubkey) ? bytesFromBase64(object.senderPubkey) : new Uint8Array(0),
+      assetId: isSet(object.assetId) ? globalThis.Number(object.assetId) : 0,
+      amount: isSet(object.amount) ? globalThis.String(object.amount) : "",
+      timeout: isSet(object.timeout) ? globalThis.String(object.timeout) : "",
+      txHash: isSet(object.txHash) ? globalThis.String(object.txHash) : "",
+      lockAddress: isSet(object.lockAddress) ? globalThis.String(object.lockAddress) : "",
+      creationVout: isSet(object.creationVout) ? globalThis.Number(object.creationVout) : 0,
+      reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestRepayLock): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.repayTxId !== 0) {
+      obj.repayTxId = Math.round(message.repayTxId);
+    }
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
+    if (message.senderPubkey.length !== 0) {
+      obj.senderPubkey = base64FromBytes(message.senderPubkey);
+    }
+    if (message.assetId !== 0) {
+      obj.assetId = Math.round(message.assetId);
+    }
+    if (message.amount !== "") {
+      obj.amount = message.amount;
+    }
+    if (message.timeout !== "") {
+      obj.timeout = message.timeout;
+    }
+    if (message.txHash !== "") {
+      obj.txHash = message.txHash;
+    }
+    if (message.lockAddress !== "") {
+      obj.lockAddress = message.lockAddress;
+    }
+    if (message.creationVout !== 0) {
+      obj.creationVout = Math.round(message.creationVout);
+    }
+    if (message.reserved !== "") {
+      obj.reserved = message.reserved;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestRepayLock>, I>>(base?: I): MsgRequestRepayLock {
+    return MsgRequestRepayLock.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestRepayLock>, I>>(object: I): MsgRequestRepayLock {
+    const message = createBaseMsgRequestRepayLock();
+    message.creator = object.creator ?? "";
+    message.repayTxId = object.repayTxId ?? 0;
+    message.fromAddress = object.fromAddress ?? "";
+    message.senderPubkey = object.senderPubkey ?? new Uint8Array(0);
+    message.assetId = object.assetId ?? 0;
+    message.amount = object.amount ?? "";
+    message.timeout = object.timeout ?? "";
+    message.txHash = object.txHash ?? "";
+    message.lockAddress = object.lockAddress ?? "";
+    message.creationVout = object.creationVout ?? 0;
+    message.reserved = object.reserved ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgRequestRepayLockResponse(): MsgRequestRepayLockResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgRequestRepayLockResponse: MessageFns<MsgRequestRepayLockResponse> = {
+  encode(message: MsgRequestRepayLockResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRequestRepayLockResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRequestRepayLockResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestRepayLockResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgRequestRepayLockResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgRequestRepayLockResponse>, I>>(base?: I): MsgRequestRepayLockResponse {
+    return MsgRequestRepayLockResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgRequestRepayLockResponse>, I>>(object: I): MsgRequestRepayLockResponse {
+    const message = createBaseMsgRequestRepayLockResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgObserveVoteRepayLocking(): MsgObserveVoteRepayLocking {
+  return { creator: "", lockTxId: 0, btcTxHash: "", status: false, failReason: "", amount: "", reserved: "" };
+}
+
+export const MsgObserveVoteRepayLocking: MessageFns<MsgObserveVoteRepayLocking> = {
+  encode(message: MsgObserveVoteRepayLocking, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.lockTxId !== 0) {
+      writer.uint32(16).uint64(message.lockTxId);
+    }
+    if (message.btcTxHash !== "") {
+      writer.uint32(26).string(message.btcTxHash);
+    }
+    if (message.status !== false) {
+      writer.uint32(32).bool(message.status);
+    }
+    if (message.failReason !== "") {
+      writer.uint32(42).string(message.failReason);
+    }
+    if (message.amount !== "") {
+      writer.uint32(50).string(message.amount);
+    }
+    if (message.reserved !== "") {
+      writer.uint32(58).string(message.reserved);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgObserveVoteRepayLocking {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgObserveVoteRepayLocking();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.lockTxId = longToNumber(reader.uint64());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.btcTxHash = reader.string();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.status = reader.bool();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.failReason = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.amount = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.reserved = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgObserveVoteRepayLocking {
+    return {
+      creator: isSet(object.creator) ? globalThis.String(object.creator) : "",
+      lockTxId: isSet(object.lockTxId) ? globalThis.Number(object.lockTxId) : 0,
+      btcTxHash: isSet(object.btcTxHash) ? globalThis.String(object.btcTxHash) : "",
+      status: isSet(object.status) ? globalThis.Boolean(object.status) : false,
+      failReason: isSet(object.failReason) ? globalThis.String(object.failReason) : "",
+      amount: isSet(object.amount) ? globalThis.String(object.amount) : "",
+      reserved: isSet(object.reserved) ? globalThis.String(object.reserved) : "",
+    };
+  },
+
+  toJSON(message: MsgObserveVoteRepayLocking): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.lockTxId !== 0) {
+      obj.lockTxId = Math.round(message.lockTxId);
+    }
+    if (message.btcTxHash !== "") {
+      obj.btcTxHash = message.btcTxHash;
+    }
+    if (message.status !== false) {
+      obj.status = message.status;
+    }
+    if (message.failReason !== "") {
+      obj.failReason = message.failReason;
+    }
+    if (message.amount !== "") {
+      obj.amount = message.amount;
+    }
+    if (message.reserved !== "") {
+      obj.reserved = message.reserved;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgObserveVoteRepayLocking>, I>>(base?: I): MsgObserveVoteRepayLocking {
+    return MsgObserveVoteRepayLocking.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgObserveVoteRepayLocking>, I>>(object: I): MsgObserveVoteRepayLocking {
+    const message = createBaseMsgObserveVoteRepayLocking();
+    message.creator = object.creator ?? "";
+    message.lockTxId = object.lockTxId ?? 0;
+    message.btcTxHash = object.btcTxHash ?? "";
+    message.status = object.status ?? false;
+    message.failReason = object.failReason ?? "";
+    message.amount = object.amount ?? "";
+    message.reserved = object.reserved ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgObserveVoteRepayLockingResponse(): MsgObserveVoteRepayLockingResponse {
+  return { code: 0, msg: "" };
+}
+
+export const MsgObserveVoteRepayLockingResponse: MessageFns<MsgObserveVoteRepayLockingResponse> = {
+  encode(message: MsgObserveVoteRepayLockingResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.code !== 0) {
+      writer.uint32(8).uint64(message.code);
+    }
+    if (message.msg !== "") {
+      writer.uint32(18).string(message.msg);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgObserveVoteRepayLockingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgObserveVoteRepayLockingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.code = longToNumber(reader.uint64());
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.msg = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgObserveVoteRepayLockingResponse {
+    return {
+      code: isSet(object.code) ? globalThis.Number(object.code) : 0,
+      msg: isSet(object.msg) ? globalThis.String(object.msg) : "",
+    };
+  },
+
+  toJSON(message: MsgObserveVoteRepayLockingResponse): unknown {
+    const obj: any = {};
+    if (message.code !== 0) {
+      obj.code = Math.round(message.code);
+    }
+    if (message.msg !== "") {
+      obj.msg = message.msg;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgObserveVoteRepayLockingResponse>, I>>(
+    base?: I,
+  ): MsgObserveVoteRepayLockingResponse {
+    return MsgObserveVoteRepayLockingResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgObserveVoteRepayLockingResponse>, I>>(
+    object: I,
+  ): MsgObserveVoteRepayLockingResponse {
+    const message = createBaseMsgObserveVoteRepayLockingResponse();
+    message.code = object.code ?? 0;
+    message.msg = object.msg ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /**
@@ -2255,6 +2845,10 @@ export interface Msg {
   VoteRepayReleaseTransaction(request: MsgVoteRepayReleaseTransaction): Promise<MsgVoteRepayReleaseTransactionResponse>;
   /** RepayObservationVote defines an operation for observation vote on repay transactions */
   RepayObservationVote(request: MsgRepayObservationVote): Promise<MsgRepayObservationVoteResponse>;
+  /** RequestRepayLock defines an operation for repay lock transactions */
+  RequestRepayLock(request: MsgRequestRepayLock): Promise<MsgRequestRepayLockResponse>;
+  /** RequestRepayLock defines an operation for repay lock observations */
+  ObserveVoteRepayLocking(request: MsgObserveVoteRepayLocking): Promise<MsgObserveVoteRepayLockingResponse>;
 }
 
 export const MsgServiceName = "cfprotocol.loan.Msg";
@@ -2273,6 +2867,8 @@ export class MsgClientImpl implements Msg {
     this.VoteRepayPullTransaction = this.VoteRepayPullTransaction.bind(this);
     this.VoteRepayReleaseTransaction = this.VoteRepayReleaseTransaction.bind(this);
     this.RepayObservationVote = this.RepayObservationVote.bind(this);
+    this.RequestRepayLock = this.RequestRepayLock.bind(this);
+    this.ObserveVoteRepayLocking = this.ObserveVoteRepayLocking.bind(this);
   }
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
@@ -2329,10 +2925,47 @@ export class MsgClientImpl implements Msg {
     const promise = this.rpc.request(this.service, "RepayObservationVote", data);
     return promise.then((data) => MsgRepayObservationVoteResponse.decode(new BinaryReader(data)));
   }
+
+  RequestRepayLock(request: MsgRequestRepayLock): Promise<MsgRequestRepayLockResponse> {
+    const data = MsgRequestRepayLock.encode(request).finish();
+    const promise = this.rpc.request(this.service, "RequestRepayLock", data);
+    return promise.then((data) => MsgRequestRepayLockResponse.decode(new BinaryReader(data)));
+  }
+
+  ObserveVoteRepayLocking(request: MsgObserveVoteRepayLocking): Promise<MsgObserveVoteRepayLockingResponse> {
+    const data = MsgObserveVoteRepayLocking.encode(request).finish();
+    const promise = this.rpc.request(this.service, "ObserveVoteRepayLocking", data);
+    return promise.then((data) => MsgObserveVoteRepayLockingResponse.decode(new BinaryReader(data)));
+  }
 }
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+}
+
+function bytesFromBase64(b64: string): Uint8Array {
+  if ((globalThis as any).Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
+  }
+}
+
+function base64FromBytes(arr: Uint8Array): string {
+  if ((globalThis as any).Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(globalThis.String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

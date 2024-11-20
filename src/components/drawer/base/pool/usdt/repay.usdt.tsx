@@ -17,7 +17,7 @@ import {
   useOfflineSigners, 
 } from 'graz'
 import { IBaseLoan, ILoanEntity, IPool } from "@/types/api/pool"
-import { pureNumberFormat } from "@/utils"
+import { pureNumberFormat, validateEthereumAddress } from "@/utils"
 import Dropdown from "@/components/dropdown"
 import { GET_LOAN_ENTITY, GET_POOL_TSS_PUBLIC_KEY, GET_REPAY_ESTIMATED_AMOUNT, GET_REPAY_TRANSACTION } from "@/constants/query"
 import { queryClient } from "@/wagmi"
@@ -28,15 +28,21 @@ import { TailSpin } from "react-loader-spinner"
 import { useLoanEntity } from "@/hooks/queries/useLoanEntity"
 import { CustomProgress } from "@/components/progress"
 import { useEstimatedRepayAmount } from "@/hooks/queries/useEstimatedRepayAmount"
-import { MsgRequestRepay } from "@/cf-client/cfprotocol.loan/tx"
+import { 
+  MsgRequestRepay, 
+  // MsgRequestRepayLock 
+} from "@/cf-client/cfprotocol.loan/tx"
 import { ITag } from "@/types/interfaces"
 import {
    useConnect,
    useAccount as wagmiUseAccount
 } from "wagmi"
-import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import BigNumber from 'bignumber.js'
 import Table from "@/components/table"
+import { useAuth } from "@/contexts/auth"
+import { EthereumIcon } from "@/assets/icons/coins"
+import { useTssPublicKey } from "@/hooks/queries/useTssPublicKey"
 
 const tabs = [
   { title: '25%', value: 25 },
@@ -50,26 +56,29 @@ export interface ISupplyContainer {
 
 export const RepayUSDTContainer = (props: ISupplyContainer) => {
   const { messageApi } = useToast()
+  const { authState } = useAuth()
+
+  // metamask
+  const { address, connector, isConnected } = wagmiUseAccount();
+  const { connectors } = useConnect();
+
   const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
   const [ repay, setRepay ] = useState<number | undefined>(0)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ activeLoan, setActiveLoan ] = useState<ILoanEntity | undefined>(undefined)
   const [ currentTab, setCurrentTab ] = useState<ITag | undefined>(undefined)
+  const [ returnAddress, setReturnAddress ] = useState<string | undefined>(address || undefined)
 
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
   const { data: assetLoanEntity } = useLoanEntity()
   const { data: assetProfiles } = useAssetProfile()
+  const { data: publicKeyData } = useTssPublicKey()
   const { data: estimatedRepayAmount } = useEstimatedRepayAmount(
     account?.bech32Address, 
     selected?.loan_tx_id,
     ((Number(repay ?? 0) / 100).toString())
   )
-
-  // metamask
-	const { address, connector, isConnected } = wagmiUseAccount();
-	const { connectors } = useConnect();
-  const { approveUSDT } = useWeb3Context()
 
   const _is_connected_metamask =
 		(address && isConnected && connector === connectors[0]) ?? false;
@@ -140,6 +149,20 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
     if (!_is_connected_metamask)
       return messageApi.Alert(FAILED_WALLET_CONNECTION('Metamask'));
 
+    if (!authState.paymentAccount?.address) {
+      return messageApi.Alert(FAILED_WALLET_CONNECTION('Unisat')); 
+    }
+
+    if (!publicKeyData?.tss_pubkey?.[0].bitcoin) {
+      return messageApi.Alert({
+        ...WARNING_MESSAGE,
+        content: "We couldn't fetch the testnet network. Plese try again later",
+      })
+    }
+    
+    if (!returnAddress || validateEthereumAddress(returnAddress))
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Return address should be valid address'})
+
     if (!activeLoan || !selected)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select an item to repay.'})
 
@@ -153,27 +176,52 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
     try {
       setLoading(true)
       
-      const _repayData: MsgRequestRepay = {
-        creator: activeLoan.creator,
-        loanId: Number(selected.loan_tx_id),
-        repayPercent: (Number(repay ?? 0) / 100).toString(),
-        reserved: ""
-      }
-
-      console.log(_repayData)
-
-      const approve = 
-        await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
-
-      if (!approve) {
+      const res = await authState.sendBitcoinToHTLC(
+        account.bech32Address,
+        offlineSigners.offlineSigner,
+        messageApi,
+        authState,
+        authState.paymentAccount.address,
+        publicKeyData?.tss_pubkey?.[0].bitcoin,
+        BigNumber(estimatedRepayAmount?.amount_repay).multipliedBy(1e8),
+        authState.paymentAccount?.publicKey,
+      )
+      
+      if (!res) {
         setLoading(false)
         return
       }
 
+      const _repayData: MsgRequestRepay = {
+        creator: activeLoan.creator,
+        loanTxId: Number(selected.loan_tx_id),
+        repayPercent: (Number(repay ?? 0) / 100).toString(),
+        reserved: "",
+        repayAddress: authState.paymentAccount.address,
+        returnAddress
+      }
+
       const client = await TxClient(offlineSigners?.offlineSigner);
       const msg = await client.msgRequestRepay(_repayData);
+      const result = await client.signAndBroadcast([msg]);
+      console.log("==msg=-==", msg)
+      console.log("===res===", result)
 
-      await client.signAndBroadcast([msg]);
+      // MsgRequestRepayLock 
+      // const _repayLockData: MsgRequestRepayLock = {
+      //   creator: activeLoan.creator,
+      //   repayTxId: 0,
+      //   fromAddress: "",
+      //   senderPubkey: Uint8Array,
+      //   assetId: 0,
+      //   amount: "",
+      //   timeout: "",
+      //   txHash: "",
+      //   lockAddress: "",
+      //   creationVout: 0,
+      //   reserved: "",
+      // }
+
       await invalidateQuery()
       await queryClient.invalidateQueries({
         queryKey: [GET_REPAY_TRANSACTION],
@@ -195,7 +243,8 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: [GET_LOAN_ENTITY] }),
       queryClient.invalidateQueries({ queryKey: [GET_REPAY_ESTIMATED_AMOUNT] }),
-      queryClient.invalidateQueries({ queryKey: [GET_POOL_TSS_PUBLIC_KEY]})
+      queryClient.invalidateQueries({ queryKey: [GET_POOL_TSS_PUBLIC_KEY]}),
+      queryClient.invalidateQueries({ queryKey: [GET_POOL_TSS_PUBLIC_KEY] }),
     ])
   }
 
@@ -220,6 +269,24 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
           className="rounded-lg"
         />
       </div>
+
+      {/* Return address */}
+			<Input
+				label="Return address"
+				value={returnAddress ?? ""}
+				placeholder="0xC3D31F37D2B045361c125b686B1BA225e14c23DA"
+				icon={<EthereumIcon />}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setReturnAddress(e.target.value)
+				}
+				classOverride={{
+					container: "mt-4",
+					inputContainer: "bg-black mt-3 py-3",
+					input: "bg-black ml-1",
+					value: "text-[13px]",
+					icon: "flex justify-center items-center w-7 h-7",
+				}}
+			/>
 
       <Input 
         label="Repay ( % )"

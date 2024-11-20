@@ -38,6 +38,9 @@ import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
 import Table from "@/components/table"
 import { REPAID_FULLY } from "@/constants/status"
+import { BitcoinIcon } from "@/assets/icons/coins"
+import { useAuth } from "@/contexts/auth"
+import validate from "bitcoin-address-validation"
 
 const tabs = [
   { title: '25%', value: 25 },
@@ -51,11 +54,14 @@ export interface ISupplyContainer {
 
 export const RepayContainer = (props: ISupplyContainer) => {
   const { messageApi } = useToast()
+  const { authState } = useAuth()
+
   const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
   const [ repay, setRepay ] = useState<number | undefined>(0)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ activeLoan, setActiveLoan ] = useState<ILoanEntity | undefined>(undefined)
   const [ currentTab, setCurrentTab ] = useState<ITag | undefined>(undefined)
+  const [ returnAddress, setReturnAddress ] = useState<string | undefined>(authState.paymentAccount?.address || undefined)
 
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
@@ -132,6 +138,9 @@ export const RepayContainer = (props: ISupplyContainer) => {
     if (!_is_connected_metamask)
       return messageApi.Alert(FAILED_WALLET_CONNECTION('Metamask'));
 
+    if (!returnAddress || validate(returnAddress))
+      return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Return address should be valid address'})
+
     if (!activeLoan || !selected)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Select an item to repay.'})
 
@@ -147,9 +156,11 @@ export const RepayContainer = (props: ISupplyContainer) => {
       
       const _repayData: MsgRequestRepay = {
         creator: activeLoan.creator,
-        loanId: Number(selected.loan_tx_id),
+        loanTxId: Number(selected.loan_tx_id),
         repayPercent: (Number(repay ?? 0) / 100).toString(),
-        reserved: ""
+        reserved: "",
+        repayAddress: address as string,
+        returnAddress
       }
 
       const approve = 
@@ -210,6 +221,24 @@ export const RepayContainer = (props: ISupplyContainer) => {
           className="rounded-lg"
         />
       </div>
+
+      {/* Return address */}
+			<Input
+				label="Return address"
+				value={returnAddress ?? ""}
+				placeholder="tb1qg0xyhu4dwcje2l5vdxrg9pkj74jh8l76uqhsfa"
+				icon={<BitcoinIcon />}
+				onChange={(e: ChangeEvent<HTMLInputElement>) =>
+					setReturnAddress(e.target.value)
+				}
+				classOverride={{
+					container: "mt-4",
+					inputContainer: "bg-black mt-3 py-3",
+					input: "bg-black ml-1",
+					value: "text-[13px]",
+					icon: "flex justify-center items-center w-7 h-7",
+				}}
+			/>
 
       <Input 
         label="Repay ( % )"
