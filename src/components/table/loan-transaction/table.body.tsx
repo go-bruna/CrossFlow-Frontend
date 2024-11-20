@@ -48,8 +48,7 @@ const Row = ({ data }: IRowProps) => {
         )}
       </td>
       <td>{`${getFixedNumber(Number(data.loan_rate) * 100)} %`}</td>
-      <td>{truncateAddress(data.loan_address, 5)}</td>
-      <td>{data.status}</td>
+      <td className="capitalize">{data.status}</td>
     </tr>
   )
 }

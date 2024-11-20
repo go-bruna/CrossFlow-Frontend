@@ -88,7 +88,7 @@ export const LoanTransactionTable = (props: Props) => {
                 className="w-[44px] h-[44px]"
                 icon={<LogoIcon />}
               />
-              <Typography variant="label-small" className="font-bold">No loan</Typography>
+              <Typography variant="label-small" className="font-bold">No Loan</Typography>
             </div>
           )}
         </div>

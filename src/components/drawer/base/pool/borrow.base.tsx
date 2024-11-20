@@ -14,6 +14,7 @@ import { useAccount, useOfflineSigners } from "graz";
 import { useLockBalance } from "@/hooks/queries/useLockBalance";
 import { queryClient } from "@/wagmi";
 import {
+  GET_ASSET_BORROW_TRANSACTION,
 	GET_ASSET_PRICE,
 	GET_ASSET_PROFILE,
 	GET_LOAN_RATE,
@@ -134,7 +135,7 @@ export const BorrowContainer = (props: Props) => {
 	 * Calculate max collateral amount based on lock-balance
 	 */
 	const calcuateMaxCollateralAmount = useMemo(() => {
-		return getFixedNumber(getLockedBalanceObj.balance / 1e8);
+		return getFixedNumber(getLockedBalanceObj.balance / 1e8, 5);
 	}, [lockData, assetProfiles]);
 
 	/**
@@ -241,9 +242,12 @@ export const BorrowContainer = (props: Props) => {
 			const client = await TxClient(offlineSigners?.offlineSigner);
 			let msg = await client.msgRequestLoan(_loanData);
 			await client.signAndBroadcast([msg]);
+			await invalidateQuery();
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ASSET_BORROW_TRANSACTION],
+      })
 
 			setLoading(false);
-			await invalidateQuery();
 
 			messageApi.Alert(SUCCESS_OPERATION("Successfully borrowed."));
 		} catch (error) {

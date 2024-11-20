@@ -18,7 +18,7 @@ import {
 import { IBaseLockTransaction } from "@/types/api/pool"
 import { getAssetDecimalObj, pureNumberFormat } from "@/utils"
 import Dropdown from "@/components/dropdown"
-import { GET_ASSET_LOCK_TRANSACTION, GET_MAX_INTEREST_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
+import { GET_ASSET_LOCK_TRANSACTION, GET_ASSET_SUPPLY_TRANSACTION, GET_MAX_INTEREST_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { queryClient } from "@/wagmi"
 import { useToast } from "@/hooks/useToast"
 import { ERROR_MESSAGE, FAILED_WALLET_CONNECTION, SUCCESS_OPERATION, WALLET_INSTALL, WARNING_MESSAGE } from "@/constants/message"
@@ -117,6 +117,9 @@ export const SupplyContainer = () => {
 
       setLoading(false)
       
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ASSET_SUPPLY_TRANSACTION],
+      })
       messageApi.Alert(SUCCESS_OPERATION('Successfully supplied.'))
 
     } catch (error) {

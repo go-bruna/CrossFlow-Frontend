@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/useToast"
 import { useAccount, useOfflineSigners } from "graz"
 import { useLockBalance } from "@/hooks/queries/useLockBalance"
 import { queryClient } from "@/wagmi"
-import { GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
+import { GET_ASSET_BORROW_TRANSACTION, GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
 import { dayDiffWithSecond, fromWei, getFixedNumber, pureNumberFormat, toWei } from "@/utils"
@@ -186,9 +186,11 @@ export const BorrowUSDTContainer = (props: Props) => {
       let msg = await client.msgRequestLoan(_loanData);
       await client.signAndBroadcast([msg]);
       await invalidateQuery()
+      await queryClient.invalidateQueries({
+        queryKey: [GET_ASSET_BORROW_TRANSACTION],
+      })
 
       setLoading(false)
-
       messageApi.Alert(SUCCESS_OPERATION('Successfully borrowed.'))
 
     } catch (error) {

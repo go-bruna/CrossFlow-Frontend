@@ -6,7 +6,7 @@ import { useEffect, useMemo } from "react"
 import { useAccount } from "graz"
 import { IAssetSuppliedTransaction } from "@/types/api/pool"
 import { queryClient } from "@/wagmi"
-import { GET_ASSET_BORROW_TRANSACTION } from "@/constants/query"
+import { GET_ASSET_SUPPLY_TRANSACTION } from "@/constants/query"
 import { LogoIcon } from "@/assets/icons/logo"
 import { useAssetSupplyTransaction } from "@/hooks/queries/useAssetSuppliedTransaction"
 import { TailSpin } from "react-loader-spinner"
@@ -36,7 +36,7 @@ export const SupplyTransactionTable = () => {
   useEffect(() => {
     const timer = window.setInterval(async () => {
       await queryClient.invalidateQueries({
-        queryKey: [GET_ASSET_BORROW_TRANSACTION],
+        queryKey: [GET_ASSET_SUPPLY_TRANSACTION],
       })
     }, 60 * 1000)
     return () => {
