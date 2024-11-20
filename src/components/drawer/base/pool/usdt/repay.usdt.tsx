@@ -36,8 +36,6 @@ import {
 } from "wagmi"
 import { useWeb3Context } from "@/contexts/web3"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
-import { useTssPublicKey } from "@/hooks/queries/useTssPublicKey"
-
 
 const tabs = [
   { title: '25%', value: 25 },
@@ -61,7 +59,6 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
   const { data: offlineSigners } = useOfflineSigners()
   const { data: assetLoanEntity } = useLoanEntity()
   const { data: assetProfiles } = useAssetProfile()
-  const { data: tssData } = useTssPublicKey()
   const { data: estimatedRepayAmount } = useEstimatedRepayAmount(
     account?.bech32Address, 
     selected?.loan_tx_id,
@@ -164,10 +161,8 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
 
       console.log(_repayData)
 
-      const approve = await approveUSDT(
-        estimatedRepayAmount?.amount_repay ?? 0,
-        tssData?.tss_pubkey[0].ecdsa
-      )
+      const approve = 
+        await approveUSDT(estimatedRepayAmount?.amount_repay ?? 0)
 
       if (!approve) {
         setLoading(false)
