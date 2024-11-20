@@ -175,7 +175,8 @@ export const BorrowUSDTContainer = (props: Props) => {
         reserved: "",
         originChain: props.data.chain_symbol,
         targetChain: 'BTC',
-        targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'BTC')?.id ?? 1),
+        // targetAssetId: Number(assetProfiles?.find(e => e.symbol === 'BTC')?.id ?? 1),
+        targetAssetId: Number(props.data.asset_id)
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
