@@ -6,7 +6,7 @@ import "./style.css";
 import dayjs from "dayjs";
 import Paragraph from "@/components/paragraph";
 import Table from "@/components/table";
-import { Input } from "@/components/input";
+import Input from "@/components/input";
 import { AmountIcon } from "@/assets/icons/amount";
 import { Typography } from "@/components/typography";
 import { useToast } from "@/hooks/useToast";
@@ -69,11 +69,9 @@ export const BorrowContainer = (props: Props) => {
 	const { data: assetProfiles } = useAssetProfile();
   
 	const [loading, setLoading] = useState<boolean>(false);
-	const [collateralAmount, setCollateralAmount] = useState<number | undefined>(
-		undefined,
-	);
-	const [loanRate, setLoanRate] = useState<number | undefined>(undefined);
-	const [interestRate, setInterestRate] = useState<number | undefined>(
+	const [collateralAmount, setCollateralAmount] = useState<number>(0);
+	const [loanRate, setLoanRate] = useState<number>(0);
+	const [interestRate, setInterestRate] = useState<number>(
 		getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100),
 	);
 	const [activeLock, setActiveLock] = useState<IBaseLockBalance | undefined>(
@@ -124,11 +122,11 @@ export const BorrowContainer = (props: Props) => {
 	}, [lockData, account?.bech32Address, assetProfiles]);
 
 	/**
-	 * calculate loanRate
+	 * Calculate loanRate
 	 */
 	const calculateEstimatedLoanAmount = useMemo(() => {
 		if (!collateralAmount || !loanRate) return undefined;
-		return (collateralAmount * (loanRate ?? 0) * Number(btcPrice?.price)) / 100;
+		return (collateralAmount * loanRate * Number(btcPrice?.price)) / 100;
 	}, [collateralAmount, loanRate]);
 
 	/**
@@ -152,6 +150,25 @@ export const BorrowContainer = (props: Props) => {
 		return Number((_diff_sec / 5).toFixed(0));
 	}, [endDate]);
 
+	/**
+	 * Get decimal of collateral asset
+	 */
+	const getDecimal = useMemo(() => {
+		return assetProfiles?.find(e => e.symbol === props.data.asset_symbol)?.decimals ?? 0
+	}, [assetProfiles])
+
+	/**
+	 * Handle collateral amount by symbol's decimal
+	 */
+	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.value === '')
+      return 
+    const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
+    if (regex.test(e.target.value.toString())) {
+      setCollateralAmount(parseFloat(e.target.value))
+    }
+	}
+	
 	/**
 	 * Handle borrow
 	 */
@@ -186,7 +203,7 @@ export const BorrowContainer = (props: Props) => {
 		if (
 			!interestRate ||
 			getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) >
-				(interestRate ?? 0)
+			interestRate
 		)
 			return messageApi.Alert({
 				...WARNING_MESSAGE,
@@ -290,16 +307,17 @@ export const BorrowContainer = (props: Props) => {
 	return (
 		<div className="w-full mt-[30px]">
 			{/* Collateral Amount */}
-			<Input
+			<Input.Number
+				type="number"
 				label="Collateral Amount ( BTC )"
-				value={collateralAmount ?? ""}
+				value={collateralAmount ?? ''}
 				placeholder="0.00"
 				icon={<AmountIcon />}
 				innerButtonLabel="Max"
 				onMax={() => setCollateralAmount(calcuateMaxCollateralAmount)}
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setCollateralAmount(Number(e.target.value))
-				}
+				onChange={(e: ChangeEvent<HTMLInputElement>) => {
+					handleAmountUpdate(e)
+				}}
 				classOverride={{
 					container: "mt-4",
 					inputContainer: "bg-black mt-3",
@@ -310,15 +328,17 @@ export const BorrowContainer = (props: Props) => {
 			/>
 
 			{/* Loan Rate */}
-			<Input
+			<Input.Number
+				type="number"
 				label="Loan Rate ( % )"
 				value={loanRate ?? ""}
-				placeholder="0.00"
+				placeholder="0.0"
 				icon={<AmountIcon />}
+				defaultValue={'0.0'}
 				innerButtonLabel="Max"
 				onMax={() => setLoanRate(Number(loanRateData?.max_loan_rate) * 100)}
 				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setLoanRate(Number(e.target.value || 0))
+					setLoanRate(parseFloat(e.target.value))
 				}
 				classOverride={{
 					container: "mt-4",
@@ -330,7 +350,7 @@ export const BorrowContainer = (props: Props) => {
 			/>
 
 			{/* Interest Rate */}
-			<Input
+			<Input.Number
 				label="Interest Rate ( % )"
 				value={interestRate ?? ""}
 				placeholder="0.00"
@@ -344,12 +364,12 @@ export const BorrowContainer = (props: Props) => {
 				errorMsg={
 					loanRateData &&
 					getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) >
-						(interestRate ?? 0)
+					Number(interestRate ?? 0)
 						? `Interest rate should be greater than ${(Number(loanRateData?.min_interest_rate) * 100).toFixed(0)} %`
 						: null
 				}
 				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setInterestRate(Number(e.target.value || 0))
+					setInterestRate(parseFloat(e.target.value))
 				}
 				classOverride={{
 					container: "mt-4",
@@ -361,7 +381,7 @@ export const BorrowContainer = (props: Props) => {
 			/>
 
 			{/* Loan address */}
-			<Input
+			<Input.Base
 				label="Loan address"
 				value={loanAddress ?? ""}
 				placeholder="0xC3D31F37D2B045361c125b686B1BA225e14c23DA"
@@ -413,7 +433,7 @@ export const BorrowContainer = (props: Props) => {
 			/>
 			<Paragraph.List
 				label="Borrowable amount"
-				value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * (collateralAmount ?? 0) * Number(btcPrice?.price))} USDT`}
+				value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * (collateralAmount ?? 0) * Number(btcPrice?.price)).toLocaleString()} USDT`}
 				classOverride={{
 					container: "flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10",
 				}}

@@ -43,7 +43,7 @@ export const PoolDrawer = (props: Props) => {
   const isUSDT = props.data.asset_symbol.toLowerCase() === 'usdt'
 
   const displayContainer = {
-    'Lock': <LockContainer />,
+    'Lock': <LockContainer data={props.data}/>,
     'Supply': <SupplyContainer />,
     'Borrow': <BorrowContainer data={props.data} />,
     'Repay': <RepayContainer data={props.data} />

@@ -1,0 +1,3 @@
+export const COLLATERAL_AMOUNT = 'COLLATERAL_AMOUNT'
+export const INTEREST_RATE = 'INTEREST_RATE'
+export const LOAN_RATE = 'LOAN_RATE'

@@ -3,7 +3,7 @@ import { InforCircleIcon } from "@/assets/icons/infor"
 import Card from "@/components/card"
 import Header from "@/components/layout/base/header"
 import { Divider } from "@/components/divider"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { CustomProgress } from "@/components/progress"
 import Tab from "@/components/tab"
 import { ACCOUNT_ITEM_DATA } from "@/constants"
@@ -145,7 +145,7 @@ export const AccountPage = () => {
             }}
           />
           {/* Search */}
-          <Input 
+          <Input.Base 
             icon={<SearchIcon />}
             value={search || ''}
             placeholder="Search"

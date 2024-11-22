@@ -1,7 +1,7 @@
 import { SearchIcon } from "@/assets/icons/common"
 import Card from "@/components/card"
 import Header from "@/components/layout/base/header"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import Tab from "@/components/tab"
 import { GOVERNANCE_ITEM_DATA } from "@/constants"
 import { ChangeEvent, useEffect, useState } from "react"
@@ -78,7 +78,7 @@ export const GovernancePage = () => {
             }}
           />
           {/* Search */}
-          <Input 
+          <Input.Base 
             icon={<SearchIcon />}
             value={search || ''}
             placeholder="Search"

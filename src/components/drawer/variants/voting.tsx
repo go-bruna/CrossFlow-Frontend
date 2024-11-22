@@ -11,7 +11,7 @@ import {
   useEffect, 
   useState 
 } from 'react'
-import { Input } from '@/components/input'
+import Input from '@/components/input'
 import { LogoIcon } from '@/assets/icons/logo'
 import { Avatar } from '@/components/avatar'
 import { Typography } from '@/components/typography'
@@ -124,7 +124,7 @@ export const VotingDrawer = (props: Props) => {
           />
 
           <div className={'w-full'}>
-            <Input 
+            <Input.Number 
               label='Amount'
               type="number"
               // value={amount ?? ''}

@@ -1,8 +1,18 @@
 import type { TWallet } from '@/contexts/auth'
 import type { IAccount, WalletType } from '@/types/interfaces.ts'
-import { OfflineSigner } from '@cosmjs/proto-signing'
-import { DeliverTxResponse } from '@cosmjs/stargate'
 import BigNumber from 'bignumber.js'
+
+export interface IBitcoinHTLCRes {
+  amount: string,
+  assetId: number,
+  creator: string
+  fromAddress: string,
+  lockAddress: string,
+  senderPubkey: Uint8Array,
+  timeout: string,
+  txHash: string,
+  creationVout: number,
+}
 
 export interface AuthStateProps {
   wallet: TWallet | null
@@ -20,17 +30,17 @@ export interface AuthStateProps {
 
   sendBitcoinToHTLC: (
     creator: string,
-    offlineSigner: OfflineSigner,
+    // offlineSigner: OfflineSigner,
     messageApi: any,
     authState: AuthStateProps,
-    senderAddress: string,
-    recipientAddress: string,
-    htlcAmount: BigNumber,
-    publicKey: string,
+    senderAddress: string | undefined,
+    recipientAddress: string | undefined,
+    htlcAmount: BigNumber | undefined,
+    publicKey: string | undefined,
     htlctimeount?: number,
-  ) => Promise<DeliverTxResponse | undefined>
+  // ) => IBitcoinHTLCRes | undefined
+  ) => Promise<IBitcoinHTLCRes | undefined>
 }
-
 export interface IAuthContext {
   authState: AuthStateProps
 

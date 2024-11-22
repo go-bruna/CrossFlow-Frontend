@@ -6,7 +6,7 @@ import '../style.css'
 import dayjs from "dayjs"
 import Paragraph from "@/components/paragraph"
 import Table from "@/components/table";
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { useToast } from "@/hooks/useToast"
@@ -98,7 +98,7 @@ export const BorrowUSDTContainer = (props: Props) => {
   const calculateEstimatedLoanAmount = useMemo(() => {
     if (!collateralAmount || !loanRate)
       return undefined
-    return collateralAmount * ((loanRate ?? 0) / 100) / Number(btcPrice?.price)
+    return collateralAmount * (loanRate / 100) / Number(btcPrice?.price)
   }, [collateralAmount, loanRate])
 
   /**
@@ -125,6 +125,25 @@ export const BorrowUSDTContainer = (props: Props) => {
   }, [endDate])
 
   /**
+	 * Get decimal of collateral asset
+	 */
+	const getDecimal = useMemo(() => {
+		return assetProfiles?.find(e => e.symbol === props.data.asset_symbol)?.decimals ?? 0
+	}, [assetProfiles])
+
+	/**
+	 * Handle collateral amount by symbol's decimal
+	 */
+	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.value === '')
+      return 
+    const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
+    if (regex.test(e.target.value.toString())) {
+      setCollateralAmount(parseFloat(e.target.value))
+    }
+	}
+
+  /**
    * Handle borrow
    */
   const handleBorrow = async () => {
@@ -143,11 +162,11 @@ export const BorrowUSDTContainer = (props: Props) => {
     // check whether collateral amount is greater than 0 or less than max suppliable amount
     if (!collateralAmount)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Collateral amount should be greater than 0'})
-    else if (collateralAmount > calcuateMaxCollateralAmount)
+    else if (Number(collateralAmount) > calcuateMaxCollateralAmount)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Collateral amount should be less than borrowabled amount'})
 
     // check whether interest_rate is valid number and greater than min_interest_rate
-    if (!interestRate || getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > (interestRate ?? 0))
+    if (!interestRate || getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > interestRate)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Set interest rate'})
 
     // check whether loan_Address is undefined or ethereum address
@@ -218,7 +237,7 @@ export const BorrowUSDTContainer = (props: Props) => {
     <div className="w-full mt-[30px]">
 
       {/* Collateral Amount */}
-      <Input 
+      <Input.Number
         label="Collateral Amount ( USDT )"
         value={collateralAmount ?? ''}
         placeholder="0.00"
@@ -226,7 +245,7 @@ export const BorrowUSDTContainer = (props: Props) => {
         innerButtonLabel="Max"
         onMax={() => setCollateralAmount(calcuateMaxCollateralAmount)}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setCollateralAmount(Number(e.target.value))
+          handleAmountUpdate(e)
         }
         classOverride={{
           container: 'mt-4',
@@ -238,7 +257,7 @@ export const BorrowUSDTContainer = (props: Props) => {
       />
 
       {/* Loan Rate */}
-      <Input 
+      <Input.Number
         label="Loan Rate ( % )"
         value={loanRate ?? ''}
         placeholder="0.00"
@@ -246,7 +265,7 @@ export const BorrowUSDTContainer = (props: Props) => {
         innerButtonLabel="Max"
         onMax={() => setLoanRate(Number(loanRateData?.max_loan_rate) * 100)}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setLoanRate(Number(e.target.value || 0))
+          setLoanRate(parseFloat(e.target.value))
         }
         classOverride={{
           container: 'mt-4',
@@ -258,7 +277,7 @@ export const BorrowUSDTContainer = (props: Props) => {
       />
 
       {/* Interest Rate */}
-      <Input 
+      <Input.Number
         label="Interest Rate ( % )"
         value={interestRate ?? ''}
         placeholder="0.00"
@@ -266,12 +285,12 @@ export const BorrowUSDTContainer = (props: Props) => {
         innerButtonLabel="Min"
         onMax={() => setInterestRate( getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) )}
         errorMsg={
-          loanRateData && getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > (interestRate ?? 0) 
+          loanRateData && getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) > Number(interestRate ?? 0) 
             ? `Interest rate should be greater than ${(Number(loanRateData?.min_interest_rate) * 100).toFixed(0)} %`
             : null
         }
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setInterestRate(Number(e.target.value || 0))
+          setInterestRate(parseFloat(e.target.value))
         }
         classOverride={{
           container: 'mt-4',
@@ -283,7 +302,7 @@ export const BorrowUSDTContainer = (props: Props) => {
       />
 
       {/* Loan address */}
-      <Input 
+      <Input.Base
         label="Loan address"
         value={loanAddress ?? '' }
         placeholder="tb1qg0xyhu4dwcje2l5vdxrg9pkj74jh8l76uqhsfa"
@@ -327,7 +346,7 @@ export const BorrowUSDTContainer = (props: Props) => {
       />
       <Paragraph.List 
         label="Borrowable amount" 
-        value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * (collateralAmount ?? 0) / Number(btcPrice?.price), 8)} BTC`}
+        value={`${getFixedNumber(Number(loanRateData?.max_loan_rate) * Number(collateralAmount ?? 0) / Number(btcPrice?.price), 8)} BTC`}
         classOverride={{
           container: 'flex-1 pt-4 pb-5 border-b border-[#36f5cf]/10',
         }}

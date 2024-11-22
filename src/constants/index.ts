@@ -22,8 +22,6 @@ export const O_USDT_TOKEN: IToken = {
 	abi: O_USDT_ABI.abi,
 }
 
-
-
 export const MAIN_POOLS_ITEM_DATA = [
 	'Total supply',
 	'Total Borrow',

@@ -6,7 +6,7 @@ import {
 } from "react"
 import Button from "@/components/button"
 import Table from "@/components/table"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { twMerge } from "tailwind-merge"
 import { GET_MAX_INTEREST_RATE, GET_USDT_SUPPLY_TRANSACTION } from "@/constants/query"
@@ -25,6 +25,7 @@ import { useWeb3Context } from "@/contexts/web3"
 import { useAccount, useOfflineSigners } from "graz"
 import { IPool } from "@/types/api/pool"
 import { toWei } from "@/utils"
+import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
 
 export interface Props {
   data: IPool
@@ -49,9 +50,29 @@ export const SupplyUSDTContainer = (props: Props) => {
   const [ rate, setRate ] = useState<number | undefined>(0)
   const [ loading, setLoading ] = useState<boolean>(false)
   const { data: maxRate } = useMaxInterestRate()
+  const { data: assetProfiles } = useAssetProfile()
   
   const _is_connected_metamask =
 		(address && isConnected && connector === connectors[0]) ?? false;
+
+  /**
+	 * Get decimal of collateral asset
+	 */
+	const getDecimal = useMemo(() => {
+		return assetProfiles?.find(e => e.symbol === props.data.asset_symbol)?.decimals ?? 0
+	}, [assetProfiles])
+
+	/**
+	 * Handle collateral amount by symbol's decimal
+	 */
+	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.value === '')
+      return 
+    const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
+    if (regex.test(e.target.value.toString())) {
+      setAmount(parseFloat(e.target.value))
+    }
+	}
 
   /**
    * Handle supply
@@ -72,7 +93,7 @@ export const SupplyUSDTContainer = (props: Props) => {
       return messageApi.Alert({...WARNING_MESSAGE});
     }
 
-    if (rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
+    if (!rate || rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
       return
 
     try {
@@ -88,7 +109,7 @@ export const SupplyUSDTContainer = (props: Props) => {
         assetId: Number(props.data.asset_id),
         chainSymbol: props.data.chain_symbol,
         amount: toWei(amount).toString(),
-        interestRate: ((rate || 0) / 100).toString(),
+        interestRate: (rate / 100).toString(),
         senderAddress: address
       }
 
@@ -134,7 +155,7 @@ export const SupplyUSDTContainer = (props: Props) => {
     <div className="w-full mt-[30px]">
 
       {/* USDT amount to supply */}
-      <Input 
+      <Input.Number 
         label="Input USDT amount to supply"
         value={amount ?? ''}
         placeholder="0"
@@ -147,7 +168,7 @@ export const SupplyUSDTContainer = (props: Props) => {
         }
         onMax={() => setAmount(balance ?? 0)}
         onChange={(e: ChangeEvent<HTMLInputElement>) => 
-          setAmount(Number(e.target.value || 0))
+          handleAmountUpdate(e)
         }
         classOverride={{
           container: 'mt-8',
@@ -158,7 +179,7 @@ export const SupplyUSDTContainer = (props: Props) => {
         }}
       />
 
-      <Input 
+      <Input.Number 
         label="Interest Rate ( % )"
         value={rate ?? ''}
         placeholder="0"
@@ -171,7 +192,7 @@ export const SupplyUSDTContainer = (props: Props) => {
         }
         onMax={() => setRate(Number((Number(maxRate?.max_interest_rate ?? 0) * 100).toFixed(0)))}
         onChange={(e: ChangeEvent<HTMLInputElement>) => 
-          setRate(Number(e.target.value || 0))
+          setRate(parseFloat(e.target.value ))
         }
         classOverride={{
           container: 'mt-6',

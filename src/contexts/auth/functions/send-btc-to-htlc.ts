@@ -2,10 +2,9 @@ import { TEST_MODE } from '@/constants'
 import * as satsConnect from 'sats-connect'
 import * as bitcoin from 'bitcoinjs-lib'
 import { createHTLCScript, htlcP2WSHAddress } from '@/utils/htlc'
-import { AuthStateProps } from '@/types/context/auth'
+import { AuthStateProps, IBitcoinHTLCRes } from '@/types/context/auth'
 import BigNumber from 'bignumber.js'
 import {
-  ERROR_MESSAGE,
   INPUT_AMOUNT,
   NO_ADDRESS,
   WALLET_NOT_CONNECTED,
@@ -13,19 +12,15 @@ import {
 } from '@/constants/message'
 import { WalletType } from '@/types/interfaces'
 import { Wallet } from '../hooks/useUnisatWallet.hook'
-import { MsgRequestLock } from '@/cf-client/cfprotocol.lock/tx'
-import { OfflineSigner } from '@cosmjs/proto-signing'
-import { TxClient } from '@/cf-client/client'
 
 export const SendBitcoinToHTLC = async (
   creator: string,
-  offlineSigner: OfflineSigner,
   messageApi: any,
   authState: AuthStateProps,
-  senderAddress: string,
-  recipientAddress: string,
-  htlcAmount: BigNumber,
-  publicKey: string,
+  senderAddress: string | undefined,
+  recipientAddress: string | undefined,
+  htlcAmount: BigNumber | undefined,
+  publicKey: string | undefined,
   htlctimeount = Math.floor(Date.now() / 1000) + 3600,
 ) => {
   if (!senderAddress) {
@@ -42,7 +37,14 @@ export const SendBitcoinToHTLC = async (
     })
     return undefined
   }
-  if (!authState.paymentAccount?.publicKey) {
+  if (!publicKey) {
+    messageApi.Alert({
+      ...NO_ADDRESS,
+      content: 'PublicKey is undefined',
+    })
+    return undefined
+  }
+  if (!authState.paymentAccount?.publicKey || !authState.paymentAccount.address) {
     messageApi.Alert(WALLET_NOT_CONNECTED)
     return undefined
   }
@@ -81,8 +83,6 @@ export const SendBitcoinToHTLC = async (
   }
 
   let txHash = ''
-  console.log('=====amount====', Number(htlcAmount))
-  console.log('===htlc address ===', htlcAddress)
 
   if (
     !authState.wallet ||
@@ -167,8 +167,6 @@ export const SendBitcoinToHTLC = async (
     return undefined
   }
 
-  console.log('=========', txHash)
-
   const senderPubkeyHex = authState.paymentAccount?.publicKey
 
   function hexStringToUint8Array(hexString: string) {
@@ -182,31 +180,17 @@ export const SendBitcoinToHTLC = async (
     return arrayBuffer
   }
 
-  const value: MsgRequestLock = {
+  const data = {
     amount: htlcAmount.toString(),
     assetId: 1,
     creator,
     fromAddress: authState.paymentAccount?.address,
     lockAddress: htlcAddress,
     senderPubkey: hexStringToUint8Array(senderPubkeyHex),
-    // 1st july in seconds
     timeout: htlctimeount.toString(),
-    // timeout: '1719792000',
     txHash: txHash,
     creationVout: 0,
-  }
+  } as IBitcoinHTLCRes
 
-  try {
-    const client = await TxClient(offlineSigner);
-    let msg = await client.msgRequestLock(value);
-    const result = await client.signAndBroadcast([msg]);
-    
-    if (!result)
-      return undefined
-    return result
-  } catch (error: any) {
-    console.log('lock error ==>', error)
-    messageApi.Alert(ERROR_MESSAGE(error as string))
-    return undefined
-  }
+  return data
 }

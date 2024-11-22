@@ -64,11 +64,26 @@ export const pureNumberFormat = (param?: string | number, decimal=2) => {
   if (!param || param === 0)
     return 0
   if (typeof param === 'number') {
-    return Number(param.toFixed(decimal)).toLocaleString()
+    return Number(param) < 1000 
+      ? Number(param.toFixed(decimal))
+      : Number(param.toFixed(decimal)).toLocaleString()
   } else {
-    return Number(Number(param).toFixed(decimal)).toLocaleString() 
+    return Number(param) < 1000 
+      ? Number(Number(param).toFixed(decimal))
+      : Number(Number(param).toFixed(decimal)).toLocaleString()
   }
 }
+
+export const getFixedNumber = (param: number | string | undefined, decimal = 2) => {
+  if (!param || param === 0)
+    return 0
+  if (typeof param === 'number') {
+    return Number(param.toFixed(decimal))
+  } else {
+    return Number(Number(param).toFixed(decimal))
+  }
+}
+
 
 export const numberFormat = (param?: string | number, decimal=2) => {
   if (!param)
@@ -114,16 +129,6 @@ export const truncateAddress = (address: string, length = 4) => {
   const firstPart = address.slice(0, length)
   const lastPart = address.slice(-length)
   return `${firstPart}...${lastPart}`
-}
-
-export const getFixedNumber = (param: number | string | undefined, decimal = 2) => {
-  if (!param || param === 0)
-    return 0
-  if (typeof param === 'number') {
-    return Number(param.toFixed(decimal))
-  } else {
-    return Number(Number(param).toFixed(decimal))
-  }
 }
 
 export const validateEthereumAddress = (addr: string) => {

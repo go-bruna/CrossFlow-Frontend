@@ -3,7 +3,7 @@ import Header from "@/components/layout/base/header/index"
 import Card from "@/components/card"
 import { MAIN_POOLS_ITEM_DATA } from "@/constants"
 import Tab from "@/components/tab";
-import { Input } from "@/components/input";
+import Input from "@/components/input";
 import { SearchIcon } from "@/assets/icons/common";
 import Table from "@/components/table";
 import { ITag } from "@/types/interfaces";
@@ -118,7 +118,7 @@ export const MainPoolPage = () => {
             }}
           />
           {/* Search */}
-          <Input 
+          <Input.Base 
             icon={<SearchIcon />}
             value={search || ''}
             placeholder="Search"

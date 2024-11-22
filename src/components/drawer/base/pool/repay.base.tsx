@@ -8,7 +8,7 @@ import Button from "@/components/button"
 import Paragraph from "@/components/paragraph"
 // import Table from "@/components/table"
 import Tab from "@/components/tab"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
@@ -57,7 +57,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
   const { authState } = useAuth()
 
   const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
-  const [ repay, setRepay ] = useState<number | undefined>(0)
+  const [ repay, setRepay ] = useState<number | undefined>(undefined)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ activeLoan, setActiveLoan ] = useState<ILoanEntity | undefined>(undefined)
   const [ currentTab, setCurrentTab ] = useState<ITag | undefined>(undefined)
@@ -138,7 +138,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
     if (!_is_connected_metamask)
       return messageApi.Alert(FAILED_WALLET_CONNECTION('Metamask'));
 
-    if (!returnAddress || validate(returnAddress))
+    if (!returnAddress || !validate(returnAddress))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Return address should be valid address'})
 
     if (!activeLoan || !selected)
@@ -146,7 +146,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
 
     if (!repay || repay <= 0)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be greater than 0%'})
-    else if (repay && Number(repay) > 100)
+    else if (repay && repay > 100)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be less than 100%'})
 
     if (!estimatedRepayAmount?.amount_repay)
@@ -157,7 +157,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       const _repayData: MsgRequestRepay = {
         creator: activeLoan.creator,
         loanTxId: Number(selected.loan_tx_id),
-        repayPercent: (Number(repay ?? 0) / 100).toString(),
+        repayPercent: (repay / 100).toString(),
         reserved: "",
         repayAddress: address as string,
         returnAddress
@@ -223,7 +223,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       </div>
 
       {/* Return address */}
-			<Input
+			<Input.Base
 				label="Return address"
 				value={returnAddress ?? ""}
 				placeholder="tb1qg0xyhu4dwcje2l5vdxrg9pkj74jh8l76uqhsfa"
@@ -240,7 +240,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
 				}}
 			/>
 
-      <Input 
+      <Input.Number
         label="Repay ( % )"
         value={repay ?? ''}
         placeholder="0"
@@ -256,7 +256,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
           setCurrentTab(tabs[3])
         }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => 
-          setRepay(Number(e.target.value || 0))
+          setRepay(parseFloat(e.target.value))
         }
         classOverride={{
           container: 'mt-6',
@@ -328,7 +328,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
               wrapperClass=""
             />
           </div>
-        ) : !selected || Number(repay) <= 0 ? (
+        ) : !selected || Number(repay ?? 0) <= 0 ? (
         <>
           <div className="flex flex-col gap-2.5 mt-8 ">
             <Button.Basic 

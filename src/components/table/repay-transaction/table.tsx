@@ -32,8 +32,7 @@ export const RepayTransactionTable = (props: Props) => {
     const _filteredData = repayTransaction
       .filter((e: IRepayTransaction) => 
         e.creator === account.bech32Address &&
-        props.data.chain_symbol === e.repay_target_chain &&
-        e.processing === true
+        props.data.chain_symbol === e.repay_target_chain
       )   
     return _filteredData
   }, [repayTransaction, account?.bech32Address])
@@ -71,7 +70,7 @@ export const RepayTransactionTable = (props: Props) => {
       {/* Sort by */}
       <div className="flex items-center gap-[4] lg:gap-8">
         <div className="flex items-center">
-          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Supplied Assets</Typography>
+          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Repay Transactions</Typography>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import Button from "@/components/button"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
@@ -20,24 +20,52 @@ import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_NOT_CONNECTED, WARNING_MESSAGE
 import { BTC_FEE_RATE } from "@/constants"
 import { TailSpin } from "react-loader-spinner"
 import Table from "@/components/table"
+import { MsgRequestLock } from "@/cf-client/cfprotocol.lock/tx"
+import { TxClient } from "@/cf-client/client"
+import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import { IPool } from "@/types/api/pool"
 
 const dropdownArr = ['Bitcoin']
 
-export const LockContainer = () => {
+type Props = {
+  data: IPool
+}
+
+export const LockContainer = (props: Props) => {
   const { messageApi } = useToast()
   const { authState } = useAuth()
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [ loading, setLoading ] = useState<boolean>(false)
   const [ amount, setAmount ] = useState<number | undefined>(undefined)
-  const [selected, setSelected] = useState<string>(dropdownArr[0])
+  const [ selected, setSelected ] = useState<string>(dropdownArr[0])
 
   const { data: account } = useAccount()
   const { data: offlineSigners } = useOfflineSigners()
   
   const { data: publicKeyData } = useTssPublicKey()
+  const { data: assetProfiles } = useAssetProfile()
   const chainStats = useGetChainStats(authState.paymentAccount?.address ?? '')
   const btcAddress = authState?.paymentAccount?.address
   
+  /**
+	 * Get decimal of collateral asset
+	 */
+	const getDecimal = useMemo(() => {
+		return assetProfiles?.find(e => e.symbol === props.data.asset_symbol)?.decimals ?? 0
+	}, [assetProfiles])
+
+	/**
+	 * Handle collateral amount by symbol's decimal
+	 */
+	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.value === '')
+      return 
+    const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
+    if (regex.test(e.target.value.toString())) {
+      setAmount(parseFloat(e.target.value))
+    }
+	}
+
   /**
    * Handle lock
    */ 
@@ -70,14 +98,14 @@ export const LockContainer = () => {
         content: 'Please enter a collateral amount',
       })
       return
-    } else if (amount > calcBTCBalance(chainStats) / 1e8) {
+    } else if (Number(amount) > calcBTCBalance(chainStats) / 1e8) {
       // console.log("===chain status====", chainStats)
       messageApi.Alert({
         ...WARNING_MESSAGE,
         content: 'Insufficient amount',
       })
       return
-    } else if (amount * 1e8 <= BTC_FEE_RATE) {
+    } else if (Number(amount) * 1e8 <= BTC_FEE_RATE) {
       messageApi.Alert({
         ...WARNING_MESSAGE,
         content: `Amount should be greater than ${BTC_FEE_RATE} satoshi.`,
@@ -87,9 +115,10 @@ export const LockContainer = () => {
 
     try {
       setLoading(true)
+      
       const res = await authState.sendBitcoinToHTLC(
         account.bech32Address,
-        offlineSigners.offlineSigner,
+        // offlineSigners.offlineSigner,
         messageApi,
         authState,
         btcAddress,
@@ -103,6 +132,25 @@ export const LockContainer = () => {
         return
       }
 
+      const value: MsgRequestLock = {
+        amount: res.amount,
+        assetId: res.assetId,
+        creator: res.creator,
+        fromAddress: res.fromAddress,
+        lockAddress: res.lockAddress,
+        senderPubkey: res.senderPubkey,
+        timeout: res.timeout,
+        txHash: res.txHash,
+        creationVout: 0,
+      }
+    
+      const client = await TxClient(offlineSigners.offlineSigner);
+      let msg = await client.msgRequestLock(value);
+      const result = await client.signAndBroadcast([msg]);
+      
+      if (!result)
+        return undefined
+
       // invalid asset_lock_transaction whenever lock succeeds.
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_LOCK_TRANSACTION],
@@ -111,7 +159,7 @@ export const LockContainer = () => {
       setLoading(false)
       messageApi.Alert(SUCCESS_OPERATION('Successfully locked collateral.'))
 
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
       messageApi.Alert(ERROR_MESSAGE(error as string))
     }
@@ -132,7 +180,7 @@ export const LockContainer = () => {
 
   return (
     <div className="w-full mt-[30px]">
-      <Input 
+      <Input.Base
         label={'From address'}
         value={authState?.paymentAccount?.address || ''}
         placeholder="2MxRhjh7HAXPXvBuhaa1VW3vbR3EK2FmFpb"
@@ -159,16 +207,15 @@ export const LockContainer = () => {
         />
       </div>
 
-      <Input 
+      <Input.Number
         label={'Amount'}
-        type="number"
         value={amount ?? ''}
         placeholder="0.00"
         icon={<AmountIcon />}
         innerButtonLabel="Max"
         onMax={() => setAmount(calcBTCBalance(chainStats) / 1e8)}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setAmount(Number(e.target.value || 0))
+          handleAmountUpdate(e)
         }
         classOverride={{
           container: 'mt-8',
@@ -195,19 +242,19 @@ export const LockContainer = () => {
           </div>
         ) : (
           <Button.Basic 
-            label={ !amount || amount < 0 
+            label={ !amount || Number(amount ?? 0) <= 0 
               ? 'Enter valid amount'
-              : amount && amount > calcBTCBalance(chainStats) / 1e8 
+              : Number(amount ?? 0) > calcBTCBalance(chainStats) / 1e8 
                 ? "Insufficient amount"
                 : "Lock"
             }
             className={twMerge(
               "w-full bg-[#36f5cf]/10",
-              amount && calcBTCBalance(chainStats) / 1e8 > amount && 'bg-[#0aab8b]'
+              amount && calcBTCBalance(chainStats) / 1e8 > Number(amount ?? 0) && 'bg-[#0aab8b]'
               // 'hover:bg-[#0aab8b]'
             )}
             onClick={ 
-              amount && calcBTCBalance(chainStats) / 1e8 > amount 
+              amount && calcBTCBalance(chainStats) / 1e8 > Number(amount ?? 0) 
                 ? handleLock 
                 : () => {}
             }

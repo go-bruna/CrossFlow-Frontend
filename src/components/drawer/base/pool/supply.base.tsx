@@ -7,7 +7,7 @@ import {
 import Button from "@/components/button"
 import Paragraph from "@/components/paragraph"
 import Table from "@/components/table"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
@@ -97,7 +97,7 @@ export const SupplyContainer = () => {
     if (account?.bech32Address !== selected?.creator) {
       return messageApi.Alert({...WARNING_MESSAGE, content: `the locked asset selected has not been created by current user.`});
     }
-    if (rate && rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
+    if (!rate || rate > (Number(maxRate?.max_interest_rate ?? 0) * 100))
       return
 
     try {
@@ -106,7 +106,7 @@ export const SupplyContainer = () => {
       const _supplyData: MsgRequestSupply = {
         creator: account.bech32Address,
         lockId: Number(selected.id),
-        interestRate: ((rate || 0) / 100).toString(),
+        interestRate: (rate / 100).toString(),
         reserved: "",
       }
 
@@ -157,7 +157,7 @@ export const SupplyContainer = () => {
         />
       </div>
 
-      <Input 
+      <Input.Number 
         label="Interest Rate ( % )"
         value={rate ?? ''}
         placeholder="0"
@@ -170,7 +170,7 @@ export const SupplyContainer = () => {
         }
         onMax={() => setRate(Number((Number(maxRate?.max_interest_rate ?? 0) * 100).toFixed(0)))}
         onChange={(e: ChangeEvent<HTMLInputElement>) => 
-          setRate(Number(e.target.value || 0))
+          setRate(parseFloat(e.target.value))
         }
         classOverride={{
           container: 'mt-6',

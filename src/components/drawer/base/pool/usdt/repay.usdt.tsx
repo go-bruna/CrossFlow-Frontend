@@ -8,7 +8,7 @@ import Button from "@/components/button"
 import Paragraph from "@/components/paragraph"
 // import Table from "@/components/table"
 import Tab from "@/components/tab"
-import { Input } from "@/components/input"
+import Input from "@/components/input"
 import { AmountIcon } from "@/assets/icons/amount"
 import { Typography } from "@/components/typography"
 import { twMerge } from "tailwind-merge"
@@ -29,8 +29,8 @@ import { useLoanEntity } from "@/hooks/queries/useLoanEntity"
 import { CustomProgress } from "@/components/progress"
 import { useEstimatedRepayAmount } from "@/hooks/queries/useEstimatedRepayAmount"
 import { 
-  MsgRequestRepay, 
-  // MsgRequestRepayLock 
+  MsgRequestRepay,
+  MsgRequestRepayLock, 
 } from "@/cf-client/cfprotocol.loan/tx"
 import { ITag } from "@/types/interfaces"
 import {
@@ -160,7 +160,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
       })
     }
     
-    if (!returnAddress || validateEthereumAddress(returnAddress))
+    if (!returnAddress || !validateEthereumAddress(returnAddress))
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Return address should be valid address'})
 
     if (!activeLoan || !selected)
@@ -168,22 +168,23 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
 
     if (!repay || repay <= 0)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be greater than 0%'})
-    else if (repay && Number(repay) > 100)
+    else if (repay && repay > 100)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'Repay should be less than 100%'})
 
     if (!estimatedRepayAmount?.amount_repay)
       return messageApi.Alert({ ...WARNING_MESSAGE, content: 'calcuating estimated USDT amount'})
+    
     try {
       setLoading(true)
       
       const res = await authState.sendBitcoinToHTLC(
         account.bech32Address,
-        offlineSigners.offlineSigner,
+        // offlineSigners.offlineSigner,
         messageApi,
         authState,
         authState.paymentAccount.address,
         publicKeyData?.tss_pubkey?.[0].bitcoin,
-        BigNumber(estimatedRepayAmount?.amount_repay).multipliedBy(1e8),
+        BigNumber(estimatedRepayAmount?.amount_repay),
         authState.paymentAccount?.publicKey,
       )
       
@@ -195,7 +196,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
       const _repayData: MsgRequestRepay = {
         creator: activeLoan.creator,
         loanTxId: Number(selected.loan_tx_id),
-        repayPercent: (Number(repay ?? 0) / 100).toString(),
+        repayPercent: (repay / 100).toString(),
         reserved: "",
         repayAddress: authState.paymentAccount.address,
         returnAddress
@@ -204,23 +205,29 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
       const client = await TxClient(offlineSigners?.offlineSigner);
       const msg = await client.msgRequestRepay(_repayData);
       const result = await client.signAndBroadcast([msg]);
-      console.log("==msg=-==", msg)
-      console.log("===res===", result)
+
+      if (!result) {
+        setLoading(false)
+        return
+      }
 
       // MsgRequestRepayLock 
-      // const _repayLockData: MsgRequestRepayLock = {
-      //   creator: activeLoan.creator,
-      //   repayTxId: 0,
-      //   fromAddress: "",
-      //   senderPubkey: Uint8Array,
-      //   assetId: 0,
-      //   amount: "",
-      //   timeout: "",
-      //   txHash: "",
-      //   lockAddress: "",
-      //   creationVout: 0,
-      //   reserved: "",
-      // }
+      const _repayLockData: MsgRequestRepayLock = {
+        creator: res.creator,
+        repayTxId: result.txIndex,
+        fromAddress: res.fromAddress,
+        senderPubkey: res.senderPubkey,
+        assetId: res.assetId,
+        amount: res.amount,
+        timeout: res.timeout,
+        txHash: res.txHash,
+        lockAddress: res.lockAddress,
+        creationVout: res.creationVout,
+        reserved: "",
+      }
+
+      const repayLockMsg = await client.msgRequestRepayLock(_repayLockData)
+      await client.signAndBroadcast([repayLockMsg]) 
 
       await invalidateQuery()
       await queryClient.invalidateQueries({
@@ -271,7 +278,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
       </div>
 
       {/* Return address */}
-			<Input
+			<Input.Base
 				label="Return address"
 				value={returnAddress ?? ""}
 				placeholder="0xC3D31F37D2B045361c125b686B1BA225e14c23DA"
@@ -288,7 +295,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
 				}}
 			/>
 
-      <Input 
+      <Input.Number 
         label="Repay ( % )"
         value={repay ?? ''}
         placeholder="0"
@@ -304,7 +311,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
           setCurrentTab(tabs[3])
         }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => 
-          setRepay(Number(e.target.value || 0))
+          setRepay(parseFloat(e.target.value))
         }
         classOverride={{
           container: 'mt-6',

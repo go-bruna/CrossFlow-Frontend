@@ -47,8 +47,11 @@ export const DropdownLoans = (props: Props) => {
           setOpenDropdown(!openDropdown);
         }}
 >
-        <Typography variant="label-extrasmall" className="font-bold">
-          {props.value?.collateral_symbol ?? 'Choose Locked Asset'}
+        <Typography variant="label-extrasmall" className="crossflow-semibold">
+          {props.value?.loan_tx_id 
+            ? `Transaction ID: ${props.value?.loan_tx_id}, Symbol: ${props.value?.collateral_symbol}`
+            : 'Choose Loan Transaction'}
+          {/* {`Id: ${props.value?.loan_tx_id}, Amount: ${props.value?.collateral_amount}`} */}
         </Typography>
         <DropdownIcon />
       </div>
