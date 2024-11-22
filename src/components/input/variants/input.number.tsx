@@ -65,8 +65,7 @@ export const NumberInput = (props: Props) => {
           <input
             className={twMerge(
               'flex flex-1 bg-[#101010] border-none focus:outline-none text-zinc-100 text-[1.2rem]',
-              props?.type === 'number' &&
-                '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+              '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
               props?.classOverride?.value,
               props?.classOverride?.input
             )}

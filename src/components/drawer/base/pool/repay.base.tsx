@@ -164,7 +164,7 @@ export const RepayContainer = (props: ISupplyContainer) => {
       }
 
       const approve = 
-        await approveUSDT(Number(estimatedRepayAmount?.amount_repay ?? 0) / 1e18)
+        await approveUSDT(estimatedRepayAmount?.amount_repay ?? "0")
 
       if (!approve) {
         setLoading(false)

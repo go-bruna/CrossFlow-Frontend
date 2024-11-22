@@ -1,4 +1,4 @@
-import { MEMPOOL_BASE_TRANSACTION_URL } from "@/constants";
+import { HOLESKY_BASE_TRANSACTION_URL, MEMPOOL_BASE_TRANSACTION_URL } from "@/constants";
 import { IRepayTransaction } from "@/types/api/pool";
 import { pureNumberFormat, truncateAddress } from "@/utils";
 
@@ -24,7 +24,12 @@ const Row = ({ data }: IRowProps) => {
         {!!data.origin_hash && (
           <a
             className="underline text-white"
-            href={`${MEMPOOL_BASE_TRANSACTION_URL}/${data.origin_hash}`}
+            href={`
+              ${data.repay_origin_chain === 'BTC' 
+                ? MEMPOOL_BASE_TRANSACTION_URL
+                : HOLESKY_BASE_TRANSACTION_URL
+              }/${data.origin_hash}
+            `}
             target="_blank"
             rel="noreferrer"
           >

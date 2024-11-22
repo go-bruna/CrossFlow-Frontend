@@ -5,7 +5,7 @@ import { type DecodedError, ErrorDecoder } from "ethers-decode-error";
 import { useEthersProvider, useEthersSigner } from "@/utils/ethersAdapter";
 import { CHAIN_ID, O_USDT_TOKEN } from "@/constants";
 import { useToast } from "./useToast";
-import { fromWei, toWei } from "@/utils";
+import { fromWei } from "@/utils";
 import { useTxModalState } from "@/contexts/tx-modal";
 import { WARNING_MESSAGE } from "@/constants/message";
 import { MODAL_STATE } from "@/types/interfaces";
@@ -35,7 +35,7 @@ export const useSigningWeb3Client = () => {
 	}, [provider, signer, address]);
 
 	const approveUSDT = useCallback(
-		async (amount: number) => {
+		async (amount: string) => {
 			try {
 				updateModalState(MODAL_STATE.APPROVE, "Approving", " ", "", 2);
 				setIsTxModal(true);
@@ -56,10 +56,9 @@ export const useSigningWeb3Client = () => {
 					O_USDT_TOKEN.abi,
 					signer,
 				);
-				const tokenAmount = amount.toString();
 				
 				// Replace this address by the address from tss_pubkey
-				const params: string[] = [_pool_address, toWei(tokenAmount)];
+				const params: string[] = [_pool_address, amount];
 
 				if (!contract) {
 					messageApi.Alert({
@@ -78,7 +77,7 @@ export const useSigningWeb3Client = () => {
 				await provider?.estimateGas(transaction);
 				let tx = await contract.approve(
 					_pool_address,
-					toWei(tokenAmount),
+					amount,
 				);
 				console.log("transaction of approve ==>", tx);
 				await tx.wait();

@@ -168,7 +168,7 @@ export const BorrowContainer = (props: Props) => {
       setCollateralAmount(parseFloat(e.target.value))
     }
 	}
-	
+
 	/**
 	 * Handle borrow
 	 */
@@ -329,7 +329,6 @@ export const BorrowContainer = (props: Props) => {
 
 			{/* Loan Rate */}
 			<Input.Number
-				type="number"
 				label="Loan Rate ( % )"
 				value={loanRate ?? ""}
 				placeholder="0.0"

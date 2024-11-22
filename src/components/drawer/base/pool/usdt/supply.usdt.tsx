@@ -46,8 +46,8 @@ export const SupplyUSDTContainer = (props: Props) => {
   } = useWeb3Context()
 
   const [ balance, setBalance ] = useState<number | undefined>(undefined)
-  const [ amount, setAmount ] = useState<number | undefined>(0)
-  const [ rate, setRate ] = useState<number | undefined>(0)
+  const [ amount, setAmount ] = useState<number | undefined>(undefined)
+  const [ rate, setRate ] = useState<number | undefined>(undefined)
   const [ loading, setLoading ] = useState<boolean>(false)
   const { data: maxRate } = useMaxInterestRate()
   const { data: assetProfiles } = useAssetProfile()
@@ -99,7 +99,7 @@ export const SupplyUSDTContainer = (props: Props) => {
     try {
       setLoading(true)
 
-      const approve = await approveUSDT(amount)
+      const approve = await approveUSDT((amount * 1e18).toString())
       if (!approve) {
         setLoading(false)
         return

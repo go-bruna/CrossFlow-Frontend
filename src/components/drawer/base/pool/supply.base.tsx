@@ -184,7 +184,7 @@ export const SupplyContainer = () => {
       <Paragraph.List
         label="Suppliable amount"
         value={`
-          ${pureNumberFormat(Number(selected?.amount) / getDecimalObj(selected?.asset_id).decimals, 2)} 
+          ${pureNumberFormat(Number(selected?.amount) / getDecimalObj(selected?.asset_id).decimals, 8)} 
           ${getDecimalObj(selected?.asset_id).symbol}
         `} 
         classOverride={{
