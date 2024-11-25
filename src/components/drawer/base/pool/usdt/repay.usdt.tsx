@@ -90,10 +90,10 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
     if (
       !account?.bech32Address || 
       !assetLoanEntity || 
-      !assetLoanEntity || 
       assetLoanEntity.length < 1
     )
       return []
+
     const _filteredData = assetLoanEntity.find((e: ILoanEntity) => e.creator === account.bech32Address)
     setActiveLoan(_filteredData)
     if (!_filteredData)
@@ -204,10 +204,11 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       const msg = await client.msgRequestRepay(_repayData);
-      const result = await client.signAndBroadcast([msg]);
+      const { data: result, error } = await client.signAndBroadcast([msg]);
 
-      if (!result) {
+      if (!result || !!error) {
         setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
         return
       }
 

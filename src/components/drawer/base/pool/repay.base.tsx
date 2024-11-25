@@ -173,8 +173,14 @@ export const RepayContainer = (props: ISupplyContainer) => {
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       const msg = await client.msgRequestRepay(_repayData);
+      const { data, error } = await client.signAndBroadcast([msg]);
+      
+      if (!data || !!error) {
+        setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
+        return
+      }
 
-      await client.signAndBroadcast([msg]);
       await invalidateQuery()
       await queryClient.invalidateQueries({
         queryKey: [GET_REPAY_TRANSACTION],

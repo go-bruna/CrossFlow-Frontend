@@ -115,7 +115,14 @@ export const SupplyUSDTContainer = (props: Props) => {
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       let msg = await client.msgRequestSupplyUSDT(_supplyData);
-      await client.signAndBroadcast([msg]);
+      const { data, error } = await client.signAndBroadcast([msg]);
+      
+      if (!data || !!error) {
+        setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
+        return
+      }
+
       await invalidateQuery()
 
       setLoading(false)

@@ -202,8 +202,15 @@ export const BorrowUSDTContainer = (props: Props) => {
       }
 
       const client = await TxClient(offlineSigners?.offlineSigner);
-      let msg = await client.msgRequestLoan(_loanData);
-      await client.signAndBroadcast([msg]);
+      const msg = await client.msgRequestLoan(_loanData);
+      const { data, error } = await client.signAndBroadcast([msg]);
+
+      if (!data || !!error) {
+        setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
+        return
+      }
+
       await invalidateQuery()
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_BORROW_TRANSACTION],

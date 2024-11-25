@@ -112,8 +112,14 @@ export const SupplyContainer = () => {
 
       const client = await TxClient(offlineSigners?.offlineSigner);
       const msg = await client.msgRequestSupply(_supplyData);
-      
-      await client.signAndBroadcast([msg]);
+      const { data, error } = await client.signAndBroadcast([msg]);
+
+      if (!data || !!error) {
+        setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
+        return
+      }
+
       await invalidateQuery()
       await queryClient.invalidateQueries({
         queryKey: [GET_ASSET_SUPPLY_TRANSACTION],

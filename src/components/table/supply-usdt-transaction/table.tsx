@@ -65,7 +65,7 @@ export const SupplyUSDTTransactionTable = () => {
       {/* Sort by */}
       <div className="flex items-center gap-[4] lg:gap-8">
         <div className="flex items-center">
-          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Borrowed Assets</Typography>
+          <Typography variant="label-small" className="min-w-[40px] semibold text-white">Supplied Assets</Typography>
         </div>
       </div>
 

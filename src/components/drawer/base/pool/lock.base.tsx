@@ -146,10 +146,13 @@ export const LockContainer = (props: Props) => {
     
       const client = await TxClient(offlineSigners.offlineSigner);
       let msg = await client.msgRequestLock(value);
-      const result = await client.signAndBroadcast([msg]);
+      const { data, error } = await client.signAndBroadcast([msg]);
       
-      if (!result)
-        return undefined
+      if (!data || !!error) {
+        setLoading(false)
+        messageApi.Alert(ERROR_MESSAGE(error as string))
+        return
+      }
 
       // invalid asset_lock_transaction whenever lock succeeds.
       await queryClient.invalidateQueries({

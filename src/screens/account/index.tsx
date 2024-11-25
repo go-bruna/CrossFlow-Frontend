@@ -209,7 +209,7 @@ export const AccountPage = () => {
             )}
             {filterAccountAssetBorrowed && filterAccountAssetBorrowed.length > 0 && (
               <>
-                // Borrowed Assets Table */
+                {/* Borrowed Assets Table */}
                 <BaseItem
                   title="Borrowed assets"
                   classOverride={{

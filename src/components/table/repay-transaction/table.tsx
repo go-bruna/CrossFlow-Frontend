@@ -94,7 +94,7 @@ export const RepayTransactionTable = (props: Props) => {
                 className="w-[44px] h-[44px]"
                 icon={<LogoIcon />}
               />
-              <Typography variant="label-small" className="font-bold">No Assets Supplied</Typography>
+              <Typography variant="label-small" className="font-bold">No assets repaid</Typography>
             </div>
           )}
         </div>

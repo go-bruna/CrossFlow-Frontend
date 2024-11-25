@@ -1,4 +1,4 @@
-import { SigningStargateClient, StdFee } from "@cosmjs/stargate";
+import { DeliverTxResponse, SigningStargateClient, StdFee } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { MsgVote } from "./cosmos.gov/tx";
 import { cosmoshub } from "@/config/graz";
@@ -29,7 +29,10 @@ const types = [
   ["/cosmos.staking.v1beta1.MsgDelegate", MsgDelegate]
 ];
 
-
+export type ISignAndBroadcastResponse = {
+  data: DeliverTxResponse | undefined
+  error: string | undefined
+}
 export const registry = new Registry(<any>types);
 
 export const TxClient = async (offlineSinger: OfflineSigner) => {
@@ -45,12 +48,19 @@ export const TxClient = async (offlineSinger: OfflineSigner) => {
       signAndBroadcast: async (
         msgs: EncodeObject[],
         { fee, memo }: SignAndBroadcastOptions = { fee: defaultFee, memo: "" }
-      ) => {
+      ): Promise<ISignAndBroadcastResponse> => {
         try {
-          return await client.signAndBroadcast(address, msgs, fee, memo)
+          const data = await client.signAndBroadcast(address, msgs, fee, memo)
+          return {
+            data,
+            error: undefined
+          }
         } catch (error) {
           console.log("broadcast error =====>", error)
-          return undefined
+          return {
+            data: undefined,
+            error: (error as any).Error
+          }
         }
       }, 
       msgVote: (data: MsgVote): EncodeObject => ({
