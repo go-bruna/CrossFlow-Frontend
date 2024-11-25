@@ -24,8 +24,9 @@ import {
 import { useWeb3Context } from "@/contexts/web3"
 import { useAccount, useOfflineSigners } from "graz"
 import { IPool } from "@/types/api/pool"
-import { toWei } from "@/utils"
+// import { toWei } from "@/utils"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
+import BigNumber from "bignumber.js"
 
 export interface Props {
   data: IPool
@@ -98,8 +99,10 @@ export const SupplyUSDTContainer = (props: Props) => {
 
     try {
       setLoading(true)
+      
+      console.log(BigNumber(amount).multipliedBy(1e18))
 
-      const approve = await approveUSDT((amount * 1e18).toString())
+      const approve = await approveUSDT(BigNumber(amount).multipliedBy(1e18).toFixed())
       if (!approve) {
         setLoading(false)
         return
@@ -108,7 +111,8 @@ export const SupplyUSDTContainer = (props: Props) => {
         creator: account?.bech32Address,
         assetId: Number(props.data.asset_id),
         chainSymbol: props.data.chain_symbol,
-        amount: toWei(amount).toString(),
+        amount: BigNumber(amount).multipliedBy(1e18).toFixed(),
+        // amount: toWei(amount).toString(),
         interestRate: (rate / 100).toString(),
         senderAddress: address
       }

@@ -16,7 +16,7 @@ import { queryClient } from "@/wagmi"
 import { GET_ASSET_BORROW_TRANSACTION, GET_ASSET_PROFILE, GET_LOAN_RATE, GET_POOL_LOCK_BALANCE } from "@/constants/query"
 import { IBaseLockBalance } from "@/types/api/other"
 import { useLoanRate } from "@/hooks/queries/useLoanRate"
-import { dayDiffWithSecond, fromWei, getFixedNumber, pureNumberFormat, toWei } from "@/utils"
+import { dayDiffWithSecond, fromWei, getFixedNumber, pureNumberFormat } from "@/utils"
 import { validate } from 'bitcoin-address-validation'
 import { ERROR_MESSAGE, SUCCESS_OPERATION, WALLET_INSTALL, WALLET_NOT_CONNECTED, WARNING_MESSAGE } from "@/constants/message"
 import { MsgRequestLoan } from "@/cf-client/cfprotocol.loan/tx"
@@ -28,6 +28,7 @@ import { IPool } from "@/types/api/pool";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
 import { useAuth } from "@/contexts/auth";
+import BigNumber from "bignumber.js";
 
 const returnValue = {
   assetId: 5,
@@ -186,10 +187,12 @@ export const BorrowUSDTContainer = (props: Props) => {
     try {
       setLoading(true)
 
+      console.log("collateral amount ==>", collateralAmount)
       const _loanData: MsgRequestLoan = {
         creator: activeLock.creator,
         assetId: Number(getLockedBalanceObj.assetId),
-        amount: toWei(BigInt(collateralAmount)),
+        // amount: toWei(BigInt(collateralAmount)),
+        amount: BigNumber(collateralAmount).multipliedBy(1e18).toFixed(),
         interestRate: (interestRate / 100).toString(),
         loanRate: (loanRate / 100).toString(),
         duration: calculateDateDiff,

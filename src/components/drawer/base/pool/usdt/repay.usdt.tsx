@@ -212,10 +212,24 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
         return
       }
 
+      const getMsgExecuted = result.events.find(e => e.type.toLowerCase() === "message_executed")
+
+      if (!getMsgExecuted) {
+        setLoading(false)
+        return messageApi.Alert(ERROR_MESSAGE(`Transaction has not been executed!`))
+      }
+
+      const getTxId = getMsgExecuted.attributes.find(e => e.key.toLowerCase() === "repay_tx_id")?.value ?? undefined
+
+      if (!getTxId) {
+        setLoading(false)
+        return messageApi.Alert(ERROR_MESSAGE(`There isn't any transaction Id.`))
+      }
+
       // MsgRequestRepayLock 
       const _repayLockData: MsgRequestRepayLock = {
         creator: res.creator,
-        repayTxId: result.txIndex,
+        repayTxId: Number(getTxId),
         fromAddress: res.fromAddress,
         senderPubkey: res.senderPubkey,
         assetId: res.assetId,
