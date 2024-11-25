@@ -14,7 +14,7 @@ import { useAccount, useOfflineSigners } from "graz";
 import { useLockBalance } from "@/hooks/queries/useLockBalance";
 import { queryClient } from "@/wagmi";
 import {
-  GET_ASSET_BORROW_TRANSACTION,
+	GET_ASSET_BORROW_TRANSACTION,
 	GET_ASSET_PRICE,
 	GET_ASSET_PROFILE,
 	GET_LOAN_RATE,
@@ -35,9 +35,7 @@ import {
 	WALLET_NOT_CONNECTED,
 	WARNING_MESSAGE,
 } from "@/constants/message";
-import {
-  useAccount as wagmiUseAccount
-} from "wagmi"
+import { useAccount as wagmiUseAccount } from "wagmi";
 import { MsgRequestLoan } from "@/cf-client/cfprotocol.loan/tx";
 import { TxClient } from "@/cf-client/client";
 import { EthereumIcon } from "@/assets/icons/coins";
@@ -46,6 +44,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { IAssetProfile, IPool } from "@/types/api/pool";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
+import BigNumber from "bignumber.js";
 
 const returnValue = {
 	assetId: 1,
@@ -59,7 +58,7 @@ export interface Props {
 
 export const BorrowContainer = (props: Props) => {
 	const { messageApi } = useToast();
-  const { address } = wagmiUseAccount();
+	const { address } = wagmiUseAccount();
 
 	const { data: account } = useAccount();
 	const { data: offlineSigners } = useOfflineSigners();
@@ -67,7 +66,7 @@ export const BorrowContainer = (props: Props) => {
 	const { data: lockData } = useLockBalance();
 	const { data: loanRateData } = useLoanRate();
 	const { data: assetProfiles } = useAssetProfile();
-  
+
 	const [loading, setLoading] = useState<boolean>(false);
 	const [collateralAmount, setCollateralAmount] = useState<number>(0);
 	const [loanRate, setLoanRate] = useState<number>(0);
@@ -77,7 +76,9 @@ export const BorrowContainer = (props: Props) => {
 	const [activeLock, setActiveLock] = useState<IBaseLockBalance | undefined>(
 		undefined,
 	);
-	const [loanAddress, setLoanAddress] = useState<string | undefined>(address || undefined);
+	const [loanAddress, setLoanAddress] = useState<string | undefined>(
+		address || undefined,
+	);
 	const [endDate, setEndDate] = useState<Date | null>(new Date());
 
 	/**
@@ -133,7 +134,10 @@ export const BorrowContainer = (props: Props) => {
 	 * Calculate max collateral amount based on lock-balance
 	 */
 	const calcuateMaxCollateralAmount = useMemo(() => {
-		return getFixedNumber(getLockedBalanceObj.balance / 1e8, 5);
+		return getFixedNumber(
+			BigNumber(getLockedBalanceObj.balance).dividedBy(1e8).toNumber(),
+			5,
+		);
 	}, [lockData, assetProfiles]);
 
 	/**
@@ -154,20 +158,22 @@ export const BorrowContainer = (props: Props) => {
 	 * Get decimal of collateral asset
 	 */
 	const getDecimal = useMemo(() => {
-		return assetProfiles?.find(e => e.symbol === props.data.asset_symbol)?.decimals ?? 0
-	}, [assetProfiles])
+		return (
+			assetProfiles?.find((e) => e.symbol === props.data.asset_symbol)
+				?.decimals ?? 0
+		);
+	}, [assetProfiles]);
 
 	/**
 	 * Handle collateral amount by symbol's decimal
 	 */
 	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.value === '')
-      return 
-    const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
-    if (regex.test(e.target.value.toString())) {
-      setCollateralAmount(parseFloat(e.target.value))
-    }
-	}
+		if (e.target.value === "") return;
+		const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`);
+		if (regex.test(e.target.value.toString())) {
+			setCollateralAmount(parseFloat(e.target.value));
+		}
+	};
 
 	/**
 	 * Handle borrow
@@ -203,7 +209,7 @@ export const BorrowContainer = (props: Props) => {
 		if (
 			!interestRate ||
 			getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) >
-			interestRate
+				interestRate
 		)
 			return messageApi.Alert({
 				...WARNING_MESSAGE,
@@ -242,7 +248,7 @@ export const BorrowContainer = (props: Props) => {
 			const _loanData: MsgRequestLoan = {
 				creator: activeLock.creator,
 				assetId: Number(getLockedBalanceObj.assetId),
-				amount: (collateralAmount * 1e8).toString(),
+				amount: BigNumber(collateralAmount).multipliedBy(1e8).toFixed(),
 				interestRate: (interestRate / 100).toString(),
 				loanRate: (loanRate / 100).toString(),
 				duration: calculateDateDiff,
@@ -253,7 +259,7 @@ export const BorrowContainer = (props: Props) => {
 				targetAssetId: Number(
 					assetProfiles?.find((e) => e.symbol === "USDT")?.id ?? 5,
 				),
-        // targetAssetId: Number(props.data.asset_id)
+				// targetAssetId: Number(props.data.asset_id)
 			};
 
 			const client = await TxClient(offlineSigners?.offlineSigner);
@@ -267,13 +273,12 @@ export const BorrowContainer = (props: Props) => {
       }
 
 			await invalidateQuery();
-      await queryClient.invalidateQueries({
-        queryKey: [GET_ASSET_BORROW_TRANSACTION],
-      })
+			await queryClient.invalidateQueries({
+				queryKey: [GET_ASSET_BORROW_TRANSACTION],
+			});
 
 			setLoading(false);
 			messageApi.Alert(SUCCESS_OPERATION("Successfully borrowed."));
-      
 		} catch (error) {
 			setLoading(false);
 			messageApi.Alert(ERROR_MESSAGE(error as string));
@@ -315,13 +320,13 @@ export const BorrowContainer = (props: Props) => {
 			<Input.Number
 				type="number"
 				label="Collateral Amount ( BTC )"
-				value={collateralAmount ?? ''}
+				value={collateralAmount ?? ""}
 				placeholder="0.00"
 				icon={<AmountIcon />}
 				innerButtonLabel="Max"
 				onMax={() => setCollateralAmount(calcuateMaxCollateralAmount)}
 				onChange={(e: ChangeEvent<HTMLInputElement>) => {
-					handleAmountUpdate(e)
+					handleAmountUpdate(e);
 				}}
 				classOverride={{
 					container: "mt-4",
@@ -338,7 +343,7 @@ export const BorrowContainer = (props: Props) => {
 				value={loanRate ?? ""}
 				placeholder="0.0"
 				icon={<AmountIcon />}
-				defaultValue={'0.0'}
+				defaultValue={"0.0"}
 				innerButtonLabel="Max"
 				onMax={() => setLoanRate(Number(loanRateData?.max_loan_rate) * 100)}
 				onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -368,7 +373,7 @@ export const BorrowContainer = (props: Props) => {
 				errorMsg={
 					loanRateData &&
 					getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100) >
-					Number(interestRate ?? 0)
+						Number(interestRate ?? 0)
 						? `Interest rate should be greater than ${(Number(loanRateData?.min_interest_rate) * 100).toFixed(0)} %`
 						: null
 				}

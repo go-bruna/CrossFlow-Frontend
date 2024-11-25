@@ -33,6 +33,7 @@
     "@wagmi/core": "^2.11.2",
     "alchemy-sdk": "^3.3.0",
     "axios": "^1.6.8",
+    "bignumber.js": "^9.1.2",
     "bitcoin-address-validation": "^2.2.3",
     "bitcoinjs-lib": "^6.1.5",
     "dayjs": "^1.11.10",
