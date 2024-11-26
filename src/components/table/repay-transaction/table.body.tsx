@@ -50,7 +50,13 @@ const Row = ({ data }: IRowProps) => {
 				{!!data.target_hash && (
 					<a
 						className="underline text-white"
-						href={`${MEMPOOL_BASE_TRANSACTION_URL}/${data.target_hash}`}
+						href={`
+							${
+								data.repay_target_chain === "BTC"
+									? MEMPOOL_BASE_TRANSACTION_URL
+									: HOLESKY_BASE_TRANSACTION_URL
+							}/${data.target_hash}
+						`}
 						target="_blank"
 						rel="noreferrer"
 					>
