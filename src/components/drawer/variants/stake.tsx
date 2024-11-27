@@ -112,7 +112,7 @@ export const StakeDrawer = (props: Props) => {
         >
           {/* tabs */}
           <Tab.Item
-            label='Stake'
+            label='Delegate'
           />
 
           <div className={'w-full'}>

@@ -1,10 +1,10 @@
-import { Icon } from "@/components/icon";
-import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
 import { useDrawer } from "@/contexts/interface";
 import { IPool } from "@/types/api/pool";
 import { getAssetDecimalObj, numberFormat, pureNumberFormat } from "@/utils";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
+import { Avatar } from "@/components/avatar";
+import { getCoinIcon } from "@/utils/coin";
 
 export const MainPoolsTableBody = ({
   data
@@ -30,7 +30,10 @@ export const MainPoolsTableBody = ({
       >
         <td>
           <div className="flex items-center gap-2 pl-5">
-            <Icon src={EthereumIMG} />
+					  <Avatar 
+              className="w-6"
+              icon={getCoinIcon(row_data.asset_symbol)} 
+            />
             <Typography variant="label-medium" className="text-[13px]">{row_data.asset_symbol}</Typography>
           </div>
         </td>
@@ -74,7 +77,7 @@ export const MainPoolsTableBody = ({
             <Typography variant="label-medium" className="text-[13px]">
               {`${pureNumberFormat(Number(row_data.liquidity) / getAssetDecimalObj(assetProfiles, row_data.asset_id).decimals, 4)} ${row_data.asset_symbol}`}
             </Typography>
-            <Typography variant="label-medium" className="text-[13px]">
+            <Typography variant="label-medium" className="text-[13px] text-[#36f5cf]">
               {`$${numberFormat(row_data.liquidity_in_dollar)}`}
             </Typography>
           </div>

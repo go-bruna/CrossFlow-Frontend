@@ -15,6 +15,7 @@ interface Props {
   type?: InputType
   icon?: JSX.Element
   label?: string
+  maxLabel?: string | JSX.Element
   value: string | number
   defaultValue?: string
   placeholder?: string
@@ -42,12 +43,27 @@ export const NumberInput = (props: Props) => {
       )}
     >
       {props?.label && (
-        <Typography 
-          variant="label-medium" 
-          className='text-[13px]'
-        >
-          {props.label}
-        </Typography>
+        <div className='flex justify-between items-center'>
+          <Typography 
+            variant="label-medium" 
+            className='text-[13px]'
+          >
+            {props.label}
+          </Typography>
+          {props?.maxLabel && typeof props.maxLabel === 'string' ? (
+            <Typography 
+              variant="label-medium" 
+              className='text-[13px]'
+            >
+              {props.maxLabel}
+            </Typography>
+          ): props?.maxLabel && typeof props.maxLabel !== 'string' ? (
+            <>
+              {props.maxLabel}
+            </>
+          ): (<></>)
+          }
+        </div>
       )}
       <div
         className={twMerge(

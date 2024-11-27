@@ -155,3 +155,4 @@ export const getAssetDecimalObj = (assetProfiles: IAssetProfile[] | null , asset
     symbol: _selectedAsset.symbol,
   }
 }
+

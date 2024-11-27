@@ -1,10 +1,10 @@
-import { Icon } from "@/components/icon";
-import { EthereumIMG } from "@/assets/icons/png";
 import { Typography } from "@/components/typography";
 import { CustomProgress } from "@/components/progress";
 import { IAccountAssetsBorrowed } from "@/types/api/account";
 import { getAssetDecimalObj, numberFormat, pureNumberFormat } from "@/utils";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
+import { Avatar } from "@/components/avatar";
+import { getCoinIcon } from "@/utils/coin";
 
 export const BorrowedAssetsTableBody = ({
   data
@@ -20,7 +20,10 @@ export const BorrowedAssetsTableBody = ({
       >
         <td>
           <div className="flex items-center gap-2 pl-5">
-            <Icon src={EthereumIMG} />
+            <Avatar 
+              className="w-6"
+              icon={getCoinIcon(row.asset_symbol)} 
+            />
             <Typography variant="label-medium" className="text-[13px]">{row.asset_symbol}</Typography>
           </div>
         </td>

@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Button from "@/components/button";
 import Input from "@/components/input";
-import { AmountIcon } from "@/assets/icons/amount";
 import { Typography } from "@/components/typography";
 import { twMerge } from "tailwind-merge";
 import { useAccount, useOfflineSigners } from "graz";
@@ -32,6 +31,8 @@ import { MsgRequestLock } from "@/cf-client/cfprotocol.lock/tx";
 import { TxClient } from "@/cf-client/client";
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { IPool } from "@/types/api/pool";
+import { Avatar } from "@/components/avatar";
+import { getCoinIcon } from "@/utils/coin";
 
 const dropdownArr = ["Bitcoin"];
 
@@ -227,7 +228,18 @@ export const LockContainer = (props: Props) => {
 				label={"Amount"}
 				value={amount ?? ""}
 				placeholder="0.00"
-				icon={<AmountIcon />}
+				maxLabel={
+          <div className="flex items-center gap-1">
+            <Typography variant="label-small" className="text-orange-500">Max :</Typography>
+            <Avatar icon={getCoinIcon(props.data.asset_symbol)} className="w-4"/>
+            <Typography variant="label-small">
+							{BigNumber(calcBTCBalance(chainStats)).dividedBy(1e8).toNumber()}
+						</Typography>
+          </div>
+        }
+				icon={
+					<Avatar icon={getCoinIcon(props.data.asset_symbol)} className="w-[26px]"/>
+				}
 				innerButtonLabel="Max"
 				onMax={() =>
 					setAmount(

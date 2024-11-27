@@ -45,6 +45,8 @@ import { useAssetProfile } from "@/hooks/queries/useAssetProfile";
 import { IAssetProfile, IPool } from "@/types/api/pool";
 import { useAssetPrice } from "@/hooks/queries/useAssetPrice";
 import BigNumber from "bignumber.js";
+import { Avatar } from "@/components/avatar";
+import { getCoinIcon } from "@/utils/coin";
 
 const returnValue = {
 	assetId: 1,
@@ -323,7 +325,9 @@ export const BorrowContainer = (props: Props) => {
 				label="Collateral Amount ( BTC )"
 				value={collateralAmount ?? ""}
 				placeholder="0.00"
-				icon={<AmountIcon />}
+				icon={
+					<Avatar icon={getCoinIcon(props.data.asset_symbol)} className="w-[26px]"/>
+				}
 				innerButtonLabel="Max"
 				onMax={() => setCollateralAmount(calcuateMaxCollateralAmount)}
 				onChange={(e: ChangeEvent<HTMLInputElement>) => {

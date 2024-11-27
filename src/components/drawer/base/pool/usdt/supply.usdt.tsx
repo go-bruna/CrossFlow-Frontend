@@ -27,6 +27,9 @@ import { IPool } from "@/types/api/pool"
 // import { toWei } from "@/utils"
 import { useAssetProfile } from "@/hooks/queries/useAssetProfile"
 import BigNumber from "bignumber.js"
+import { Avatar } from "@/components/avatar"
+import { getCoinIcon } from "@/utils/coin"
+import { Typography } from "@/components/typography"
 
 export interface Props {
   data: IPool
@@ -169,8 +172,17 @@ export const SupplyUSDTContainer = (props: Props) => {
       <Input.Number 
         label="Input USDT amount to supply"
         value={amount ?? ''}
+        maxLabel={
+          <div className="flex items-center gap-1">
+            <Typography variant="label-small" className="text-orange-500">Max :</Typography>
+            <Avatar icon={getCoinIcon(props.data.asset_symbol)} className="w-4"/>
+            <Typography variant="label-small">{(balance ?? 0)?.toFixed(2)}</Typography>
+          </div>
+        }
         placeholder="0"
-        icon={<AmountIcon />}
+        icon={
+					<Avatar icon={getCoinIcon(props.data.asset_symbol)} className="w-6"/>
+				}
         innerButtonLabel="Max"
         errorMsg={
           amount && amount > (balance || 0)
