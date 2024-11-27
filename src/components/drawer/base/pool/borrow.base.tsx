@@ -68,7 +68,7 @@ export const BorrowContainer = (props: Props) => {
 	const { data: assetProfiles } = useAssetProfile();
 
 	const [loading, setLoading] = useState<boolean>(false);
-	const [collateralAmount, setCollateralAmount] = useState<number>(0);
+	const [collateralAmount, setCollateralAmount] = useState<number | undefined>(undefined);
 	const [loanRate, setLoanRate] = useState<number>(0);
 	const [interestRate, setInterestRate] = useState<number>(
 		getFixedNumber(Number(loanRateData?.min_interest_rate ?? 0) * 100),
@@ -168,7 +168,8 @@ export const BorrowContainer = (props: Props) => {
 	 * Handle collateral amount by symbol's decimal
 	 */
 	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.value === "") return;
+		if (e.target.value === "")
+			return setCollateralAmount(undefined);
 		const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`);
 		if (regex.test(e.target.value.toString())) {
 			setCollateralAmount(parseFloat(e.target.value));

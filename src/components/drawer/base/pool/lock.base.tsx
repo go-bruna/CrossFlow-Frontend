@@ -69,7 +69,8 @@ export const LockContainer = (props: Props) => {
 	 * Handle collateral amount by symbol's decimal
 	 */
 	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.value === "") return;
+		if (e.target.value === "") 
+			return setAmount(undefined);
 		const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`);
 		if (regex.test(e.target.value.toString())) {
 			setAmount(parseFloat(e.target.value));

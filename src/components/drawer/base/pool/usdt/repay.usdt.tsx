@@ -63,7 +63,7 @@ export const RepayUSDTContainer = (props: ISupplyContainer) => {
   const { connectors } = useConnect();
 
   const [selected, setSelected] = useState<IBaseLoan | undefined>(undefined)
-  const [ repay, setRepay ] = useState<number | undefined>(0)
+  const [ repay, setRepay ] = useState<number | undefined>(undefined)
   const [ loading, setLoading ] = useState<boolean>(false)
   const [ activeLoan, setActiveLoan ] = useState<ILoanEntity | undefined>(undefined)
   const [ currentTab, setCurrentTab ] = useState<ITag | undefined>(undefined)

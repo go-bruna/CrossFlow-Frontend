@@ -137,7 +137,7 @@ export const BorrowUSDTContainer = (props: Props) => {
 	 */
 	const handleAmountUpdate = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value === '')
-      return 
+      return setCollateralAmount(undefined)
     const regex = new RegExp(`^\\d*\\.?\\d{0,${getDecimal}}$`)
     if (regex.test(e.target.value.toString())) {
       setCollateralAmount(parseFloat(e.target.value))
