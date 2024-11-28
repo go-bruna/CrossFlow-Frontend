@@ -8,7 +8,7 @@ export const getCoinIcon = (token: string) => {
     eth: <EthereumIcon />,
     usdt: <USDTIcon />,
     amount: <AmountIcon />,
-  }[token.toLowerCase() || 'amount'] as JSX.Element
+  }[(token ?? 'amount').toLowerCase()] as JSX.Element
 
   return icon
 }

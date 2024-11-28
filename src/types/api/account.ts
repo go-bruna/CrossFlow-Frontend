@@ -22,11 +22,13 @@ export interface IAccountAssetsSupplies {
 
 export interface IAccountAssetsBorrowed {
   user: string
-  asset_id: string
-  asset_symbol: string
+  collateral_asset_id: string
+  collateral_asset_symbol: string
   apy: string
   loan_rate: string
   balance: string
   health: string
   reserved: string
+  loan_asset_id: string
+  loan_asset_symbol: string
 }

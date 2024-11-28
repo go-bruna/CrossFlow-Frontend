@@ -14,6 +14,7 @@ export const BorrowedAssetsTableBody = ({
   const { data: assetProfiles } = useAssetProfile()
 
   const Row = ({ row }: { row: IAccountAssetsBorrowed }) => {
+    console.log(row)
     return (
       <tr 
         className="h-[68px] text-[13px] hover:bg-[#90d5c8]/10"
@@ -22,9 +23,9 @@ export const BorrowedAssetsTableBody = ({
           <div className="flex items-center gap-2 pl-5">
             <Avatar 
               className="w-6"
-              icon={getCoinIcon(row.asset_symbol)} 
+              icon={getCoinIcon(row.collateral_asset_id)} 
             />
-            <Typography variant="label-medium" className="text-[13px]">{row.asset_symbol}</Typography>
+            <Typography variant="label-medium" className="text-[13px]">{row.collateral_asset_id}</Typography>
           </div>
         </td>
         <td>
@@ -36,10 +37,10 @@ export const BorrowedAssetsTableBody = ({
         <td>
           <div className="flex flex-col gap-[2px] items-end mr-2">
             <Typography variant="label-medium" className="text-[13px]">
-              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.asset_id).decimals, 4)} 
+              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.loan_asset_id).decimals, 4)} 
             </Typography>
             <Typography variant="label-medium" className="text-[13px]">
-              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.asset_id).decimals, 4)}
+              {pureNumberFormat(Number(row.balance) / getAssetDecimalObj(assetProfiles, row.loan_asset_id).decimals, 4)}
             </Typography>
           </div>
         </td>
